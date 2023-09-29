@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33712.159
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemestralniPraceDB2", "SemestralniPraceDB2\SemestralniPraceDB2.csproj", "{2E48A7C2-12B5-4411-A852-0615514B6B1C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2E48A7C2-12B5-4411-A852-0615514B6B1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E48A7C2-12B5-4411-A852-0615514B6B1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E48A7C2-12B5-4411-A852-0615514B6B1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E48A7C2-12B5-4411-A852-0615514B6B1C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8898FC47-427F-4DA3-B1A0-DE4F0DC4A8B6}
+	EndGlobalSection
+EndGlobal
