@@ -12,4 +12,8 @@
     <PackageReference Include="odp.net.x64" Version="112.3.20" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\" />
+  </ItemGroup>
+
 </Project>
