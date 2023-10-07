@@ -6,7 +6,20 @@
         xmlns:local="clr-namespace:SemestralniPraceDB2"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+    <StackPanel>
+        <Label Content="Vráceno z databáze:"
+               Width="120"
+               VerticalAlignment="Center"/>
+        <TextBox    Width="200"
+                    MaxLength="100"
+                    Name="databaseResultTextBox"
+                    Text="{Binding Path=DatabaseResult.Text, Mode=OneWay}"
+                    VerticalAlignment="Center"
+                    IsReadOnly="True"/>
+        <Button Width="100"
+                Height="25"
+                Margin="5"
+                Content="Připojit a načíst"
+                Command="{Binding ConnectAndGetCommand}"/>
+    </StackPanel>
 </Window>
