@@ -10,7 +10,7 @@
         <Label Content="Vráceno z databáze:"
                Width="120"
                VerticalAlignment="Center"/>
-        <TextBox    Width="200"
+        <TextBox    Width="400"
                     MaxLength="100"
                     Name="databaseResultTextBox"
                     Text="{Binding Path=DatabaseResult.Text, Mode=OneWay}"

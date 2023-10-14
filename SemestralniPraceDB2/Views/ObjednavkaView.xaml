@@ -1,0 +1,103 @@
+﻿<UserControl x:Class="SemestralniPraceDB2.Views.ObjednavkaView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SemestralniPraceDB2.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="Lightgray">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="5*" />
+        </Grid.ColumnDefinitions>
+
+
+        <StackPanel Grid.Column="0"
+                 Orientation="Vertical" 
+                 VerticalAlignment="Stretch" 
+                 HorizontalAlignment="Stretch" 
+                 Margin="10"
+                 Width="auto">
+            <Label Content="Vyhledávání"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Margin="10"
+                FontSize="18"
+                FontWeight="Bold" />
+            <DataGrid  AutoGenerateColumns="False"
+                    ItemsSource="{Binding YourItems}"
+                    VerticalAlignment="Stretch">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Název" Binding="{Binding Nazev}" />
+                    <DataGridTextColumn Header="Cena" Binding="{Binding Cena}" />
+                    <DataGridTextColumn Header="Čárový kód" Binding="{Binding CarovyKod}" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <!-- TextBox pro název -->
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <Label Content="Název:" Width="80" HorizontalContentAlignment="Right" />
+                <TextBox Text="Zadejte název" Width="200"/>
+            </StackPanel>
+
+            <!-- TextBox pro čárový kód -->
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <Label Content="Čárový kód:" Width="80" HorizontalContentAlignment="Right" />
+                <TextBox Text="Zadejte čárový kód" Width="200"/>
+            </StackPanel>
+
+
+        </StackPanel>
+
+
+        <StackPanel Grid.Column="1"
+          Orientation="Vertical" 
+          VerticalAlignment="Stretch" 
+          HorizontalAlignment="Stretch" 
+          Margin="10"
+          Width="auto">
+            <Button Content=">>"
+             Width="auto"
+             Height="30"
+             Click="AddItem_Click"
+             VerticalAlignment="Center"/>
+            <Button Content="&lt;&lt;"
+             Width="auto"
+             Height="30"
+             Click="AddItem_Click"
+             VerticalAlignment="Center"/>
+
+        </StackPanel>
+
+
+        <StackPanel Grid.Column="2"
+         Orientation="Vertical" 
+         VerticalAlignment="Stretch" 
+         HorizontalAlignment="Stretch" 
+         Margin="10"
+         Width="auto">
+            <Label Content="Objednávka"
+        VerticalAlignment="Top"
+        HorizontalAlignment="Left"
+        Margin="10"
+        FontSize="18"
+        FontWeight="Bold" />
+            <DataGrid  AutoGenerateColumns="False"
+            ItemsSource="{Binding YourItems}"
+            VerticalAlignment="Stretch">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Název" Binding="{Binding Nazev}" />
+                    <DataGridTextColumn Header="Cena" Binding="{Binding Cena}" />
+                    <DataGridTextColumn Header="Čárový kód" Binding="{Binding CarovyKod}" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <Button Content="Potvrdit objednávku" Width="150" Height="30" Click="PotvrditObjednavku_Click" />
+
+
+        </StackPanel>
+
+
+    </Grid>
+</UserControl>

@@ -1,27 +1,40 @@
-﻿using Oracle.DataAccess.Client;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Oracle.ManagedDataAccess.Client;
+using System.Configuration;
+
 
 namespace SemestralniPraceDB2.Models
 {
     public class DatabaseConnector
     {
+
+
         public static string GetFromDatabase()
         {
             string? dbResult = string.Empty;
 
-            string connectionString = "Data Source=fei-sql3.upceucebny.cz;User Id=st67084;Password=semestralkadb2;";
-            OracleConnection connection = new OracleConnection(connectionString);
+            string username = "st64515";
+            string password = "hodiny";
+            string hostname = "fei-sql3.upceucebny.cz";
+            int port = 1521; // Oracle default port
+            string sid = "BDAS";
+
+            string connectionString = $"Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST={hostname})(PORT={port}))(CONNECT_DATA=(SID={sid})));User Id={username};Password={password};";
+
+
+            //    string connectionString = "Data Source=fei-sql3.upceucebny.cz;User Id=st67084;Password=semestralkadb2;";
+            OracleConnection connection = new OracleConnection(connectionString); //ConfigurationManager.ConnectionStrings["mojePripojeni"].ConnectionString);
 
             try
             {
                 connection.Open();
                 // Spojení bylo úspěšně navázáno
 
-                string query = "SELECT * FROM MojeTabulka";
+                string query = "SELECT * FROM AUTO";
                 OracleCommand command = new OracleCommand(query, connection);
 
                 try
@@ -59,5 +72,5 @@ namespace SemestralniPraceDB2.Models
 
             return dbResult;
         }
-    }
+}
 }

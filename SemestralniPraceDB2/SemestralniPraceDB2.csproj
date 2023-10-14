@@ -9,11 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
-    <PackageReference Include="odp.net.x64" Version="112.3.20" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\" />
+    <PackageReference Include="Oracle.ManagedDataAccess" Version="21.12.0" />
   </ItemGroup>
 
 </Project>
