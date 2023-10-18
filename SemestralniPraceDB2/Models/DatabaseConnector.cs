@@ -26,19 +26,23 @@ namespace SemestralniPraceDB2.Models
                 connection.Open();
                 // Spojení bylo úspěšně navázáno
 
-                string query = "SELECT * FROM NEW_DEPTS";
+                string query = "SELECT * FROM AUTO";
                 OracleCommand command = new OracleCommand(query, connection);
 
                 try
                 {
                     OracleDataReader reader = command.ExecuteReader();
+                    StringBuilder sb = new StringBuilder();
 
-                    while (reader.Read())
+                    reader.Read();
+                    for (int i = 0; i< 1; i++)
                     {
                         // Zpracování dat z výsledku dotazu
                         //Console.WriteLine(reader["ColumnName"].ToString());
-                        dbResult = reader.ToString();
+                        
+                        sb.Append(reader[i].ToString());
                     }
+                    dbResult = sb.ToString();
                 }
                 catch (Exception ex)
                 {
@@ -64,5 +68,5 @@ namespace SemestralniPraceDB2.Models
 
             return dbResult;
         }
-}
+    }
 }

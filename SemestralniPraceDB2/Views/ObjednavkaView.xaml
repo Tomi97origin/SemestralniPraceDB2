@@ -61,12 +61,12 @@
             <Button Content=">>"
              Width="auto"
              Height="30"
-             Click="AddItem_Click"
+             Command="{Binding AddItemCommand}"
              VerticalAlignment="Center"/>
             <Button Content="&lt;&lt;"
              Width="auto"
              Height="30"
-             Click="AddItem_Click"
+             Command="{Binding RemoveItemCommand}"
              VerticalAlignment="Center"/>
 
         </StackPanel>
@@ -93,7 +93,8 @@
                     <DataGridTextColumn Header="Čárový kód" Binding="{Binding CarovyKod}" />
                 </DataGrid.Columns>
             </DataGrid>
-            <Button Content="Potvrdit objednávku" Width="150" Height="30" Click="PotvrditObjednavku_Click" />
+            <Button Content="Potvrdit objednávku" Width="150" Height="30"
+                                 Command="{Binding ConfirmOrderCommand}" />
 
 
         </StackPanel>
