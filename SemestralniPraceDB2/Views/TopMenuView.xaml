@@ -12,58 +12,55 @@
         <Button Command="{Binding UpdateViewCommand}"
                 CommandParameter="Activity">
             <StackPanel>
-                <Image Source="/Views/Images/schedule_ico.png" />
-                <TextBlock Text="Rozvh&#x0a;akcí" />
-            </StackPanel>
-        </Button>
-        <Button Command="{Binding UpdateViewCommand}"
-                CommandParameter="AddEvent">
-            <StackPanel>
                 <Image Source="/Views/Images/note_ico.png" />
-                <TextBlock Text="Přidat&#x0a;událost" />
+                <TextBlock Text="Vytvořit&#x0a;objednávku" />
             </StackPanel>
         </Button>
         <Button Command="{Binding UpdateViewCommand}"
-                CommandParameter="Horses">
+                CommandParameter="NotImplementedYet">
+            <StackPanel>
+                <Image Source="/Views/Images/schedule_ico.png" />
+                <TextBlock Text="Dummy" />
+            </StackPanel>
+        </Button>
+        <Button Command="{Binding UpdateViewCommand}"
+                CommandParameter="NotImplementedYet">
             <StackPanel>
                 <Image Source="/Views/Images/horseShoe_ico.png" />
-                <TextBlock Text="Správa&#x0a;koní" />
+                <TextBlock Text="Dummy" />
             </StackPanel>
         </Button>
         <Button Command="{Binding UpdateViewCommand}"
-                CommandParameter="Riders">
+                CommandParameter="NotImplementedYet">
             <StackPanel>
                 <Image Source="/Views/Images/riderBoot_ico.png" />
-                <TextBlock Text="Správa&#x0a;jezdců" />
+                <TextBlock Text="Dummy" />
             </StackPanel>
         </Button>
         <Button Command="{Binding UpdateViewCommand}"
-                CommandParameter="Holiday">
+                CommandParameter="NotImplementedYet">
             <StackPanel>
                 <Image Source="/Views/Images/holiday_ico.png" />
-                <TextBlock Text="Prázdniny" />
+                <TextBlock Text="Dummy" />
             </StackPanel>
         </Button>
         <Button Command="{Binding SaveCommand}">
             <StackPanel>
                 <Image Source="/Views/Images/save_ico.png" />
-                <TextBlock Text="Uložit"
-                           VerticalAlignment="Bottom" />
+                <TextBlock Text="Dummy" />
             </StackPanel>
         </Button>
         <Button Command="{Binding UpdateViewCommand}"
-                CommandParameter="Archive">
+                CommandParameter="NotImplementedYet">
             <StackPanel>
                 <Image Source="/Views/Images/archive_ico.png" />
-                <TextBlock Text="Archiv"
-                           VerticalAlignment="Bottom" />
+                <TextBlock Text="Dummy" />
             </StackPanel>
         </Button>
         <Button Command="{Binding PostOnTelegramCommand}">
             <StackPanel>
                 <Image Source="/Views/Images/telegram_ico.png" />
-                <TextBlock Text="Odeslat přes&#x0a;telegram"
-                       VerticalAlignment="Bottom" />
+                <TextBlock Text="Dummy" />
             </StackPanel>
         </Button>
     </StackPanel>

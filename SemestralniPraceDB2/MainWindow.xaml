@@ -3,9 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SemestralniPraceDB2"
+        xmlns:local="clr-namespace:SemestralniPraceDB2.ViewModels"
         mc:Ignorable="d"
-        Title="Super-MARKET v54.3542.15.99 (2023)" Height="700" Width="1200">
+        Title="Super-MARKET v54.3542.15.99 (2023)" Height="700" Width="1200" >
+    <!-- d:DataContext="{d:DesignInstance Type=ViewModels:MainWindowViewModel}" -->
+        
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -18,34 +20,44 @@
 
         <Separator Grid.Row="0"
                    Background="LightGray" />
+        
         <ContentControl Content="{Binding TopMenuViewModel}"
                         Grid.Row="1" />
+        
         <Separator Grid.Row="2" Background="LightGray"/>
+        
         <ContentControl Content="{Binding SelectedViewModel}"
                         Grid.Row="3" />
+        
         <Separator Grid.Row="4"
                    Background="LightGray" />
+        
         <StackPanel Grid.Row="5"
                     Orientation="Horizontal" >
+            
             <Label  Content="Vráceno z databáze:"
                     Width="120"
                     VerticalAlignment="Center"/>
+            
             <TextBox    Width="400"
                         MaxLength="100"
                         Name="databaseResultTextBox"
                         Text="{Binding Path=DatabaseResult.Text, Mode=OneWay}"
                         VerticalAlignment="Center"
                         IsReadOnly="True"/>
+            
             <Button Width="100"
                     Height="25"
                     Margin="5"
                     Content="Připojit a načíst"
                     Command="{Binding ConnectAndGetCommand}"/>
+            
             <Label  Content="{Binding StatusLabelText}"
-                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
                     Width="auto"
                     FontSize="11"
                     FontStyle="Italic" />
+
         </StackPanel>
         
     </Grid>

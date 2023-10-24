@@ -5,8 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SemestralniPraceDB2.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="Lightgray">
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             Background="Lightgray">
+    <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*" />
             <ColumnDefinition Width="1*" />
@@ -53,52 +55,62 @@
 
 
         <StackPanel Grid.Column="1"
-          Orientation="Vertical" 
-          VerticalAlignment="Stretch" 
-          HorizontalAlignment="Stretch" 
-          Margin="10"
-          Width="auto">
+            Orientation="Vertical" 
+            VerticalAlignment="Center" 
+            HorizontalAlignment="Stretch" 
+            Margin="10"
+            Width="auto">
+            
             <Button Content=">>"
-             Width="auto"
-             Height="30"
-             Command="{Binding AddItemCommand}"
-             VerticalAlignment="Center"/>
-            <Button Content="&lt;&lt;"
-             Width="auto"
-             Height="30"
-             Command="{Binding RemoveItemCommand}"
-             VerticalAlignment="Center"/>
+                Width="auto"
+                Height="30"
+                Command="{Binding AddItemCommand}"
+                VerticalAlignment="Center"
+                Margin="5" />
 
+            <Button Content="&lt;&lt;"
+                Width="auto"
+                Height="30"
+                Command="{Binding RemoveItemCommand}"
+                VerticalAlignment="Center"
+                Margin="5" />
+            
         </StackPanel>
 
 
         <StackPanel Grid.Column="2"
-         Orientation="Vertical" 
-         VerticalAlignment="Stretch" 
-         HorizontalAlignment="Stretch" 
-         Margin="10"
-         Width="auto">
+            Orientation="Vertical" 
+            VerticalAlignment="Stretch" 
+            HorizontalAlignment="Stretch" 
+            Margin="10"
+            Width="auto">
+            
             <Label Content="Objednávka"
-        VerticalAlignment="Top"
-        HorizontalAlignment="Left"
-        Margin="10"
-        FontSize="18"
-        FontWeight="Bold" />
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Margin="10"
+                FontSize="18"
+                FontWeight="Bold" />
+            
             <DataGrid  AutoGenerateColumns="False"
-            ItemsSource="{Binding YourItems}"
-            VerticalAlignment="Stretch">
+                ItemsSource="{Binding YourItems}"
+                VerticalAlignment="Stretch">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Název" Binding="{Binding Nazev}" />
                     <DataGridTextColumn Header="Cena" Binding="{Binding Cena}" />
                     <DataGridTextColumn Header="Čárový kód" Binding="{Binding CarovyKod}" />
                 </DataGrid.Columns>
             </DataGrid>
-            <Button Content="Potvrdit objednávku" Width="150" Height="30"
-                                 Command="{Binding ConfirmOrderCommand}" />
-
+            
+            <Button
+                Content="Potvrdit objednávku"
+                Width="150"
+                Height="30"
+                Command="{Binding ConfirmOrderCommand}" 
+                Margin="6"
+                />
 
         </StackPanel>
-
 
     </Grid>
 </UserControl>
