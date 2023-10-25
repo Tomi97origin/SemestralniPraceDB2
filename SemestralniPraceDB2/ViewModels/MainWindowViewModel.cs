@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.ViewModels
 {
-    
-    partial class MainWindowViewModel : BaseViewModel
+    [ObservableObject]
+    partial class MainWindowViewModel //: BaseViewModel
     {
 
         //Inicializace ViewModels
-        private static readonly ObjednavkaViewModel objednavkaVM = new();
+        private static readonly ObjednavkaViewModel objednavkaVM = new ObjednavkaViewModel();
 
         [ObservableProperty]
         public BaseViewModel selectedViewModel = objednavkaVM;

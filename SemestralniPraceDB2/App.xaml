@@ -2,8 +2,18 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:SemestralniPraceDB2"
+             xmlns:views="clr-namespace:SemestralniPraceDB2.Views"
+             xmlns:viewModels="clr-namespace:SemestralniPraceDB2.ViewModels"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        
+        <DataTemplate DataType="{x:Type viewModels:TopMenuViewModel}">
+            <views:TopMenuView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModels:ObjednavkaViewModel}">
+            <views:ObjednavkaView/>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>
