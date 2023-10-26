@@ -11,10 +11,11 @@ namespace SemestralniPraceDB2.ViewModels;
 
 partial class TopMenuViewModel : BaseViewModel
 {
+    private IMessenger messenger = WeakReferenceMessenger.Default;
+
     [RelayCommand]
     private void UpdateView(string parameter)
     {
-        //throw new NotImplementedException();
-        //messenger.Send(new ViewChanged(parameter));
+        messenger.Send(new ViewChanged(parameter));
     }
 }

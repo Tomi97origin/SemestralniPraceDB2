@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SemestralniPraceDB2.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,10 +19,11 @@ namespace SemestralniPraceDB2.Views
     /// <summary>
     /// Interakční logika pro ObjednavkaView.xaml
     /// </summary>
-    public partial class ObjednavkaView : UserControl
+    public partial class MakingOrderForWarehouseView : UserControl
     {
-        public ObjednavkaView()
+        public MakingOrderForWarehouseView()
         {
+            DataContext = new MakingOrderForWarehouseViewModel();
             InitializeComponent();
         }
     }

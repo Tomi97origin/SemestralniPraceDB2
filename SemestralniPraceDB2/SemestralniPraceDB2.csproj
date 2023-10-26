@@ -12,6 +12,7 @@
     <None Remove="Views\holiday_ico.png" />
     <None Remove="Views\horseShoe_ico.png" />
     <None Remove="Views\Images\archive_ico.png" />
+    <None Remove="Views\left_arrow_ico.png" />
     <None Remove="Views\note_ico.png" />
     <None Remove="Views\riderBoot_ico.png" />
     <None Remove="Views\save_ico.png" />
@@ -33,6 +34,7 @@
     <Resource Include="Views\Images\schedule_ico.png" />
     <Resource Include="Views\Images\telegram_ico.png" />
     <Resource Include="Views\Images\note_ico.png" />
+    <Resource Include="Views\Images\left_arrow_ico.png" />
   </ItemGroup>
 
 </Project>

@@ -10,7 +10,7 @@
              Background="AliceBlue">
     <StackPanel Orientation="Horizontal">
         <Button Command="{Binding UpdateViewCommand}"
-                CommandParameter="Activity">
+                CommandParameter="MakingOrderForWarehouse">
             <StackPanel>
                 <Image Source="/Views/Images/note_ico.png" />
                 <TextBlock Text="Vytvořit&#x0a;objednávku" />

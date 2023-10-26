@@ -3,8 +3,7 @@
 namespace SemestralniPraceDB2.ViewModels
 {
 
-    [ObservableObject]
-    public partial class BaseViewModel
+    public partial class BaseViewModel : ObservableObject
     {
     }
 }

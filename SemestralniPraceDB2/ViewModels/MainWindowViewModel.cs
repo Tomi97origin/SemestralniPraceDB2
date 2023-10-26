@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using SemestralniPraceDB2.Models;
 using SemestralniPraceDB2.Views;
 using System;
@@ -11,15 +12,18 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.ViewModels
 {
-    [ObservableObject]
-    partial class MainWindowViewModel //: BaseViewModel
+    [ObservableRecipient]
+    partial class MainWindowViewModel : BaseViewModel, IRecipient<ViewChanged>
     {
 
         //Inicializace ViewModels
-        private static readonly ObjednavkaViewModel objednavkaVM = new ObjednavkaViewModel();
+        private static readonly MakingOrderForWarehouseViewModel makingOrderForWarehouseVM = new();
+        private static readonly WelcomeViewModel        welcomeVM       = new();
 
         [ObservableProperty]
-        public BaseViewModel selectedViewModel = objednavkaVM;
+        public BaseViewModel selectedViewModel = welcomeVM;
+        
+        public BaseViewModel? lastSelectedViewModel = null;
 
         [ObservableProperty]
         private TopMenuViewModel topMenuViewModel = new TopMenuViewModel();
@@ -29,6 +33,33 @@ namespace SemestralniPraceDB2.ViewModels
 
         [ObservableProperty]
         private string statusLabelText = "Status OK";
+
+        public MainWindowViewModel()
+        {
+            Messenger = WeakReferenceMessenger.Default;
+            Messenger.Register<ViewChanged>(this);
+        }
+
+        public void Receive(ViewChanged message)
+        {
+            switch(message.ViewName)
+            {
+                case "MakingOrderForWarehouse":
+                    lastSelectedViewModel = SelectedViewModel;
+                    SelectedViewModel = makingOrderForWarehouseVM;
+                    break;
+                case "GoBack":
+                    if (lastSelectedViewModel is not null)
+                    {
+                        SelectedViewModel = lastSelectedViewModel;
+                        lastSelectedViewModel = null;
+                    }
+                    break;
+                case "Default": 
+                    SelectedViewModel = welcomeVM;
+                    break;
+            }
+        }
 
         [RelayCommand]
         private void ConnectAndGet()

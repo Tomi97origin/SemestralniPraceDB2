@@ -11,8 +11,12 @@
             <views:TopMenuView />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type viewModels:ObjednavkaViewModel}">
-            <views:ObjednavkaView/>
+        <DataTemplate DataType="{x:Type viewModels:MakingOrderForWarehouseViewModel}">
+            <views:MakingOrderForWarehouseView/>
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type viewModels:WelcomeViewModel}">
+            <views:WelcomeView/>
         </DataTemplate>
 
     </Application.Resources>
