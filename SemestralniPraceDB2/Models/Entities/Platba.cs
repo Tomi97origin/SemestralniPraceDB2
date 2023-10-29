@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    internal class Platba
+    public class Platba
     {
         public int Id { get; set; }
         public double Vraceno { get; set; }
@@ -14,5 +14,6 @@ namespace SemestralniPraceDB2.Models.Entities
         public string CisloKarty { get; set; }
         public short Hotovost { get;}
         public Vydavatel? Vydavatel { get; set; }
+        public Vernostni_karta? Vernostni_Karta { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    internal class InventarniPolozka
+    public class InventarniPolozka
     {
         public int Id { get; set; }
         public short Sklad { get; set; }

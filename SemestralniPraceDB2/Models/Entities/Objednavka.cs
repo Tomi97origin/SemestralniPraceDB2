@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    internal class Objednavka
+    public class Objednavka
     {
         public int Id { get; set; }
         public DateTime Vytvoreno { get; set; }

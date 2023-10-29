@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    internal class PlnyUvazek : Zamestnanec
+    public class PlnyUvazek : Zamestnanec
     {
         public double Plat { set; get; }
         public DateTime PlatnostDo { set; get; }

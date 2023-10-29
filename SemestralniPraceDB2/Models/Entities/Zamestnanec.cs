@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    class Zamestnanec
+    public class Zamestnanec
     {
         public int Id { get; set; }
         public string Jmeno { get; set; }

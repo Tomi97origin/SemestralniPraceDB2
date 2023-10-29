@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    internal class Zbozi
+    public class Zbozi
     {
         public int Id { get; set; }
         public string Nazev { get; set; }

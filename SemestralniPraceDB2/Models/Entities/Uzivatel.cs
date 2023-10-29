@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class Vydavatel
+    public class Uzivatel
     {
         public int Id { get; set; }
-        public string Nazev { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public bool Admin { get; set; }
+        public DateTime PosledniPrihlaseni { get; set; }
     }
 }

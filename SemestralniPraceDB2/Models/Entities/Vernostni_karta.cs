@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class Vydavatel
+    public class Vernostni_karta
     {
         public int Id { get; set; }
-        public string Nazev { get; set; }
+        public string Jmeno { get; set; }
+        public DateTime Zalozeni { get; set; }
+        public string Cislo_Karty { get; set; }
     }
 }

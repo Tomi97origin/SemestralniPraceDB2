@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    internal class ObjednaneZbozi
+    public class ObjednaneZbozi
     {
         public int Mnozstvi { get; set; }
         public double Cena { get; set; }

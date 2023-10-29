@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    internal class Uctenka
+    public class Uctenka
     {
         public int Id { get; set; }
         public DateTime Vytvoreno { get; set; }
