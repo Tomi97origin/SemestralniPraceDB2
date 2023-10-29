@@ -63,10 +63,39 @@ namespace SemestralniPraceDB2.Models
                 connection.Close();
             }
 
-
-
-
             return dbResult;
+        }
+
+
+        public static OracleDataReader ExecuteCommand(string query, OracleParameter[] oracleParameters)
+        {
+            OracleConnection connection = GetConnection();
+            try
+            {
+                connection.Open();
+                // Spojení bylo úspěšně navázáno
+                OracleCommand command = new OracleCommand(query, connection);
+                command.Parameters.Add(oracleParameters);
+                try
+                {
+                    OracleDataReader reader = command.ExecuteReader();
+                    return reader;
+                }
+                catch (Exception ex)
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                // Vždy uzavírejte spojení po skončení práce s ním
+                connection.Close();
+            }
+
         }
     }
 }
