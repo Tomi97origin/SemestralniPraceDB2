@@ -25,7 +25,6 @@ namespace SemestralniPraceDB2.Models
         public bool Get(Adresa adresa)
         {
             throw new NotImplementedException();
-            return adresa;
         }
         public List<Adresa> GetAll()
         {
