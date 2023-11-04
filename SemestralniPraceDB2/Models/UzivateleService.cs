@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Reflection.PortableExecutable;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +17,8 @@ namespace SemestralniPraceDB2.Models
 {
     public class UzivateleService
     {
+        public Uzivatel? Prihlaseny { get; set; }
+        public Uzivatel? Aktualni { get; set; }
         public bool Registration(string jmeno, string heslo)
         {
             
@@ -47,7 +50,9 @@ namespace SemestralniPraceDB2.Models
             prm[3].Value = uzivatel.PosledniPrihlaseni;
             prm[4] = new OracleParameter(":id_uzivatele", OracleDbType.Int32, System.Data.ParameterDirection.Input);
             prm[4].Value = uzivatel.Id;
-            var result = DatabaseConnector.ExecuteCommand(query, prm);
+            var result = DatabaseConnector.ExecuteCommandAsync(query, prm).Result;
+            if (result == null)
+                return false;
             return result.RecordsAffected == 1;
         }
 
@@ -63,7 +68,9 @@ namespace SemestralniPraceDB2.Models
             prm[2].Value = uzivatel.Admin == true ? 1 : 0;
             prm[3] = new OracleParameter(":posledniPrihlaseni", OracleDbType.Date, System.Data.ParameterDirection.Input);
             prm[3].Value = uzivatel.PosledniPrihlaseni;
-            var result = DatabaseConnector.ExecuteCommand(query, prm);
+            var result = DatabaseConnector.ExecuteCommandAsync(query, prm).Result;
+            if (result == null)
+                return false;
             return result.RecordsAffected == 1;
         }
 
@@ -76,6 +83,9 @@ namespace SemestralniPraceDB2.Models
             }
             if (uzivatel.Password == BCrypt.Net.BCrypt.HashPassword(heslo))
             {
+                uzivatel.PosledniPrihlaseni = DateTime.Now;
+                Update(uzivatel);
+                Prihlaseny = Aktualni = uzivatel;
                 return uzivatel;
             }
             return null;
@@ -89,7 +99,7 @@ namespace SemestralniPraceDB2.Models
             prm[0].Value = jmeno;
             Uzivatel toReturn;
 
-            var result = DatabaseConnector.ExecuteCommand(query, prm);
+            var result = DatabaseConnector.ExecuteCommandAsync(query, prm).Result;
             if (result == null || !result.HasRows)
             {
                 return null;
@@ -106,6 +116,30 @@ namespace SemestralniPraceDB2.Models
             };
             result.Close();
             return toReturn;
+        }
+
+        public void Emulate(string jmeno)
+        {
+            if (Prihlaseny?.Admin == true)
+            {
+                var emulated = GetUzivatele(jmeno);
+                if (emulated != null)
+                {
+                    Aktualni = emulated;
+                }
+            }
+        }
+
+        public void StopEmulating()
+        {
+            Aktualni = Prihlaseny;
+        }
+
+        public bool Delete(Uzivatel uzivatel)
+        {
+            if (uzivatel == null) return false;
+            if (Prihlaseny?.Admin == false) { return false; }
+            throw new NotImplementedException();
         }
     }
 }

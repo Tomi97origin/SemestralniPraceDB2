@@ -67,8 +67,9 @@ namespace SemestralniPraceDB2.Models
         }
 
 
-        public static OracleDataReader ExecuteCommand(string query, OracleParameter[] oracleParameters)
+        public static async Task<OracleDataReader?> ExecuteCommandAsync(string query, OracleParameter[] oracleParameters)
         {
+            var result =  Task.Run(() => { 
             OracleConnection connection = GetConnection();
             try
             {
@@ -81,13 +82,13 @@ namespace SemestralniPraceDB2.Models
                     OracleDataReader reader = command.ExecuteReader();
                     return reader;
                 }
-                catch (Exception ex)
-                {
+                catch (Exception)
+                    {
                     return null;
                 }
             }
-            catch (Exception ex)
-            {
+            catch (Exception)
+                {
                 return null;
             }
             finally
@@ -95,7 +96,9 @@ namespace SemestralniPraceDB2.Models
                 // Vždy uzavírejte spojení po skončení práce s ním
                 connection.Close();
             }
-
+            });
+            result.Start();
+            return  await result;
         }
     }
 }
