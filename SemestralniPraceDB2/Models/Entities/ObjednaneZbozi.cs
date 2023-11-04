@@ -10,7 +10,7 @@ namespace SemestralniPraceDB2.Models.Entities
     {
         public int Mnozstvi { get; set; }
         public double Cena { get; set; }
-        public Objednavka objednavka { get; set; }
-        public Zbozi zbozi { get; set; }
+        public Objednavka Objednavka { get; set; }
+        public Zbozi Zbozi { get; set; }
     }
 }

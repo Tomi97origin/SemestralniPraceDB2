@@ -14,6 +14,6 @@ namespace SemestralniPraceDB2.Models.Entities
         public string OznaceniPozice { get; set; }
         public DateTime Naskladneno { get; set; }
         public Supermarket Supermarket { get; set; }
-        public Zbozi zbozi { get; set; }
+        public Zbozi Zbozi { get; set; }
     }
 }
