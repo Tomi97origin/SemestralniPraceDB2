@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SemestralniPraceDB2.ViewModels;
 
@@ -18,4 +19,20 @@ partial class TopMenuViewModel : BaseViewModel
     {
         messenger.Send(new ViewChanged(parameter));
     }
+
+    [RelayCommand]
+    private void MenuItem(string parameter)
+    {
+        MessageBox.Show("Klikli jste na položku menu.");
+    }
+    
+    [RelayCommand]
+    private void ShowContextMenu(string parameter)
+    {
+
+        MessageBox.Show("Klikli jste na položku menu.");
+    }
+
+    
+
 }

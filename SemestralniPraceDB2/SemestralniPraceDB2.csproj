@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Remove="Views\archive_ico.png" />
+    <None Remove="Views\gear.png" />
     <None Remove="Views\holiday_ico.png" />
     <None Remove="Views\horseShoe_ico.png" />
     <None Remove="Views\Images\archive_ico.png" />
@@ -27,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Views\Images\gear.png" />
     <Resource Include="Views\Images\holiday_ico.png" />
     <Resource Include="Views\Images\horseShoe_ico.png" />
     <Resource Include="Views\Images\archive_ico.png" />

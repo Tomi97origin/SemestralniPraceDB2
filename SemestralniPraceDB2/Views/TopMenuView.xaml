@@ -5,68 +5,93 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SemestralniPraceDB2.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="100"
+             d:DesignHeight="120"
              d:DesignWidth="800"
              Background="AliceBlue">
-    <StackPanel Orientation="Horizontal">
-        <Button Command="{Binding UpdateViewCommand}"
+    <StackPanel Orientation="Vertical" Margin="0,0,0,5">
+        <Menu Height="20" Background="AliceBlue">
+            <MenuItem Header="Nastavení" Height="20">
+                <MenuItem Header="Prohlížení tabulek" Command="{Binding MenuItemCommand}"/>
+                <MenuItem Header="Položka menu 2" Command="{Binding MenuItemCommand}"/>
+                <MenuItem Command="ApplicationCommands.Copy"/>
+                <MenuItem Command="ApplicationCommands.Cut"/>
+                <MenuItem Command="ApplicationCommands.Paste"/>
+            </MenuItem>
+        </Menu>
+        <StackPanel Orientation="Horizontal" Margin="5,10,5,5">
+            <Button Command="{Binding UpdateViewCommand}"
                 CommandParameter="MakingOrderForWarehouse">
-            <StackPanel>
-                <Image Source="/Views/Images/note_ico.png" />
-                <TextBlock Text="Vytvořit&#x0a;objednávku" />
-            </StackPanel>
-        </Button>
-        <Button Command="{Binding UpdateViewCommand}"
+                <StackPanel>
+                    <Image Source="/Views/Images/note_ico.png" />
+                    <TextBlock Text="Vytvořit&#x0a;objednávku" />
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding UpdateViewCommand}"
                 CommandParameter="NotImplementedYet">
-            <StackPanel>
-                <Image Source="/Views/Images/schedule_ico.png" />
-                <TextBlock Text="Dummy" />
-            </StackPanel>
-        </Button>
-        <Button Command="{Binding UpdateViewCommand}"
+                <StackPanel>
+                    <Image Source="/Views/Images/schedule_ico.png" />
+                    <TextBlock Text="Dummy" />
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding UpdateViewCommand}"
                 CommandParameter="NotImplementedYet">
-            <StackPanel>
-                <Image Source="/Views/Images/horseShoe_ico.png" />
-                <TextBlock Text="Dummy" />
-            </StackPanel>
-        </Button>
-        <Button Command="{Binding UpdateViewCommand}"
+                <StackPanel>
+                    <Image Source="/Views/Images/horseShoe_ico.png" />
+                    <TextBlock Text="Dummy" />
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding UpdateViewCommand}"
                 CommandParameter="NotImplementedYet">
-            <StackPanel>
-                <Image Source="/Views/Images/riderBoot_ico.png" />
-                <TextBlock Text="Dummy" />
-            </StackPanel>
-        </Button>
-        <Button Command="{Binding UpdateViewCommand}"
+                <StackPanel>
+                    <Image Source="/Views/Images/riderBoot_ico.png" />
+                    <TextBlock Text="Dummy" />
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding UpdateViewCommand}"
                 CommandParameter="NotImplementedYet">
-            <StackPanel>
-                <Image Source="/Views/Images/holiday_ico.png" />
-                <TextBlock Text="Dummy" />
-            </StackPanel>
-        </Button>
-        <Button Command="{Binding SaveCommand}">
-            <StackPanel>
-                <Image Source="/Views/Images/save_ico.png" />
-                <TextBlock Text="Dummy" />
-            </StackPanel>
-        </Button>
-        <Button Command="{Binding UpdateViewCommand}"
+                <StackPanel>
+                    <Image Source="/Views/Images/holiday_ico.png" />
+                    <TextBlock Text="Dummy" />
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding SaveCommand}">
+                <StackPanel>
+                    <Image Source="/Views/Images/save_ico.png" />
+                    <TextBlock Text="Dummy" />
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding UpdateViewCommand}"
                 CommandParameter="NotImplementedYet">
-            <StackPanel>
-                <Image Source="/Views/Images/archive_ico.png" />
-                <TextBlock Text="Dummy" />
-            </StackPanel>
-        </Button>
-        <Button Command="{Binding PostOnTelegramCommand}">
-            <StackPanel>
-                <Image Source="/Views/Images/telegram_ico.png" />
-                <TextBlock Text="Dummy" />
-            </StackPanel>
-        </Button>
+                <StackPanel>
+                    <Image Source="/Views/Images/archive_ico.png" />
+                    <TextBlock Text="Dummy" />
+                </StackPanel>
+            </Button>
+            <Button>
+
+
+                <StackPanel>
+
+                    <Image Source="/Views/Images/gear.png" />
+                    <TextBlock Text="Nastavení" />
+                </StackPanel>
+            </Button>
+            <Menu>
+                <MenuItem Header="Nastavení">
+
+                    <MenuItem Header="Prohlížení tabulek" Command="{Binding MenuItemCommand}"/>
+                    <MenuItem Header="Položka menu 2" Command="{Binding MenuItemCommand}"/>
+                    <MenuItem Command="ApplicationCommands.Copy"/>
+                    <MenuItem Command="ApplicationCommands.Cut"/>
+                    <MenuItem Command="ApplicationCommands.Paste"/>
+                </MenuItem>
+            </Menu>
+        </StackPanel>
     </StackPanel>
 
-    <UserControl.Resources>
 
+
+    <UserControl.Resources>
         <Style TargetType="Button">
             <Setter Property="Margin"
                     Value="0,0,0,0" />
