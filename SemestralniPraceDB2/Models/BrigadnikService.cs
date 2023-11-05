@@ -34,6 +34,7 @@ namespace SemestralniPraceDB2.Models
             //TODO start transaction
             //delete from Brigadnici
             zamestnanecService.Delete(brigadnik);
+            //Delete where Brigadnik.Id
             throw new NotImplementedException();
         }
         public bool Get(Brigadnik brigadnik)
