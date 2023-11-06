@@ -11,7 +11,7 @@
     <StackPanel Orientation="Vertical" Margin="0,0,0,5">
         <Menu Height="20" Background="AliceBlue">
             <MenuItem Header="Nastavení" Height="20">
-                <MenuItem Header="Prohlížení tabulek" Command="{Binding MenuItemCommand}"/>
+                <MenuItem Header="Systémový katalog" Command="{Binding MenuItemCommand}"/>
                 <MenuItem Header="Položka menu 2" Command="{Binding MenuItemCommand}"/>
                 <MenuItem Command="ApplicationCommands.Copy"/>
                 <MenuItem Command="ApplicationCommands.Cut"/>
@@ -30,48 +30,52 @@
                 CommandParameter="NotImplementedYet">
                 <StackPanel>
                     <Image Source="/Views/Images/schedule_ico.png" />
-                    <TextBlock Text="Dummy" />
+                    <TextBlock Text="Dummy 1" />
                 </StackPanel>
             </Button>
             <Button Command="{Binding UpdateViewCommand}"
                 CommandParameter="NotImplementedYet">
                 <StackPanel>
-                    <Image Source="/Views/Images/horseShoe_ico.png" />
-                    <TextBlock Text="Dummy" />
+                    <Image Source="/Views/Images/close.png" />
+                    <TextBlock Text="Dummy 2" />
                 </StackPanel>
             </Button>
             <Button Command="{Binding UpdateViewCommand}"
                 CommandParameter="NotImplementedYet">
                 <StackPanel>
-                    <Image Source="/Views/Images/riderBoot_ico.png" />
-                    <TextBlock Text="Dummy" />
+                    <Image Source="/Views/Images/close.png" />
+                    <TextBlock Text="Dummy 3" />
                 </StackPanel>
             </Button>
             <Button Command="{Binding UpdateViewCommand}"
                 CommandParameter="NotImplementedYet">
                 <StackPanel>
-                    <Image Source="/Views/Images/holiday_ico.png" />
-                    <TextBlock Text="Dummy" />
+                    <Image Source="/Views/Images/close.png" />
+                    <TextBlock Text="Dummy 4" />
                 </StackPanel>
             </Button>
             <Button Command="{Binding SaveCommand}">
                 <StackPanel>
                     <Image Source="/Views/Images/save_ico.png" />
-                    <TextBlock Text="Dummy" />
+                    <TextBlock Text="Dummy 5" />
                 </StackPanel>
             </Button>
             <Button Command="{Binding UpdateViewCommand}"
                 CommandParameter="NotImplementedYet">
                 <StackPanel>
                     <Image Source="/Views/Images/archive_ico.png" />
-                    <TextBlock Text="Dummy" />
+                    <TextBlock Text="Dummy 6" />
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding LogoutCommand}"
+                CommandParameter="NotImplementedYet">
+                <StackPanel>
+                    <Image Source="/Views/Images/logout.png" />
+                    <TextBlock Text="Odhlásit se" />
                 </StackPanel>
             </Button>
             <Button>
-
-
                 <StackPanel>
-
                     <Image Source="/Views/Images/gear.png" />
                     <TextBlock Text="Nastavení" />
                 </StackPanel>
@@ -79,7 +83,7 @@
             <Menu>
                 <MenuItem Header="Nastavení">
 
-                    <MenuItem Header="Prohlížení tabulek" Command="{Binding MenuItemCommand}"/>
+                    <MenuItem Header="Systémový katalog" Command="{Binding MenuItemCommand}"/>
                     <MenuItem Header="Položka menu 2" Command="{Binding MenuItemCommand}"/>
                     <MenuItem Command="ApplicationCommands.Copy"/>
                     <MenuItem Command="ApplicationCommands.Cut"/>
