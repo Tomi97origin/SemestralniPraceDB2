@@ -46,12 +46,13 @@ namespace SemestralniPraceDB2.Models
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
             return result == 1;
         }
-        public bool Delete(Adresa adresa) {
+        public bool Delete(Adresa adresa)
+        {
             string sql = "DELETE FROM adresy WHERE id_adresy = :id_adresy";
             OracleParameter[] prm = new OracleParameter[6];
             prm[0] = new OracleParameter(":id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input);
             prm[0].Value = adresa.Id;
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm,CommandType.Text);
+            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text);
             return result.Result == 1;
         }
         public Adresa? Get(Adresa adresa)
@@ -71,7 +72,8 @@ namespace SemestralniPraceDB2.Models
 
         private Adresa MapOracleResultToAddress(OracleDataReader result)
         {
-            return new Adresa() { 
+            return new Adresa()
+            {
                 Id = result.GetInt32(0),
                 Ulice = result.GetString(1),
                 Cp = result.GetInt32(2),
@@ -84,7 +86,7 @@ namespace SemestralniPraceDB2.Models
         public List<Adresa> GetAll()
         {
             string sql = "SELECT * FROM adresy";
-            OracleParameter[] prm = new OracleParameter[0]; // No parameters needed for this query
+            OracleParameter[] prm = new OracleParameter[0];
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm).Result;
             if (result == null || !result.HasRows)
             {
