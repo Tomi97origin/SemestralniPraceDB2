@@ -61,16 +61,16 @@ namespace SemestralniPraceDB2.Models
             prm[0] = new OracleParameter(":id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input);
             prm[0].Value = adresa.Id;
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm).Result;
-            if (result != null && result.HasRows)
+            if (result == null || !result.HasRows)
             {
                 return null;
             }
+            result.Read();
             return MapOracleResultToAddress(result);
         }
 
         private Adresa MapOracleResultToAddress(OracleDataReader result)
         {
-            result.Read();
             return new Adresa() { 
                 Id = result.GetInt32(0),
                 Ulice = result.GetString(1),
@@ -83,7 +83,21 @@ namespace SemestralniPraceDB2.Models
 
         public List<Adresa> GetAll()
         {
-            throw new NotImplementedException();
+            string sql = "SELECT * FROM adresy";
+            OracleParameter[] prm = new OracleParameter[0]; // No parameters needed for this query
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm).Result;
+            if (result == null || !result.HasRows)
+            {
+                return new List<Adresa> { };
+            }
+            List<Adresa> addresses = new List<Adresa>();
+
+            while (result.Read())
+            {
+                addresses.Add(MapOracleResultToAddress(result));
+            }
+
+            return addresses;
         }
     }
 }
