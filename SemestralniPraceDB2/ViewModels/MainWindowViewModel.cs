@@ -34,6 +34,11 @@ namespace SemestralniPraceDB2.ViewModels
         [ObservableProperty]
         private string statusLabelText = "Status OK";
 
+        [ObservableProperty]
+        private string loggedAs = "Nepřihlášený uživatel";
+
+        
+
         public MainWindowViewModel()
         {
             Messenger = WeakReferenceMessenger.Default;

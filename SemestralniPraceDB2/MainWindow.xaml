@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}" 
         Title="Super-MARKET v54.3542.15.99 (2023)" Height="700" Width="1200" >
-        
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -19,48 +19,66 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <Separator Grid.Row="0"
-                   Background="LightGray" />
-        
+        <Separator Grid.Row="0" Background="LightGray" />
+
         <ContentControl Content="{Binding TopMenuViewModel}"
                         Grid.Row="1" />
-        
+
         <Separator Grid.Row="2" Background="LightGray"/>
-        
+
         <ContentControl Content="{Binding SelectedViewModel}"
                         Grid.Row="3" />
-        
+
         <Separator Grid.Row="4"
                    Background="LightGray" />
-        
-        <StackPanel Grid.Row="5"
-                    Orientation="Horizontal" >
-            
-            <Label  Content="Vráceno z databáze:"
-                    Width="120"
-                    VerticalAlignment="Center"/>
-            
-            <TextBox    Width="400"
-                        MaxLength="100"
-                        Name="databaseResultTextBox"
-                        Text="{Binding Path=DatabaseResult.Text, Mode=OneWay}"
-                        VerticalAlignment="Center"
-                        IsReadOnly="True"/>
-            
-            <Button Width="100"
-                    Height="25"
-                    Margin="5"
-                    Content="Připojit a načíst"
-                    Command="{Binding ConnectAndGetCommand}"/>
-            
-            <Label  Content="{Binding StatusLabelText}"
-                    VerticalAlignment="Center"
-                    Width="auto"
-                    FontSize="11"
-                    FontStyle="Italic" />
 
-        </StackPanel>
-        
+        <Grid Grid.Row="5" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal"
+                        Grid.Column="0">
+
+                <Label  Content="Vráceno z databáze:"
+                        Width="120"
+                        VerticalAlignment="Center"/>
+
+                <TextBox    Width="400"
+                            MaxLength="100"
+                            Name="databaseResultTextBox"
+                            Text="{Binding Path=DatabaseResult.Text, Mode=OneWay}"
+                            VerticalAlignment="Center"
+                            IsReadOnly="True"/>
+
+                <Button Width="100"
+                        Height="25"
+                        Margin="5"
+                        Content="Připojit a načíst"
+                        Command="{Binding ConnectAndGetCommand}"/>
+
+                <Label  Content="{Binding StatusLabelText}"
+                        VerticalAlignment="Center"
+                        Width="auto"
+                        FontSize="11"
+                        FontStyle="Italic" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"
+                        Width="auto"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right">
+                
+                <Label  Content="{Binding LoggedAs}"
+                        VerticalAlignment="Center"
+                        Width="auto"
+                        FontSize="11"
+                        FontStyle="Normal" />
+                
+            </StackPanel>
+        </Grid>
+
     </Grid>
-    
+
 </Window>
