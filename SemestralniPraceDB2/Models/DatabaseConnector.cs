@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Oracle.ManagedDataAccess.Client;
 using System.Configuration;
-
+using System.Data;
 
 namespace SemestralniPraceDB2.Models
 {
@@ -35,11 +35,11 @@ namespace SemestralniPraceDB2.Models
                     StringBuilder sb = new StringBuilder();
 
                     reader.Read();
-                    for (int i = 0; i< 1; i++)
+                    for (int i = 0; i < 1; i++)
                     {
                         // Zpracování dat z výsledku dotazu
                         //Console.WriteLine(reader["ColumnName"].ToString());
-                        
+
                         sb.Append(reader[i].ToString());
                     }
                     dbResult = sb.ToString();
@@ -67,38 +67,68 @@ namespace SemestralniPraceDB2.Models
         }
 
 
-        public static async Task<OracleDataReader?> ExecuteCommandAsync(string query, OracleParameter[] oracleParameters)
+        public static async Task<OracleDataReader?> ExecuteCommandQueryAsync(string query, OracleParameter[] oracleParameters)
         {
-            var result =  Task.Run(() => { 
-            OracleConnection connection = GetConnection();
             try
             {
-                connection.Open();
-                // Spojení bylo úspěšně navázáno
-                OracleCommand command = new OracleCommand(query, connection);
-                command.Parameters.Add(oracleParameters);
-                try
+                using (OracleConnection connection = GetConnection())
                 {
-                    OracleDataReader reader = command.ExecuteReader();
-                    return reader;
-                }
-                catch (Exception)
+                    await connection.OpenAsync();
+
+                    using (OracleCommand command = new OracleCommand(query, connection))
                     {
-                    return null;
+                        command.CommandType = CommandType.Text;
+                        command.Parameters.AddRange(oracleParameters);
+
+                        try
+                        {
+                            OracleDataReader reader = (OracleDataReader)await command.ExecuteReaderAsync();
+                            return reader;
+                        }
+                        catch (Exception)
+                        {
+                            return null;
+                        }
+                    }
                 }
             }
             catch (Exception)
-                {
+            {
                 return null;
             }
-            finally
+
+        }
+
+
+        public static async Task<int?> ExecuteCommandNonQueryAsync(string query, OracleParameter[] oracleParameters, CommandType commandType = CommandType.StoredProcedure)
+        {
+            try
             {
-                // Vždy uzavírejte spojení po skončení práce s ním
-                connection.Close();
+                using (OracleConnection connection = GetConnection())
+                {
+                    await connection.OpenAsync();
+
+                    using (OracleCommand command = new OracleCommand(query, connection))
+                    {
+                        command.CommandType = commandType;
+                        command.Parameters.AddRange(oracleParameters);
+
+                        try
+                        {
+                            int result = await command.ExecuteNonQueryAsync();
+                            return result;
+                        }
+                        catch (Exception)
+                        {
+                            return null;
+                        }
+                    }
+                }
             }
-            });
-            result.Start();
-            return  await result;
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }
