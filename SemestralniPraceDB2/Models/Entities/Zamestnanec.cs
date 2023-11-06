@@ -19,5 +19,7 @@ namespace SemestralniPraceDB2.Models.Entities
         public Supermarket? Supermarket { get; set; }
         public Adresa Adresa { get; set; }
         public Role Role { get; set; }
+        public ObrazekZamestnance? ObrazekZamestnance { get; set; }
+
     }
 }
