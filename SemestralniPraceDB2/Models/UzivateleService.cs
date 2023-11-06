@@ -19,8 +19,8 @@ namespace SemestralniPraceDB2.Models
 {
     public class UzivateleService
     {
-        public Uzivatel? Prihlaseny { get; set; }
-        public Uzivatel? Aktualni { get; set; }
+        public static Uzivatel? Prihlaseny { get; set; }
+        public static Uzivatel? Aktualni { get; set; }
         public bool Registration(string jmeno, string heslo)
         {
             
