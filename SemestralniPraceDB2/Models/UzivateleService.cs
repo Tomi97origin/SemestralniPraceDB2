@@ -106,16 +106,7 @@ namespace SemestralniPraceDB2.Models
             {
                 return null;
             }
-            result.Read();
-
-            toReturn = new Uzivatel()
-            {
-                Id = result.GetInt32(0),
-                Username = result.GetString(1),
-                Password = result.GetString(2),
-                Admin = result.GetInt32(3) == 0,
-                PosledniPrihlaseni = result.GetDateTime(4)
-            };
+            toReturn = MapUzivatelFromReader(result);
             result.Close();
             return toReturn;
         }
@@ -143,5 +134,20 @@ namespace SemestralniPraceDB2.Models
             if (Prihlaseny?.Admin == false) { return false; }
             throw new NotImplementedException();
         }
+
+        private static Uzivatel MapUzivatelFromReader(OracleDataReader reader)
+        {
+            reader.Read();
+
+            return new Uzivatel()
+            {
+                Id = reader.GetInt32(0),
+                Username = reader.GetString(1),
+                Password = reader.GetString(2),
+                Admin = reader.GetInt32(3) == 0,
+                PosledniPrihlaseni = reader.GetDateTime(4)
+            };
+        }
+        
     }
 }
