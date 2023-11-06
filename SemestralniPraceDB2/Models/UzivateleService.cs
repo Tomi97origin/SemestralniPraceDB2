@@ -3,6 +3,7 @@ using OracleInternal.SqlAndPlsqlParser.LocalParsing;
 using SemestralniPraceDB2.Models.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Reflection.PortableExecutable;
@@ -40,22 +41,22 @@ namespace SemestralniPraceDB2.Models
             {
                 return Create(uzivatel);
             }
-            string query = "UPDATE uzivatel SET username = :username, password = :password, admin = :admin, posledniPrihlaseni = :posledniPrihlaseni WHERE id_uzivatele = :id_uzivatele";
-            OracleParameter[] prm = new OracleParameter[5];
-            prm[0] = new OracleParameter(":username", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
-            prm[0].Value = uzivatel.Username;
-            prm[1] = new OracleParameter(":password", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
-            prm[1].Value = uzivatel.Password;
-            prm[2] = new OracleParameter(":admin", OracleDbType.Int32, System.Data.ParameterDirection.Input);
-            prm[2].Value = uzivatel.Admin == true ? 1 : 0;
-            prm[3] = new OracleParameter(":posledniPrihlaseni", OracleDbType.Date, System.Data.ParameterDirection.Input);
-            prm[3].Value = uzivatel.PosledniPrihlaseni;
-            prm[4] = new OracleParameter(":id_uzivatele", OracleDbType.Int32, System.Data.ParameterDirection.Input);
-            prm[4].Value = uzivatel.Id;
-            var result = DatabaseConnector.ExecuteCommandAsync(query, prm).Result;
-            if (result == null)
-                return false;
-            return result.RecordsAffected == 1;
+            string query = "UpdateUzivatele";
+            OracleParameter[] prm = new OracleParameter[6];
+            prm[0] = new OracleParameter("id_uzivatele", OracleDbType.Int32, System.Data.ParameterDirection.Input);
+            prm[0].Value = uzivatel.Id;
+            prm[1] = new OracleParameter("username", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
+            prm[1].Value = uzivatel.Username;
+            prm[2] = new OracleParameter("password", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
+            prm[2].Value = uzivatel.Password;
+            prm[3] = new OracleParameter("admin", OracleDbType.Int32, System.Data.ParameterDirection.Input);
+            prm[3].Value = uzivatel.Admin == true ? 1 : 0;
+            prm[4] = new OracleParameter("posledniPrihlaseni", OracleDbType.Date, System.Data.ParameterDirection.Input);
+            prm[4].Value = uzivatel.PosledniPrihlaseni;
+            prm[5] = new OracleParameter("id_uzivatele", OracleDbType.Int32, System.Data.ParameterDirection.Input);
+            prm[5].Value = uzivatel.Id;
+            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(query, prm).Result;
+            return result == 1;
         }
 
         private bool Create(Uzivatel uzivatel)
@@ -70,7 +71,7 @@ namespace SemestralniPraceDB2.Models
             prm[2].Value = uzivatel.Admin == true ? 1 : 0;
             prm[3] = new OracleParameter(":posledniPrihlaseni", OracleDbType.Date, System.Data.ParameterDirection.Input);
             prm[3].Value = uzivatel.PosledniPrihlaseni;
-            var result = DatabaseConnector.ExecuteCommandAsync(query, prm).Result;
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(query, prm).Result;
             if (result == null)
                 return false;
             return result.RecordsAffected == 1;
@@ -101,7 +102,7 @@ namespace SemestralniPraceDB2.Models
             prm[0].Value = jmeno;
             Uzivatel toReturn;
 
-            var result = DatabaseConnector.ExecuteCommandAsync(query, prm).Result;
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(query, prm).Result;
             if (result == null || !result.HasRows)
             {
                 return null;

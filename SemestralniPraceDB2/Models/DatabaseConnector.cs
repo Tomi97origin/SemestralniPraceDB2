@@ -100,7 +100,7 @@ namespace SemestralniPraceDB2.Models
         }
 
 
-        public static async Task<int?> ExecuteCommandNonQueryAsync(string query, OracleParameter[] oracleParameters, CommandType commandType = CommandType.StoredProcedure)
+        public static async Task<int> ExecuteCommandNonQueryAsync(string query, OracleParameter[] oracleParameters, CommandType commandType = CommandType.StoredProcedure)
         {
             try
             {
@@ -120,14 +120,14 @@ namespace SemestralniPraceDB2.Models
                         }
                         catch (Exception)
                         {
-                            return null;
+                            return 0;
                         }
                     }
                 }
             }
             catch (Exception)
             {
-                return null;
+                return 0;
             }
         }
     }
