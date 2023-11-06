@@ -20,6 +20,7 @@ namespace SemestralniPraceDB2.Models
         {
             //TODO start transaction
             zamestnanecService.Create(brigadnik);
+
             throw new NotImplementedException();
         }
 

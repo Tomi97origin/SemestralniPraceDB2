@@ -1,0 +1,2 @@
+//EXECUTE myProcInsert(tabulka,whereString, valuesString)
+//EXECUTE myProcUpdate(tabulka, valuesString)
