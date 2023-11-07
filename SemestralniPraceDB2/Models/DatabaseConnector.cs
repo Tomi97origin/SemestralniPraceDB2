@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Oracle.ManagedDataAccess.Client;
 using System.Configuration;
 using System.Data;
+using SemestralniPraceDB2.Models.Entities;
 
 namespace SemestralniPraceDB2.Models
 {
@@ -20,56 +21,19 @@ namespace SemestralniPraceDB2.Models
         public static string GetFromDatabase()
         {
             string? dbResult = string.Empty;
-            string query = "SELECT first_name,last_name FROM  A_EMPLOYEES.employees ";
-
-            var x = ExecuteCommandQueryAsync(query,new OracleParameter[] { }, Map).Result;
-            dbResult = x.Count == 0 ? "":x[0];
-            /*OracleConnection connection = GetConnection();
-            try
-            {
-                connection.Open();
-                // Spojení bylo úspěšně navázáno
-
-                string query = "SELECT * FROM AUTO";
-                OracleCommand command = new OracleCommand(query, connection);
-
-                try
-                {
-                    OracleDataReader reader = command.ExecuteReader();
-                    StringBuilder sb = new StringBuilder();
-
-                    reader.Read();
-                    for (int i = 0; i < 1; i++)
-                    {
-                        // Zpracování dat z výsledku dotazu
-                        //Console.WriteLine(reader["ColumnName"].ToString());
-
-                        sb.Append(reader[i].ToString());
-                    }
-                    dbResult = sb.ToString();
-                }
-                catch (Exception ex)
-                {
-                    dbResult = "Chyba: " + ex.Message;
-                }
-
-
-
-            }
-            catch (Exception ex)
-            {
-                // Chyba při připojování k databázi
-                dbResult = "Chyba při připojování k databázi: " + ex.Message;
-            }
-            finally
-            {
-                // Vždy uzavírejte spojení po skončení práce s ním
-                connection.Close();
-            }*/
-
+            string query = "SELECT first_name,last_name FROM  A_EMPLOYEES.employees WHERE employee_id = :employee_id";
+            OracleParameter[] prm = new OracleParameter[1];
+            prm[0] = new OracleParameter(":employee_id", OracleDbType.Int32, System.Data.ParameterDirection.Input);
+            prm[0].Value = 100;
+            var x = ExecuteCommandQueryAsync(query, prm, Map).Result;
+            dbResult = x.Count == 0 ? "Nenalezen":x[0];
+            /*
+            OracleParameter[] prm = new OracleParameter[0] { };
+            var x = ExecuteCommandNonQueryAsync("TRPASLIK_PLATY", prm).Result;
+            dbResult = x.ToString();*/
             return dbResult;
         }
-        static string Map(OracleDataReader reader)
+            static string Map(OracleDataReader reader)
         {
            return reader.GetString(0) + reader.GetString(1);
         }

@@ -18,7 +18,7 @@ namespace SemestralniPraceDB2.Models
             string procedureName = "InsertAddress";
             OracleParameter[] prm = MapAddressIntoParams(adresa);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
-            return result.Result == 1;
+            return result.Result == -1;
         }
 
         private OracleParameter[] MapAddressIntoParams(Adresa adresa)
@@ -44,7 +44,7 @@ namespace SemestralniPraceDB2.Models
             string procedureName = "UpdateAddress";
             OracleParameter[] prm = MapAddressIntoParams(adresa);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
-            return result == 1;
+            return result == -1;
         }
         public bool Delete(Adresa adresa)
         {
@@ -52,8 +52,8 @@ namespace SemestralniPraceDB2.Models
             OracleParameter[] prm = new OracleParameter[6];
             prm[0] = new OracleParameter(":id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input);
             prm[0].Value = adresa.Id;
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text);
-            return result.Result == 1;
+            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
+            return result == -1;
         }
         public Adresa? Get(Adresa adresa)
         {
