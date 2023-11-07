@@ -20,7 +20,11 @@ namespace SemestralniPraceDB2.Models
         public static string GetFromDatabase()
         {
             string? dbResult = string.Empty;
-            OracleConnection connection = GetConnection();
+            string query = "SELECT first_name,last_name FROM  A_EMPLOYEES.employees ";
+
+            var x = ExecuteCommandQueryAsync(query,new OracleParameter[] { }, Map).Result;
+            dbResult = x.Count == 0 ? "":x[0];
+            /*OracleConnection connection = GetConnection();
             try
             {
                 connection.Open();
@@ -61,14 +65,19 @@ namespace SemestralniPraceDB2.Models
             {
                 // Vždy uzavírejte spojení po skončení práce s ním
                 connection.Close();
-            }
+            }*/
 
             return dbResult;
         }
-
-
-        public static async Task<OracleDataReader?> ExecuteCommandQueryAsync(string query, OracleParameter[] oracleParameters)
+        static string Map(OracleDataReader reader)
         {
+           return reader.GetString(0) + reader.GetString(1);
+        }
+
+
+        public static async Task<List<T>> ExecuteCommandQueryAsync<T>(string query, OracleParameter[] oracleParameters, Func<OracleDataReader, T> mapResult)
+        {
+            List<T> resultList = new List<T>();
             try
             {
                 using (OracleConnection connection = GetConnection())
@@ -82,19 +91,27 @@ namespace SemestralniPraceDB2.Models
 
                         try
                         {
-                            OracleDataReader reader = (OracleDataReader)await command.ExecuteReaderAsync();
-                            return reader;
+                            using (OracleDataReader reader = (OracleDataReader)await command.ExecuteReaderAsync())
+                            {
+                                while (await reader.ReadAsync())
+                                {
+                                    T result = mapResult(reader);
+                                    resultList.Add(result);
+                                }
+                            }
+                            
+                            return resultList;
                         }
                         catch (Exception)
                         {
-                            return null;
+                            return new List<T>();
                         }
                     }
                 }
             }
             catch (Exception)
             {
-                return null;
+                return new List<T>();
             }
 
         }

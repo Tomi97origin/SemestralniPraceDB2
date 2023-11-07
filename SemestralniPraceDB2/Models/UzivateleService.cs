@@ -71,10 +71,8 @@ namespace SemestralniPraceDB2.Models
             prm[2].Value = uzivatel.Admin == true ? 1 : 0;
             prm[3] = new OracleParameter(":posledniPrihlaseni", OracleDbType.Date, System.Data.ParameterDirection.Input);
             prm[3].Value = uzivatel.PosledniPrihlaseni;
-            var result = DatabaseConnector.ExecuteCommandQueryAsync(query, prm).Result;
-            if (result == null)
-                return false;
-            return result.RecordsAffected == 1;
+            int result = DatabaseConnector.ExecuteCommandNonQueryAsync(query, prm).Result;
+            return result == 0;
         }
 
         public Uzivatel? Login(string jmeno, string heslo)
@@ -102,14 +100,8 @@ namespace SemestralniPraceDB2.Models
             prm[0].Value = jmeno;
             Uzivatel toReturn;
 
-            var result = DatabaseConnector.ExecuteCommandQueryAsync(query, prm).Result;
-            if (result == null || !result.HasRows)
-            {
-                return null;
-            }
-            toReturn = MapUzivatelFromReader(result);
-            result.Close();
-            return toReturn;
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(query, prm, MapUzivatelFromReader).Result;
+            return result.Count == 0 ? null : result[0];
         }
 
         public void Emulate(string jmeno)
