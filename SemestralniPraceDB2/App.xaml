@@ -18,6 +18,14 @@
         <DataTemplate DataType="{x:Type viewModels:WelcomeViewModel}">
             <views:WelcomeView/>
         </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type viewModels:UserLoginViewModel}">
+            <views:UserLoginView/>
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type viewModels:UserRegistrationViewModel}">
+            <views:UserRegistrationView/>
+        </DataTemplate>
 
     </Application.Resources>
 </Application>

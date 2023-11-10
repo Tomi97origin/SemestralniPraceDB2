@@ -44,4 +44,10 @@
     <Resource Include="Views\Images\logout.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Views\UserRegistrationView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

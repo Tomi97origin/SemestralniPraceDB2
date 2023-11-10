@@ -74,22 +74,7 @@
                     <TextBlock Text="Odhlásit se" />
                 </StackPanel>
             </Button>
-            <Button>
-                <StackPanel>
-                    <Image Source="/Views/Images/gear.png" />
-                    <TextBlock Text="Nastavení" />
-                </StackPanel>
-            </Button>
-            <Menu>
-                <MenuItem Header="Nastavení">
-
-                    <MenuItem Header="Systémový katalog" Command="{Binding MenuItemCommand}"/>
-                    <MenuItem Header="Položka menu 2" Command="{Binding MenuItemCommand}"/>
-                    <MenuItem Command="ApplicationCommands.Copy"/>
-                    <MenuItem Command="ApplicationCommands.Cut"/>
-                    <MenuItem Command="ApplicationCommands.Paste"/>
-                </MenuItem>
-            </Menu>
+                        
         </StackPanel>
     </StackPanel>
 

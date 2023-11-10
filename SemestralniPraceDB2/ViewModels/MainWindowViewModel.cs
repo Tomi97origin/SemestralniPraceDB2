@@ -18,10 +18,12 @@ namespace SemestralniPraceDB2.ViewModels
 
         //Inicializace ViewModels
         private static readonly MakingOrderForWarehouseViewModel makingOrderForWarehouseVM = new();
-        private static readonly WelcomeViewModel        welcomeVM       = new();
+        private static readonly WelcomeViewModel welcomeVM = new();
+        private static readonly UserLoginViewModel userLoginVM = new();
+        private static readonly UserRegistrationViewModel userRegistrationVM = new();
 
         [ObservableProperty]
-        public BaseViewModel selectedViewModel = welcomeVM;
+        public BaseViewModel selectedViewModel = userLoginVM;
         
         public BaseViewModel? lastSelectedViewModel = null;
 
@@ -59,6 +61,10 @@ namespace SemestralniPraceDB2.ViewModels
                         SelectedViewModel = lastSelectedViewModel;
                         lastSelectedViewModel = null;
                     }
+                    break;
+                case "UserRegistration":
+                    lastSelectedViewModel = SelectedViewModel;
+                    SelectedViewModel = userRegistrationVM;
                     break;
                 case "Default": 
                     SelectedViewModel = welcomeVM;
