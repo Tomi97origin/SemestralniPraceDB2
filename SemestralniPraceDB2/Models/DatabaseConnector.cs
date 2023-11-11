@@ -21,10 +21,8 @@ namespace SemestralniPraceDB2.Models
         public static string GetFromDatabase()
         {
             string? dbResult = string.Empty;
-            string query = "SELECT first_name,last_name FROM  A_EMPLOYEES.employees WHERE employee_id = :employee_id";
-            OracleParameter[] prm = new OracleParameter[1];
-            prm[0] = new OracleParameter(":employee_id", OracleDbType.Int32, System.Data.ParameterDirection.Input);
-            prm[0].Value = 100;
+            string query = "SELECT TABULKA,OPERACE FROM LOGY";
+            List<OracleParameter> prm = new();
             var x = ExecuteCommandQueryAsync(query, prm, Map).Result;
             dbResult = x.Count == 0 ? "Nenalezen":x[0];
             /*
@@ -35,11 +33,11 @@ namespace SemestralniPraceDB2.Models
         }
             static string Map(OracleDataReader reader)
         {
-           return reader.GetString(0) + reader.GetString(1);
+            return reader.GetString(0);// + " - " + reader.GetString(1) + " - " + reader.GetString(2) + " - " + reader.GetString(3);
         }
 
 
-        public static async Task<List<T>> ExecuteCommandQueryAsync<T>(string query, OracleParameter[] oracleParameters, Func<OracleDataReader, T> mapResult)
+        public static async Task<List<T>> ExecuteCommandQueryAsync<T>(string query, List<OracleParameter> oracleParameters, Func<OracleDataReader, T> mapResult)
         {
             List<T> resultList = new List<T>();
             try
@@ -51,7 +49,11 @@ namespace SemestralniPraceDB2.Models
                     using (OracleCommand command = new OracleCommand(query, connection))
                     {
                         command.CommandType = CommandType.Text;
-                        command.Parameters.AddRange(oracleParameters);
+                        if (oracleParameters != null && oracleParameters.Count > 0)
+                        {
+                            command.Parameters.AddRange(oracleParameters.ToArray());
+                        }
+                        
 
                         try
                         {
@@ -81,7 +83,7 @@ namespace SemestralniPraceDB2.Models
         }
 
 
-        public static async Task<int> ExecuteCommandNonQueryAsync(string query, OracleParameter[] oracleParameters, CommandType commandType = CommandType.StoredProcedure)
+        public static async Task<int> ExecuteCommandNonQueryAsync(string query, List<OracleParameter> oracleParameters, CommandType commandType = CommandType.StoredProcedure)
         {
             try
             {
@@ -92,7 +94,7 @@ namespace SemestralniPraceDB2.Models
                     using (OracleCommand command = new OracleCommand(query, connection))
                     {
                         command.CommandType = commandType;
-                        command.Parameters.AddRange(oracleParameters);
+                        command.Parameters.AddRange(oracleParameters.ToArray());
 
                         try
                         {

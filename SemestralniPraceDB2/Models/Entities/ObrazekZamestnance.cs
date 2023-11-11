@@ -12,8 +12,6 @@ namespace SemestralniPraceDB2.Models.Entities
     {
         public int Id { get; set; }
         public string Soubor { get; set; }
-        public DateTime? Created { get; set; }
-        public DateTime? Updated { get; set; }
         public Image Image { get; set; }
     }
 }

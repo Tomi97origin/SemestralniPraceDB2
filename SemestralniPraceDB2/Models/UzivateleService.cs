@@ -42,7 +42,7 @@ namespace SemestralniPraceDB2.Models
                 return Create(uzivatel);
             }
             string query = "UpdateUzivatele";
-            OracleParameter[] prm = new OracleParameter[6];
+            List<OracleParameter> prm = new();
             prm[0] = new OracleParameter("id_uzivatele", OracleDbType.Int32, System.Data.ParameterDirection.Input);
             prm[0].Value = uzivatel.Id;
             prm[1] = new OracleParameter("username", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
@@ -51,10 +51,10 @@ namespace SemestralniPraceDB2.Models
             prm[2].Value = uzivatel.Password;
             prm[3] = new OracleParameter("admin", OracleDbType.Int32, System.Data.ParameterDirection.Input);
             prm[3].Value = uzivatel.Admin == true ? 1 : 0;
-            prm[4] = new OracleParameter("posledniPrihlaseni", OracleDbType.Date, System.Data.ParameterDirection.Input);
-            prm[4].Value = uzivatel.PosledniPrihlaseni;
-            prm[5] = new OracleParameter("id_uzivatele", OracleDbType.Int32, System.Data.ParameterDirection.Input);
-            prm[5].Value = uzivatel.Id;
+            prm[4] = new OracleParameter("active", OracleDbType.Int32, System.Data.ParameterDirection.Input);
+            prm[4].Value = uzivatel.Active == true ? 1 : 0;
+            prm[5] = new OracleParameter("posledniPrihlaseni", OracleDbType.Date, System.Data.ParameterDirection.Input);
+            prm[5].Value = uzivatel.PosledniPrihlaseni;
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(query, prm).Result;
             return result == 1;
         }
@@ -62,7 +62,7 @@ namespace SemestralniPraceDB2.Models
         private bool Create(Uzivatel uzivatel)
         {
             string query = "INSERT INTO uzivatel (username,password,admin,posledniPrihlaseni) VALUES (:username,:password,:admin,:posledniPrihlaseni)";
-            OracleParameter[] prm = new OracleParameter[4];
+            List<OracleParameter> prm = new();
             prm[0] = new OracleParameter(":username", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
             prm[0].Value = uzivatel.Username;
             prm[1] = new OracleParameter(":password", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
@@ -95,10 +95,9 @@ namespace SemestralniPraceDB2.Models
         private Uzivatel? GetUzivatele(string jmeno)
         {
             string query = "SELECT * FROM Uzivatel WHERE username = :username";
-            OracleParameter[] prm = new OracleParameter[1];
+            List<OracleParameter> prm = new();
             prm[0] = new OracleParameter(":username", OracleDbType.Varchar2,System.Data.ParameterDirection.Input);
             prm[0].Value = jmeno;
-            Uzivatel toReturn;
 
             var result = DatabaseConnector.ExecuteCommandQueryAsync(query, prm, MapUzivatelFromReader).Result;
             return result.Count == 0 ? null : result[0];
@@ -138,7 +137,8 @@ namespace SemestralniPraceDB2.Models
                 Username = reader.GetString(1),
                 Password = reader.GetString(2),
                 Admin = reader.GetInt32(3) == 0,
-                PosledniPrihlaseni = reader.GetDateTime(4)
+                Active = reader.GetInt32(4) == 0,
+                PosledniPrihlaseni = reader.GetDateTime(5)
             };
         }
         

@@ -9,15 +9,18 @@ namespace SemestralniPraceDB2.Models
 {
     public class ZamestnanecService
     {
+
+        //NEBUDE POTREBA CREATE BUDE JEN U BRIGADNIK/PLNU UVAZEK
         public bool Create(Zamestnanec zamestnanec)
         {
             throw new NotImplementedException();
         }
-
+        //NEBUDE POTREBA Update BUDE JEN U BRIGADNIK/PLNU UVAZEK
         public bool Update(Zamestnanec zamestnanec)
         {
             throw new NotImplementedException();
         }
+        //NEBUDE POTREBA DELETE BUDE JEN U BRIGADNIK/PLNU UVAZEK
         public bool Delete(Zamestnanec zamestnanec)
         {
             throw new NotImplementedException();

@@ -12,6 +12,7 @@ namespace SemestralniPraceDB2.Models.Entities
         public string Username { get; set; }
         public string Password { get; set; }
         public bool Admin { get; set; }
+        public bool Active { get; set; }
         public DateTime PosledniPrihlaseni { get; set; }
     }
 }
