@@ -13,59 +13,60 @@ namespace SemestralniPraceDB2.Models
 {
     public class AdresaService
     {
-        public bool Create(Adresa adresa)
+        public static bool Create(Adresa adresa)
         {
-            string procedureName = "InsertAddress";
+            string procedureName = "padresy";
             List<OracleParameter> prm = MapAddressIntoParams(adresa);
+            prm[0] = null;
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
             return result.Result == -1;
         }
 
-        private List<OracleParameter> MapAddressIntoParams(Adresa adresa)
+        private static List<OracleParameter> MapAddressIntoParams(Adresa adresa)
         {
             List<OracleParameter> prm = new();
-            prm[0] = new OracleParameter("id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input);
-            prm[0].Value = adresa.Id;
-            prm[1] = new OracleParameter("ulice", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
+            prm.Add(new OracleParameter("p_id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = adresa.Id <= 0 ? null : adresa.Id;
+            prm.Add(new OracleParameter("p_ulice", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
             prm[1].Value = adresa.Ulice;
-            prm[2] = new OracleParameter("cp", OracleDbType.Int32, System.Data.ParameterDirection.Input);
+            prm.Add(new OracleParameter("p_cp", OracleDbType.Int32, System.Data.ParameterDirection.Input));
             prm[2].Value = adresa.Cp;
-            prm[3] = new OracleParameter("mesto", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
+            prm.Add(new OracleParameter("p_mesto", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
             prm[3].Value = adresa.Mesto;
-            prm[4] = new OracleParameter("stat", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
+            prm.Add(new OracleParameter("p_stat", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
             prm[4].Value = adresa.Stat;
-            prm[4] = new OracleParameter("psc", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
+            prm.Add(new OracleParameter("p_psc", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
             prm[4].Value = adresa.Psc;
             return prm;
         }
 
-        public bool Update(Adresa adresa)
+        public static bool Update(Adresa adresa)
         {
-            string procedureName = "UpdateAddress";
+            string procedureName = "padresy";
             List<OracleParameter> prm = MapAddressIntoParams(adresa);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
             return result == -1;
         }
-        public bool Delete(Adresa adresa)
+        public static bool Delete(Adresa adresa)
         {
             string sql = "DELETE FROM adresy WHERE id_adresy = :id_adresy";
             List<OracleParameter> prm = new();
-            prm[0] = new OracleParameter(":id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input);
+            prm.Add(new OracleParameter(":id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input));
             prm[0].Value = adresa.Id;
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
-            return result == -1;
+            return result == 1;
         }
-        public Adresa? Get(Adresa adresa)
+        public static Adresa? Get(Adresa adresa)
         {
             string sql = "SELECT * FROM adresy WHERE id_adresy = :id_adresy";
             List<OracleParameter> prm = new();
-            prm[0] = new OracleParameter(":id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input);
+            prm.Add(new OracleParameter(":id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input));
             prm[0].Value = adresa.Id;
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToAddress).Result;
             return result.Count == 0 ? null : result[0];
         }
 
-        private Adresa MapOracleResultToAddress(OracleDataReader result)
+        private static Adresa MapOracleResultToAddress(OracleDataReader result)
         {
             return new Adresa()
             {
@@ -78,7 +79,7 @@ namespace SemestralniPraceDB2.Models
             };
         }
 
-        public List<Adresa> GetAll()
+        public static List<Adresa> GetAll()
         {
             string sql = "SELECT * FROM adresy";
             List<OracleParameter> prm = new();

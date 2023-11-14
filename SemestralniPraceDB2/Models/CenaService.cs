@@ -10,29 +10,29 @@ namespace SemestralniPraceDB2.Models
     public class CenaService
     {
         
-        public bool Create(Cena cena)
+        public static bool Create(Cena cena)
         {
             throw new NotImplementedException();
         }
 
-        public bool Update(Cena cena)
+        public static bool Update(Cena cena)
         {
             throw new NotImplementedException();
         }
-        public bool Delete(Cena cena)
+        public static bool Delete(Cena cena)
         {
             throw new NotImplementedException();
         }
-        public bool Get(Cena cena)
+        public static bool Get(Cena cena)
         {
             throw new NotImplementedException();
         }
-        public List<Cena> GetAll()
+        public static List<Cena> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public List<Cena> GetPriceHistory(Zbozi zbozi)
+        public static List<Cena> GetPriceHistory(Zbozi zbozi)
         {
             throw new NotImplementedException();
         }

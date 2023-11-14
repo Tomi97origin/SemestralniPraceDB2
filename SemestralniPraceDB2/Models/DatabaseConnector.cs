@@ -21,14 +21,23 @@ namespace SemestralniPraceDB2.Models
         public static string GetFromDatabase()
         {
             string? dbResult = string.Empty;
-            string query = "SELECT TABULKA,OPERACE FROM LOGY";
+            /*string query = "SELECT TABULKA,OPERACE FROM LOGY";
             List<OracleParameter> prm = new();
             var x = ExecuteCommandQueryAsync(query, prm, Map).Result;
-            dbResult = x.Count == 0 ? "Nenalezen":x[0];
+            dbResult = x.Count == 0 ? "Nenalezen":x[0];*/
             /*
-            OracleParameter[] prm = new OracleParameter[0] { };
-            var x = ExecuteCommandNonQueryAsync("TRPASLIK_PLATY", prm).Result;
-            dbResult = x.ToString();*/
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter("id", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = 1;
+            prm.Add(new OracleParameter("x", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
+            prm[1].Value = "test25";
+            var x = ExecuteCommandNonQueryAsync("prole", prm).Result;*/
+            string sql = "DELETE FROM role WHERE id_role = :id_role";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_role", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = 4;
+            var x = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
+            dbResult = x.ToString();
             return dbResult;
         }
             static string Map(OracleDataReader reader)

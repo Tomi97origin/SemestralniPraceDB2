@@ -22,67 +22,42 @@ namespace SemestralniPraceDB2.Models
     {
         public static Uzivatel? Prihlaseny { get; set; }
         public static Uzivatel? Aktualni { get; set; }
-        public bool Registration(string jmeno, string heslo)
+        public static bool Registration(string jmeno, string heslo)
         {
-            
             Uzivatel uzivatel = new Uzivatel()
             {
-                Id  =   0,
+                Id = 0,
                 Username = jmeno,
                 Password = BCrypt.Net.BCrypt.HashPassword(heslo),
-                Admin=false
+                Admin = false
             };
             return Create(uzivatel);
         }
 
-        public bool Update(Uzivatel uzivatel)
+        public static bool Update(Uzivatel uzivatel)
         {
-            if (uzivatel.Id == 0)
-            {
-                return Create(uzivatel);
-            }
-            string query = "UpdateUzivatele";
-            List<OracleParameter> prm = new();
-            prm[0] = new OracleParameter("id_uzivatele", OracleDbType.Int32, System.Data.ParameterDirection.Input);
-            prm[0].Value = uzivatel.Id;
-            prm[1] = new OracleParameter("username", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
-            prm[1].Value = uzivatel.Username;
-            prm[2] = new OracleParameter("password", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
-            prm[2].Value = uzivatel.Password;
-            prm[3] = new OracleParameter("admin", OracleDbType.Int32, System.Data.ParameterDirection.Input);
-            prm[3].Value = uzivatel.Admin == true ? 1 : 0;
-            prm[4] = new OracleParameter("active", OracleDbType.Int32, System.Data.ParameterDirection.Input);
-            prm[4].Value = uzivatel.Active == true ? 1 : 0;
-            prm[5] = new OracleParameter("posledniPrihlaseni", OracleDbType.Date, System.Data.ParameterDirection.Input);
-            prm[5].Value = uzivatel.PosledniPrihlaseni;
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(query, prm).Result;
-            return result == 1;
+            string procedureName = "puzivatele";
+            List<OracleParameter> prm = MapUzivatelIntoParams(uzivatel);
+            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
+            return result == -1;
         }
 
-        private bool Create(Uzivatel uzivatel)
+        private static bool Create(Uzivatel uzivatel)
         {
-            string query = "INSERT INTO uzivatel (username,password,admin,posledniPrihlaseni) VALUES (:username,:password,:admin,:posledniPrihlaseni)";
-            List<OracleParameter> prm = new();
-            prm[0] = new OracleParameter(":username", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
-            prm[0].Value = uzivatel.Username;
-            prm[1] = new OracleParameter(":password", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
-            prm[1].Value = uzivatel.Password;
-            prm[2] = new OracleParameter(":admin", OracleDbType.Int32, System.Data.ParameterDirection.Input);
-            prm[2].Value = uzivatel.Admin == true ? 1 : 0;
-            prm[3] = new OracleParameter(":posledniPrihlaseni", OracleDbType.Date, System.Data.ParameterDirection.Input);
-            prm[3].Value = uzivatel.PosledniPrihlaseni;
-            int result = DatabaseConnector.ExecuteCommandNonQueryAsync(query, prm).Result;
-            return result == 0;
+            string procedureName = "puzivatele";
+            List<OracleParameter> prm = MapUzivatelIntoParams(uzivatel);
+            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
+            return result == -1;
         }
 
-        public Uzivatel? Login(string jmeno, string heslo)
+        public static Uzivatel? Login(string jmeno, string heslo)
         {
             Uzivatel? uzivatel = GetUzivatele(jmeno);
             if (uzivatel == null)
             {
                 return null;
             }
-            if (uzivatel.Password == BCrypt.Net.BCrypt.HashPassword(heslo))
+            if (uzivatel.Password == BCrypt.Net.BCrypt.HashPassword(heslo) && uzivatel.Active)
             {
                 uzivatel.PosledniPrihlaseni = DateTime.Now;
                 Update(uzivatel);
@@ -92,55 +67,83 @@ namespace SemestralniPraceDB2.Models
             return null;
         }
 
-        private Uzivatel? GetUzivatele(string jmeno)
+        private static Uzivatel? GetUzivatele(string jmeno)
         {
             string query = "SELECT * FROM Uzivatel WHERE username = :username";
             List<OracleParameter> prm = new();
-            prm[0] = new OracleParameter(":username", OracleDbType.Varchar2,System.Data.ParameterDirection.Input);
+            prm[0] = new OracleParameter(":username", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
             prm[0].Value = jmeno;
 
             var result = DatabaseConnector.ExecuteCommandQueryAsync(query, prm, MapUzivatelFromReader).Result;
             return result.Count == 0 ? null : result[0];
         }
 
-        public void Emulate(string jmeno)
+        public static void Emulate(string jmeno)
         {
             if (Prihlaseny?.Admin == true)
             {
                 var emulated = GetUzivatele(jmeno);
-                if (emulated != null)
+                if (emulated != null && emulated.Active)
                 {
                     Aktualni = emulated;
                 }
             }
         }
 
-        public void StopEmulating()
+        public static void StopEmulating()
         {
             Aktualni = Prihlaseny;
         }
 
-        public bool Delete(Uzivatel uzivatel)
+        public static bool Delete(Uzivatel uzivatel)
         {
             if (uzivatel == null) return false;
             if (Prihlaseny?.Admin == false) { return false; }
-            throw new NotImplementedException();
+            string sql = "DELETE FROM uzivatele WHERE id_uzivatele = :id_uzivatele";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_uzivatele", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = uzivatel.Id;
+            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
+            return result == 1;
         }
-
         private static Uzivatel MapUzivatelFromReader(OracleDataReader reader)
         {
-            reader.Read();
-
             return new Uzivatel()
             {
                 Id = reader.GetInt32(0),
                 Username = reader.GetString(1),
                 Password = reader.GetString(2),
-                Admin = reader.GetInt32(3) == 0,
-                Active = reader.GetInt32(4) == 0,
+                Admin = reader.GetInt32(3) == 1,
+                Active = reader.GetInt32(4) == 1,
                 PosledniPrihlaseni = reader.GetDateTime(5)
             };
         }
-        
+
+        private static List<OracleParameter> MapUzivatelIntoParams(Uzivatel uzivatel)
+        {
+            List<OracleParameter> prm = new List<OracleParameter>();
+
+            prm.Add(new OracleParameter("p_id_uzivatele", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = uzivatel.Id;
+
+            prm.Add(new OracleParameter("p_username", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
+            prm[1].Value = uzivatel.Username;
+
+            prm.Add(new OracleParameter("p_password", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
+            prm[2].Value = uzivatel.Password;
+
+            prm.Add(new OracleParameter("p_admin", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[3].Value = uzivatel.Admin ? 1 : 0;
+
+            prm.Add(new OracleParameter("p_active", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[4].Value = uzivatel.Active ? 1 : 0;
+
+            prm.Add(new OracleParameter("p_posledni", OracleDbType.Date, System.Data.ParameterDirection.Input));
+            prm[5].Value = uzivatel.PosledniPrihlaseni;
+
+            return prm;
+        }
+
+
     }
 }
