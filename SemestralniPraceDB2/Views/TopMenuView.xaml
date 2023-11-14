@@ -9,15 +9,27 @@
              d:DesignWidth="800"
              Background="AliceBlue">
     <StackPanel Orientation="Vertical" Margin="0,0,0,5">
+
         <Menu Height="20" Background="AliceBlue">
-            <MenuItem Header="Nastavení" Height="20">
-                <MenuItem Header="Systémový katalog" Command="{Binding MenuItemCommand}"/>
-                <MenuItem Header="Položka menu 2" Command="{Binding MenuItemCommand}"/>
-                <MenuItem Command="ApplicationCommands.Copy"/>
-                <MenuItem Command="ApplicationCommands.Cut"/>
-                <MenuItem Command="ApplicationCommands.Paste"/>
+
+            <MenuItem Header="Nastavení" >
+                <MenuItem Header="Položka" 
+                          Command="{Binding MenuItemCommand}"/>
             </MenuItem>
+
+            <MenuItem Header="Správa zaměstnanců" >
+                <MenuItem Header="Vytvořit nového zaměstnance"
+                          Command="{Binding UpdateViewCommand}"
+                          CommandParameter="CreateEmployee"/>
+            </MenuItem>
+
+            <MenuItem Header="Databáze" >
+                <MenuItem Header="Systémový katalog" 
+                          Command="{Binding MenuItemCommand}"/>
+            </MenuItem>
+
         </Menu>
+
         <StackPanel Orientation="Horizontal" Margin="5,10,5,5">
             <Button Command="{Binding UpdateViewCommand}"
                 CommandParameter="MakingOrderForWarehouse">
@@ -74,7 +86,7 @@
                     <TextBlock Text="Odhlásit se" />
                 </StackPanel>
             </Button>
-                        
+
         </StackPanel>
     </StackPanel>
 

@@ -21,5 +21,11 @@ namespace SemestralniPraceDB2.Models.Entities
         public Role Role { get; set; }
         public ObrazekZamestnance? ObrazekZamestnance { get; set; }
 
+
+        override public string ToString()
+        {
+            return $"{Jmeno} {Prijmeni}, {OsobniCislo}, {TelCislo}, " +
+                $"{Nastup}, {TypUvazku}, {Vedouci}, {Supermarket}, {Adresa}, {Role}";
+        }
     }
 }

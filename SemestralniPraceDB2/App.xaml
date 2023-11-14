@@ -27,5 +27,9 @@
             <views:UserRegistrationView/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type viewModels:CreateEmployeeViewModel}">
+            <views:CreateEmployeeView/>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>
