@@ -8,13 +8,16 @@ namespace SemestralniPraceDB2.Models.Entities
 {
     public class Adresa
     {
-       public int Id { get; set; }
+        public int Id { get; set; }
         public string? Ulice { get; set; }
         public int? Cp { get; set; }
         public string? Mesto { get; set; }
         public string? Stat { get; set; }
         public string? Psc { get; set; }
 
-
+        override public string ToString()
+        {
+            return $"{Ulice} {Cp}, {Mesto} {Psc}, {Stat}";
+        }
     }
 }

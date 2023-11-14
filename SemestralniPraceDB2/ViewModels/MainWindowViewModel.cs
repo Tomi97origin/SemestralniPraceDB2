@@ -21,6 +21,7 @@ namespace SemestralniPraceDB2.ViewModels
         private static readonly WelcomeViewModel welcomeVM = new();
         private static readonly UserLoginViewModel userLoginVM = new();
         private static readonly UserRegistrationViewModel userRegistrationVM = new();
+        private static readonly CreateEmployeeViewModel CreateEmployeeVM = new();
 
         [ObservableProperty]
         public BaseViewModel selectedViewModel = userLoginVM;
@@ -65,6 +66,10 @@ namespace SemestralniPraceDB2.ViewModels
                 case "UserRegistration":
                     lastSelectedViewModel = SelectedViewModel;
                     SelectedViewModel = userRegistrationVM;
+                    break;
+                case "CreateEmployee":
+                    lastSelectedViewModel = SelectedViewModel;
+                    SelectedViewModel = CreateEmployeeVM;
                     break;
                 case "Default": 
                     SelectedViewModel = welcomeVM;

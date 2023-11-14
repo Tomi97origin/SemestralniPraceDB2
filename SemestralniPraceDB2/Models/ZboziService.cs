@@ -29,15 +29,17 @@ namespace SemestralniPraceDB2.Models
             OracleParameter[] prm = new OracleParameter[6];
             prm[0] = new OracleParameter(":id_zbozi", OracleDbType.Int32, System.Data.ParameterDirection.Input);
             prm[0].Value = zbozi.Id;
-            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToZbozi).Result;
-            return result.Count == 0 ? null : result[0];
+            throw new NotImplementedException();  //TODO prm nejde zkompilovat
+            //var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToZbozi).Result;
+            //return result.Count == 0 ? null : result[0];
         }
         public List<Zbozi> GetAll()
         {
             string sql = "SELECT * FROM zbozi";
             OracleParameter[] prm = new OracleParameter[0];
-            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToZbozi).Result;
-            return result;
+            throw new NotImplementedException();  //TODO prm nejde zkompilovat
+            //var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToZbozi).Result;
+            //return result;
         }
 
         private OracleParameter[] MapZboziIntoParams(Zbozi zbozi)
