@@ -15,7 +15,7 @@ namespace SemestralniPraceDB2.Models
         {
             string procedureName = "pinventarni_polozky";
             List<OracleParameter> prm = MapInventarniPolozkaIntoParams(polozka);
-            prm[0] = null;
+            prm[0].Value = null;
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
             return result.Result == -1;
         }

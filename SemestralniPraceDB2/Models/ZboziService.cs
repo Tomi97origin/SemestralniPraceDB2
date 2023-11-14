@@ -15,7 +15,7 @@ namespace SemestralniPraceDB2.Models
         {
             string procedureName = "pzbozi";
             List<OracleParameter> prm = MapZboziIntoParams(zbozi);
-            prm[0] = null;
+            prm[0].Value = null;
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
             return result.Result == -1;
         }
