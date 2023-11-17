@@ -65,7 +65,7 @@ namespace SemestralniPraceDB2.Models
             prm[1].Value = dodavatel.Nazev;
 
             prm.Add(new OracleParameter("p_id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input));
-            prm[2].Value = dodavatel.Adresa.Id; // Assuming Adresa has an Id property
+            prm[2].Value = dodavatel.Adresa.Id; 
 
             return prm;
         }
@@ -76,7 +76,7 @@ namespace SemestralniPraceDB2.Models
             {
                 Id = reader.GetInt32(0),
                 Nazev = reader.GetString(1),
-                Adresa = new Adresa() { Id = reader.GetInt32(2) } // Assuming Adresa has an Id property
+                Adresa = new Adresa() { Id = reader.GetInt32(2) }
             };
         }
 

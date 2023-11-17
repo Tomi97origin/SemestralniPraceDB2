@@ -70,10 +70,10 @@ namespace SemestralniPraceDB2.Models
             prm[3].Value = zbozi.EAN;
 
             prm.Add(new OracleParameter("p_id_kategorie", OracleDbType.Int32, System.Data.ParameterDirection.Input));
-            prm[4].Value = zbozi.Kategorie.Id; // Assuming Kategorie has an Id property
+            prm[4].Value = zbozi.Kategorie.Id;
 
             prm.Add(new OracleParameter("p_id_vyrobce", OracleDbType.Int32, System.Data.ParameterDirection.Input));
-            prm[5].Value = zbozi.Vyrobce.Id; // Assuming Vyrobce has an Id property
+            prm[5].Value = zbozi.Vyrobce.Id;
 
             return prm;
         }
@@ -87,8 +87,8 @@ namespace SemestralniPraceDB2.Models
                 Nazev = result.GetString(1),
                 Popis = result.GetString(2),
                 EAN = result.GetString(3),
-                Kategorie = new Kategorie() { Id = result.GetInt32(4) }, // Assuming Kategorie has an Id property
-                Vyrobce = new Vyrobce() { Id = result.GetInt32(5) } // Assuming Vyrobce has an Id property
+                Kategorie = new Kategorie() { Id = result.GetInt32(4) },
+                Vyrobce = new Vyrobce() { Id = result.GetInt32(5) }
             };
         }
     }

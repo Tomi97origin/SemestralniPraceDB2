@@ -1,6 +1,8 @@
-﻿using SemestralniPraceDB2.Models.Entities;
+﻿using Oracle.ManagedDataAccess.Client;
+using SemestralniPraceDB2.Models.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,31 +11,92 @@ namespace SemestralniPraceDB2.Models
 {
     public class ObjednaneZboziService
     {
-        public bool Create(ObjednaneZbozi zbozi)
+        public static bool Create(ObjednaneZbozi zbozi)
         {
-            throw new NotImplementedException();
+            string procedureName = "pobjednane_zbozi";
+            List<OracleParameter> prm = ObjednaneZboziIntoParams(zbozi);
+            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
+            return result.Result == -1;
         }
 
-        public bool Update(ObjednaneZbozi zbozi)
+        public static bool Update(ObjednaneZbozi zbozi)
         {
-            throw new NotImplementedException();
+            string procedureName = "pobjednane_zbozi";
+            List<OracleParameter> prm = ObjednaneZboziIntoParams(zbozi);
+            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
+            return result.Result == -1;
         }
-        public bool Delete(ObjednaneZbozi zbozi)
+        public static bool Delete(ObjednaneZbozi zbozi)
         {
-            throw new NotImplementedException();
+            string sql = "DELETE FROM objednane_zbozi WHERE id_objednavky = :id_objednavky AND id_zbozi = :id_zbozi";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_objednavky", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = zbozi.Objednavka.Id;
+            prm.Add(new OracleParameter(":id_zbozi", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[1].Value = zbozi.Zbozi.Id;
+            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
+            return result == 1;
         }
-        public bool Get(ObjednaneZbozi zbozi)
+        public static ObjednaneZbozi? Get(ObjednaneZbozi zbozi)
         {
-            throw new NotImplementedException();
-        }
-        public List<ObjednaneZbozi> GetAll()
-        {
-            throw new NotImplementedException();
+            string sql = "Select * FROM objednane_zbozi WHERE id_objednavky = :id_objednavky AND id_zbozi = :id_zbozi";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_objednavky", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = zbozi.Objednavka.Id;
+            prm.Add(new OracleParameter(":id_zbozi", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[1].Value = zbozi.Zbozi.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToObjednaneZbozi).Result;
+            return result.Count == 0 ? null : result[0];
         }
 
-        public List<ObjednaneZbozi> GetFromObjenavka(Objednavka objednavka)
+        private static ObjednaneZbozi MapOracleResultToObjednaneZbozi(OracleDataReader reader)
         {
-            throw new NotImplementedException();
+
+            return new ObjednaneZbozi()
+            {
+                Mnozstvi = reader.GetInt32(0),
+                Cena = reader.GetDouble(1),
+                Objednavka = new Objednavka() { Id = reader.GetInt32(2) },
+                Zbozi = new Zbozi() { Id = reader.GetInt32(3) }
+            };
         }
+
+        public static List<ObjednaneZbozi> GetAll()
+        {
+            string sql = "SELECT * FROM objednane_zbozi";
+            List<OracleParameter> prm = new();
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToObjednaneZbozi).Result;
+            return result;
+        }
+
+        public static List<ObjednaneZbozi> GetFromObjenavka(Objednavka objednavka)
+        {
+            string sql = "Select * FROM objednane_zbozi WHERE id_objednavky = :id_objednavky";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_objednavky", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = objednavka.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToObjednaneZbozi).Result;
+            return result;
+        }
+
+        private List<OracleParameter> ObjednaneZboziIntoParams(ObjednaneZbozi zbozi)
+        {
+            List<OracleParameter> prm = new List<OracleParameter>();
+
+            prm.Add(new OracleParameter("p_mnozstvi", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = zbozi.Mnozstvi;
+
+            prm.Add(new OracleParameter("p_cena", OracleDbType.Double, System.Data.ParameterDirection.Input));
+            prm[1].Value = zbozi.Cena;
+
+            prm.Add(new OracleParameter("p_id_objednavky", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[2].Value = zbozi.Objednavka.Id;
+
+            prm.Add(new OracleParameter("p_id_zbozi", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[3].Value = zbozi.Zbozi.Id;
+
+            return prm;
+        }
+
     }
 }

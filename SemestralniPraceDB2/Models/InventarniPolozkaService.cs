@@ -73,10 +73,10 @@ namespace SemestralniPraceDB2.Models
             prm[4].Value = polozka.Naskladneno;
 
             prm.Add(new OracleParameter("p_id_supermarketu", OracleDbType.Int32, System.Data.ParameterDirection.Input));
-            prm[5].Value = polozka.Supermarket.Id; // Assuming Supermarket has an Id property
+            prm[5].Value = polozka.Supermarket.Id;
 
             prm.Add(new OracleParameter("p_id_zbozi", OracleDbType.Int32, System.Data.ParameterDirection.Input));
-            prm[6].Value = polozka.Zbozi.Id; // Assuming Zbozi has an Id property
+            prm[6].Value = polozka.Zbozi.Id;
 
             return prm;
         }
@@ -90,8 +90,8 @@ namespace SemestralniPraceDB2.Models
                     Mnozstvi = reader.GetInt32(2),
                     OznaceniPozice = reader.GetString(3),
                     Naskladneno = reader.GetDateTime(4),
-                    Supermarket = new Supermarket() { Id = reader.GetInt32(5) }, // Assuming Supermarket has an Id property
-                    Zbozi = new Zbozi() { Id = reader.GetInt32(6) } // Assuming Zbozi has an Id property
+                    Supermarket = new Supermarket() { Id = reader.GetInt32(5) },
+                    Zbozi = new Zbozi() { Id = reader.GetInt32(6) }
                 };
             
         }
