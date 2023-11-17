@@ -26,6 +26,9 @@
             <MenuItem Header="Databáze" >
                 <MenuItem Header="Systémový katalog" 
                           Command="{Binding MenuItemCommand}"/>
+                <MenuItem Header="Prohlížeč tabulek" 
+                          Command="{Binding UpdateViewCommand}"
+                          CommandParameter="DatabaseExplorer"/>
             </MenuItem>
 
         </Menu>

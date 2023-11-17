@@ -19,5 +19,19 @@ namespace SemestralniPraceDB2.Models.Entities
         {
             return $"{Ulice} {Cp}, {Mesto} {Psc}, {Stat}";
         }
+
+        public Adresa(int id, string? ulice, int? cp, string? mesto, string? stat, string? psc)
+        {
+            Id = id;
+            Ulice = ulice;
+            Cp = cp;
+            Mesto = mesto;
+            Stat = stat;
+            Psc = psc;
+        }
+
+        public Adresa()
+        {
+        }
     }
 }

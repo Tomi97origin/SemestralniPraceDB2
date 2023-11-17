@@ -38,8 +38,31 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
+            
             <StackPanel Orientation="Horizontal"
                         Grid.Column="0">
+
+                <StackPanel Grid.Column="0"
+                            Grid.Row="1"
+                            Margin="10,0,10,0"
+                            HorizontalAlignment="Left">
+                    <Button Command="{Binding UpdateViewCommand}"
+                            CommandParameter="GoBack"
+                            Width="auto"
+                            MaxHeight="45"
+                            Background="AliceBlue"
+                            BorderThickness="0">
+                        <StackPanel 
+                            Orientation="Horizontal"
+                            Margin="5">
+                            <Image Source="/Views/Images/left_arrow_ico.png" 
+                                   Height="20"/>
+                            <TextBlock Text="Zpět" 
+                                       VerticalAlignment="Center"
+                                       Padding="10,0,10,0"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
 
                 <Label  Content="Vráceno z databáze:"
                         Width="120"

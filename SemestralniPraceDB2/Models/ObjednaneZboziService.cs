@@ -79,7 +79,7 @@ namespace SemestralniPraceDB2.Models
             return result;
         }
 
-        private List<OracleParameter> ObjednaneZboziIntoParams(ObjednaneZbozi zbozi)
+        private static List<OracleParameter> ObjednaneZboziIntoParams(ObjednaneZbozi zbozi)
         {
             List<OracleParameter> prm = new List<OracleParameter>();
 

@@ -58,5 +58,10 @@ namespace SemestralniPraceDB2.ViewModels
                 zamestnanecImage = new BitmapImage(new Uri(imagePath));
             }
         }
+
+        public CreateEmployeeViewModel()
+        {
+            Zamestnanec.Nastup = DateTime.Now;
+        }
     }
 }

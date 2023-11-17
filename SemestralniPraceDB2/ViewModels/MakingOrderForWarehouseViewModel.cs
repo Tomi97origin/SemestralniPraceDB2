@@ -7,12 +7,6 @@ namespace SemestralniPraceDB2.ViewModels
     
     partial class MakingOrderForWarehouseViewModel : BaseViewModel
     {
-        private IMessenger messenger = WeakReferenceMessenger.Default;
-
-        [RelayCommand]
-        private void UpdateView(string parameter)
-        {
-            messenger.Send(new ViewChanged(parameter));
-        }
+        
     }
 }

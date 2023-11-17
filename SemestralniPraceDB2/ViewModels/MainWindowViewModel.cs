@@ -15,21 +15,21 @@ namespace SemestralniPraceDB2.ViewModels
     [ObservableRecipient]
     partial class MainWindowViewModel : BaseViewModel, IRecipient<ViewChanged>
     {
-
         //Inicializace ViewModels
         private static readonly MakingOrderForWarehouseViewModel makingOrderForWarehouseVM = new();
         private static readonly WelcomeViewModel welcomeVM = new();
         private static readonly UserLoginViewModel userLoginVM = new();
         private static readonly UserRegistrationViewModel userRegistrationVM = new();
         private static readonly CreateEmployeeViewModel CreateEmployeeVM = new();
+        private static readonly DatabaseExplorerViewModel DatabaseExplorerVM = new();
 
         [ObservableProperty]
         public BaseViewModel selectedViewModel = userLoginVM;
-        
+
         public BaseViewModel? lastSelectedViewModel = null;
 
         [ObservableProperty]
-        private TopMenuViewModel topMenuViewModel = new TopMenuViewModel();
+        private TopMenuViewModel topMenuViewModel = new();
 
         [ObservableProperty]
         private DatabaseResult? _databaseResult;
@@ -40,7 +40,7 @@ namespace SemestralniPraceDB2.ViewModels
         [ObservableProperty]
         private string loggedAs = "Nepřihlášený uživatel";
 
-        
+
 
         public MainWindowViewModel()
         {
@@ -50,30 +50,19 @@ namespace SemestralniPraceDB2.ViewModels
 
         public void Receive(ViewChanged message)
         {
-            switch(message.ViewName)
+            BaseViewModel newVM = message.ViewName switch
             {
-                case "MakingOrderForWarehouse":
-                    lastSelectedViewModel = SelectedViewModel;
-                    SelectedViewModel = makingOrderForWarehouseVM;
-                    break;
-                case "GoBack":
-                    if (lastSelectedViewModel is not null)
-                    {
-                        SelectedViewModel = lastSelectedViewModel;
-                        lastSelectedViewModel = null;
-                    }
-                    break;
-                case "UserRegistration":
-                    lastSelectedViewModel = SelectedViewModel;
-                    SelectedViewModel = userRegistrationVM;
-                    break;
-                case "CreateEmployee":
-                    lastSelectedViewModel = SelectedViewModel;
-                    SelectedViewModel = CreateEmployeeVM;
-                    break;
-                case "Default": 
-                    SelectedViewModel = welcomeVM;
-                    break;
+                "MakingOrderForWarehouse" => makingOrderForWarehouseVM,
+                "UserRegistration" => userRegistrationVM,
+                "CreateEmployee" => CreateEmployeeVM,
+                "DatabaseExplorer" => DatabaseExplorerVM,
+                _ => welcomeVM,
+            };
+
+            if (newVM != SelectedViewModel)
+            {
+                lastSelectedViewModel = SelectedViewModel;
+                SelectedViewModel = newVM;
             }
         }
 
@@ -84,6 +73,16 @@ namespace SemestralniPraceDB2.ViewModels
             {
                 Text = DatabaseConnector.GetFromDatabase()
             };
+        }
+
+        [RelayCommand]
+        private void UpdateView(string parameter)
+        {
+            if (lastSelectedViewModel is not null)
+            {
+                SelectedViewModel = lastSelectedViewModel;
+                lastSelectedViewModel = null;
+            }
         }
     }
 }

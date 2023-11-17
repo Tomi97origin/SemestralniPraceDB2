@@ -10,5 +10,11 @@ namespace SemestralniPraceDB2.Models.Entities
     {
         public int Id { get; set; }
         public string  Nazev { get; set; }
+
+        public Role(int id, string nazev)
+        {
+            Id = id;
+            Nazev = nazev;
+        }
     }
 }

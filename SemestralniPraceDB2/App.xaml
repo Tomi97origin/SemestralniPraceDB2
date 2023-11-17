@@ -31,5 +31,9 @@
             <views:CreateEmployeeView/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type viewModels:DatabaseExplorerViewModel}">
+            <views:DatabaseExplorerView/>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>
