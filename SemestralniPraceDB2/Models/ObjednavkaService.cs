@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models
 {
-    public class ObjednavkaService
+    public static class ObjednavkaService
     {
         public static bool Create(Objednavka objednavka)
         {
@@ -17,7 +17,7 @@ namespace SemestralniPraceDB2.Models
             List<OracleParameter> prm = MapObjednavkaIntoParams(objednavka);
             prm[0].Value = null;
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
-            return result.Result == -1;
+            return result.Result > 0;
         }
 
         public static bool Update(Objednavka objednavka)
@@ -25,17 +25,23 @@ namespace SemestralniPraceDB2.Models
             string procedureName = "pobjednavky";
             List<OracleParameter> prm = MapObjednavkaIntoParams(objednavka);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
-            return result.Result == -1;
+            return result.Result > 0;
         }
         public static bool Delete(Objednavka objednavka)
         {
-            string sql = "DELETE FROM objednavky WHERE id_objednavky = :id_objednavky";
-            List<OracleParameter> prm = new();
-            prm.Add(new OracleParameter(":id_objednavky", OracleDbType.Int32, System.Data.ParameterDirection.Input));
-            prm[0].Value = objednavka.Id;
+            PrepareDeleteCall(objednavka, out string sql, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
             return result == 1;
         }
+
+        public static void PrepareDeleteCall(Objednavka objednavka, out string sql, out List<OracleParameter> prm)
+        {
+            sql = "DELETE FROM objednavky WHERE id_objednavky = :id_objednavky";
+            prm = new();
+            prm.Add(new OracleParameter(":id_objednavky", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = objednavka.Id;
+        }
+
         public static Objednavka? Get(Objednavka objednavka)
         {
             string sql = "Select * FROM objednavky WHERE id_objednavky = :id_objednavky";
@@ -50,12 +56,12 @@ namespace SemestralniPraceDB2.Models
         {
             return new Objednavka()
             {
-                Id = reader.GetInt32(0),
-                Vytvoreno = reader.GetDateTime(1),
-                Splatnost = reader.IsDBNull(2) ? (DateTime?)null : reader.GetDateTime(2),
-                CelkovaCena = reader.IsDBNull(3) ? (double?)null : reader.GetDouble(3),
-                Supermarket = new Supermarket() { Id = reader.GetInt32(4) },
-                Dodavatel = new Dodavatel() { Id = reader.GetInt32(5) } 
+                Id = reader.GetInt32("id_objednavky"),
+                Vytvoreno = reader.GetDateTime("vytvoreno"),
+                Splatnost = reader.IsDBNull("splatnost") ? (DateTime?)null : reader.GetDateTime("splatnost"),
+                CelkovaCena = reader.IsDBNull("celkova_cena") ? (double?)null : reader.GetDouble("celkova_cena"),
+                Supermarket = new Supermarket() { Id = reader.GetInt32("id_supermarketu") },
+                Dodavatel = new Dodavatel() { Id = reader.GetInt32("id_dodavatele") }
             };
         }
 
@@ -71,7 +77,7 @@ namespace SemestralniPraceDB2.Models
         {
             List<OracleParameter> prm = new List<OracleParameter>();
 
-            prm.Add(new OracleParameter("p_id_objednavky", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm.Add(new OracleParameter("p_id_objednavky", OracleDbType.Int32, System.Data.ParameterDirection.InputOutput));
             prm[0].Value = objednavka.Id;
 
             prm.Add(new OracleParameter("p_vytvoreno", OracleDbType.Date, System.Data.ParameterDirection.Input));

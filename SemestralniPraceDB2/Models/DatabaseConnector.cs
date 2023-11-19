@@ -7,10 +7,11 @@ using Oracle.ManagedDataAccess.Client;
 using System.Configuration;
 using System.Data;
 using SemestralniPraceDB2.Models.Entities;
+using Oracle.ManagedDataAccess.Types;
 
 namespace SemestralniPraceDB2.Models
 {
-    public class DatabaseConnector
+    public static class DatabaseConnector
     {
 
         public static OracleConnection GetConnection()
@@ -21,28 +22,49 @@ namespace SemestralniPraceDB2.Models
         public static string GetFromDatabase()
         {
             string? dbResult = string.Empty;
+            int x = -1;
+            using (OracleConnection connection = DatabaseConnector.GetConnection())
+            {
+                connection.Open();
+
+                // Start a transaction
+                using (OracleTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        var adresa = new Adresa();
+                        AdresaService.PrepareProcedureCall(adresa, out string prom, out List<OracleParameter> param);
+                        adresa.Id = DatabaseConnector.ExecuteCommandProcedureForTransactionAsync(prom, param, connection).Result;
+                        prom = "prole";
+                        param.Clear();
+                        param.Add(new OracleParameter("returnId", OracleDbType.Int32, System.Data.ParameterDirection.InputOutput));
+                        param.Add(new OracleParameter("p_nazev", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
+                        param[1].Value = adresa.Id.ToString();
+                        x = DatabaseConnector.ExecuteCommandProcedureForTransactionAsync(prom, param, connection).Result;
+                        // Commit the transaction if all commands are successful
+                        transaction.Commit();
+                        Console.WriteLine("Transaction committed successfully");
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Console.WriteLine($"Error {ex.Message}");
+                        // An error occurred, rollback the transaction
+                        transaction.Rollback();
+                    }
+                }
+            }
+            dbResult = x.ToString();
             /*string query = "SELECT TABULKA,OPERACE FROM LOGY";
             List<OracleParameter> prm = new();
             var x = ExecuteCommandQueryAsync(query, prm, Map).Result;
-            dbResult = x.Count == 0 ? "Nenalezen":x[0];*/
-            /*
-            List<OracleParameter> prm = new();
-            prm.Add(new OracleParameter("id", OracleDbType.Int32, System.Data.ParameterDirection.Input));
-            prm[0].Value = 1;
-            prm.Add(new OracleParameter("x", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
-            prm[1].Value = "test25";
-            var x = ExecuteCommandNonQueryAsync("prole", prm).Result;*/
-            string sql = "DELETE FROM role WHERE id_role = :id_role";
-            List<OracleParameter> prm = new();
-            prm.Add(new OracleParameter(":id_role", OracleDbType.Int32, System.Data.ParameterDirection.Input));
-            prm[0].Value = 4;
-            var x = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
-            dbResult = x.ToString();
+            dbResult = x.Count == 0 ? "Nenalezen" : x[0];*/
             return dbResult;
         }
-            static string Map(OracleDataReader reader)
+
+        static string Map(OracleDataReader reader)
         {
-            return reader.GetString(0);// + " - " + reader.GetString(1) + " - " + reader.GetString(2) + " - " + reader.GetString(3);
+            return reader.GetString("TABULKA");
         }
 
 
@@ -62,7 +84,7 @@ namespace SemestralniPraceDB2.Models
                         {
                             command.Parameters.AddRange(oracleParameters.ToArray());
                         }
-                        
+
 
                         try
                         {
@@ -74,7 +96,7 @@ namespace SemestralniPraceDB2.Models
                                     resultList.Add(result);
                                 }
                             }
-                            
+
                             return resultList;
                         }
                         catch (Exception)
@@ -108,6 +130,11 @@ namespace SemestralniPraceDB2.Models
                         try
                         {
                             int result = await command.ExecuteNonQueryAsync();
+                            if (oracleParameters[0].Direction == ParameterDirection.InputOutput)
+                            {
+                                OracleDecimal returnId = (OracleDecimal)command.Parameters[0].Value;
+                                return returnId.ToInt32();
+                            }
                             return result;
                         }
                         catch (Exception)
@@ -120,6 +147,42 @@ namespace SemestralniPraceDB2.Models
             catch (Exception)
             {
                 return 0;
+            }
+        }
+
+        public static async Task<List<T>> ExecuteCommandQueryForTransactionAsync<T>(string query, List<OracleParameter> oracleParameters, OracleConnection connection, Func<OracleDataReader, T> mapResult)
+        {
+            List<T> resultList = new List<T>();
+            using (OracleCommand command = new OracleCommand(query, connection))
+            {
+                command.Parameters.AddRange(oracleParameters.ToArray());
+                command.CommandType = CommandType.Text;
+
+                using (OracleDataReader reader = (OracleDataReader)await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        T result = mapResult(reader);
+                        resultList.Add(result);
+                    }
+                }
+            }
+            return resultList;
+        }
+
+        public static async Task<int> ExecuteCommandProcedureForTransactionAsync(string query, List<OracleParameter> oracleParameters, OracleConnection connection)
+        {
+            using (OracleCommand command = new OracleCommand(query, connection))
+            {
+                command.Parameters.AddRange(oracleParameters.ToArray());
+                command.CommandType = CommandType.StoredProcedure;
+                var result = await command.ExecuteNonQueryAsync();
+                if (oracleParameters[0].Direction == ParameterDirection.InputOutput)
+                {
+                    OracleDecimal returnId = (OracleDecimal)command.Parameters[0].Value;
+                    return returnId.ToInt32();
+                }
+                return result;
             }
         }
     }

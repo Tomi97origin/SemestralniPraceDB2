@@ -9,33 +9,44 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models
 {
-    public class ZboziService
+    public static class ZboziService
     {
         public static bool Create(Zbozi zbozi)
         {
-            string procedureName = "pzbozi";
-            List<OracleParameter> prm = MapZboziIntoParams(zbozi);
+            PrepareProcedureCall(zbozi, out string procedureName, out List<OracleParameter> prm);
             prm[0].Value = null;
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
-            return result.Result == -1;
+            return result.Result > 0;
         }
 
         public static bool Update(Zbozi zbozi)
         {
-            string procedureName = "pzbozi";
-            List<OracleParameter> prm = MapZboziIntoParams(zbozi);
+            PrepareProcedureCall(zbozi, out string procedureName, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
-            return result.Result == -1;
+            return result.Result > 0;
         }
+
+        public static void PrepareProcedureCall(Zbozi zbozi, out string procedureName, out List<OracleParameter> prm)
+        {
+            procedureName = "pzbozi";
+            prm = MapZboziIntoParams(zbozi);
+        }
+
         public static bool Delete(Zbozi zbozi)
         {
-            string sql = "DELETE FROM zbozi WHERE id_zbozi = :id_zbozi";
-            List<OracleParameter> prm = new();
-            prm.Add(new OracleParameter(":id_zbozi", OracleDbType.Int32, System.Data.ParameterDirection.Input));
-            prm[0].Value = zbozi.Id;
+            PrepareDeleteCall(zbozi, out string sql, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
             return result == 1;
         }
+
+        private static void PrepareDeleteCall(Zbozi zbozi, out string sql, out List<OracleParameter> prm)
+        {
+            sql = "DELETE FROM zbozi WHERE id_zbozi = :id_zbozi";
+            prm = new();
+            prm.Add(new OracleParameter(":id_zbozi", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = zbozi.Id;
+        }
+
         public static Zbozi? Get(Zbozi zbozi)
         {
             string sql = "SELECT * FROM zbozi WHERE id_zbozi = :id_zbozi";
@@ -57,7 +68,7 @@ namespace SemestralniPraceDB2.Models
         {
             List<OracleParameter> prm = new List<OracleParameter>();
 
-            prm.Add(new OracleParameter("p_id_zbozi", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm.Add(new OracleParameter("p_id_zbozi", OracleDbType.Int32, System.Data.ParameterDirection.InputOutput));
             prm[0].Value = zbozi.Id <= 0 ? null : zbozi.Id;
 
             prm.Add(new OracleParameter("p_nazev", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
@@ -83,12 +94,12 @@ namespace SemestralniPraceDB2.Models
         {
             return new Zbozi()
             {
-                Id = result.GetInt32(0),
-                Nazev = result.GetString(1),
-                Popis = result.GetString(2),
-                EAN = result.GetString(3),
-                Kategorie = new Kategorie() { Id = result.GetInt32(4) },
-                Vyrobce = new Vyrobce() { Id = result.GetInt32(5) }
+                Id = result.GetInt32("id_zbozi"),
+                Nazev = result.GetString("nazev"),
+                Popis = result.GetString("popis"),
+                EAN = result.GetString("ean"),
+                Kategorie = new Kategorie() { Id = result.GetInt32("id_kategorie") },
+                Vyrobce = new Vyrobce() { Id = result.GetInt32("id_vyrobce") }
             };
         }
     }

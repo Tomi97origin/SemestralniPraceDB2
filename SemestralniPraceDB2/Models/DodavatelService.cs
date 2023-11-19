@@ -9,33 +9,43 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models
 {
-    public class DodavatelService
+    public static class DodavatelService
     {
         public static bool Create(Dodavatel dodavatel)
         {
-            string procedureName = "pdodavatele";
-            List<OracleParameter> prm = MapDodavatelIntoParams(dodavatel);
+            PrepareProcedureCall(dodavatel, out string procedureName,out List < OracleParameter > prm);
             prm[0].Value = null;
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
-            return result.Result == -1;
+            return result.Result > 0;
+        }
+
+        public static void PrepareProcedureCall(Dodavatel dodavatel, out string procedureName, out List<OracleParameter> prm)
+        {
+            procedureName = "pdodavatele";
+            prm = MapDodavatelIntoParams(dodavatel);
         }
 
         public static bool Update(Dodavatel dodavatel)
         {
-            string procedureName = "pdodavatele";
-            List<OracleParameter> prm = MapDodavatelIntoParams(dodavatel);
+            PrepareProcedureCall(dodavatel, out string procedureName, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
-            return result == -1;
+            return result > 0;
         }
         public static bool Delete(Dodavatel dodavatel)
         {
-            string sql = "DELETE FROM dodavatele WHERE id_dodavatele = :id_dodavatele";
-            List<OracleParameter> prm = new();
-            prm.Add(new OracleParameter(":id_dodavatele", OracleDbType.Int32, System.Data.ParameterDirection.Input));
-            prm[0].Value = dodavatel.Id;
+            PrepareDeleteCall(dodavatel, out string sql, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
             return result == 1;
         }
+
+        public static void PrepareDeleteCall(Dodavatel dodavatel, out string sql, out List<OracleParameter> prm)
+        {
+            sql = "DELETE FROM dodavatele WHERE id_dodavatele = :id_dodavatele";
+            prm = new();
+            prm.Add(new OracleParameter(":id_dodavatele", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = dodavatel.Id;
+        }
+
         public static Dodavatel? Get(Dodavatel dodavatel)
         {
             string sql = "SELECT * FROM dodavatele WHERE id_dodavatele = :id_dodavatele";
@@ -58,7 +68,7 @@ namespace SemestralniPraceDB2.Models
         {
             List<OracleParameter> prm = new List<OracleParameter>();
 
-            prm.Add(new OracleParameter("p_id_dodavatele", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm.Add(new OracleParameter("p_id_dodavatele", OracleDbType.Int32, System.Data.ParameterDirection.InputOutput));
             prm[0].Value = dodavatel.Id <= 0 ? null : dodavatel.Id;
 
             prm.Add(new OracleParameter("p_nazev", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
@@ -74,9 +84,9 @@ namespace SemestralniPraceDB2.Models
         {
             return new Dodavatel()
             {
-                Id = reader.GetInt32(0),
-                Nazev = reader.GetString(1),
-                Adresa = new Adresa() { Id = reader.GetInt32(2) }
+                Id = reader.GetInt32("id_dodavatele"),
+                Nazev = reader.GetString("nazev"),
+                Adresa = new Adresa() { Id = reader.GetInt32("id_adresy") }
             };
         }
 

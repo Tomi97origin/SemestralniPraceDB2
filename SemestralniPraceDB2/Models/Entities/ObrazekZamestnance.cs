@@ -11,7 +11,7 @@ namespace SemestralniPraceDB2.Models.Entities
     public class ObrazekZamestnance
     {
         public int Id { get; set; }
-        public string Soubor { get; set; }
-        public Image Image { get; set; }
+        public string? Soubor { get; set; }
+        public Image? Image { get; set; }
     }
 }

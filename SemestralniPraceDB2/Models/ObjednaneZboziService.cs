@@ -9,34 +9,44 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models
 {
-    public class ObjednaneZboziService
+    public static class ObjednaneZboziService
     {
         public static bool Create(ObjednaneZbozi zbozi)
         {
-            string procedureName = "pobjednane_zbozi";
-            List<OracleParameter> prm = ObjednaneZboziIntoParams(zbozi);
+            PrepareProcedureCall(zbozi, out string procedureName, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
             return result.Result == -1;
         }
 
+        public static void PrepareProcedureCall(ObjednaneZbozi zbozi, out string procedureName, out List<OracleParameter> prm)
+        {
+            procedureName = "pobjednane_zbozi";
+            prm = ObjednaneZboziIntoParams(zbozi);
+        }
+
         public static bool Update(ObjednaneZbozi zbozi)
         {
-            string procedureName = "pobjednane_zbozi";
-            List<OracleParameter> prm = ObjednaneZboziIntoParams(zbozi);
+            PrepareProcedureCall(zbozi, out string procedureName, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
             return result.Result == -1;
         }
         public static bool Delete(ObjednaneZbozi zbozi)
         {
-            string sql = "DELETE FROM objednane_zbozi WHERE id_objednavky = :id_objednavky AND id_zbozi = :id_zbozi";
-            List<OracleParameter> prm = new();
+            PrepareDeleteCall(zbozi, out string sql, out List<OracleParameter> prm);
+            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
+            return result == 1;
+        }
+
+        public static void PrepareDeleteCall(ObjednaneZbozi zbozi, out string sql, out List<OracleParameter> prm)
+        {
+            sql = "DELETE FROM objednane_zbozi WHERE id_objednavky = :id_objednavky AND id_zbozi = :id_zbozi";
+            prm = new();
             prm.Add(new OracleParameter(":id_objednavky", OracleDbType.Int32, System.Data.ParameterDirection.Input));
             prm[0].Value = zbozi.Objednavka.Id;
             prm.Add(new OracleParameter(":id_zbozi", OracleDbType.Int32, System.Data.ParameterDirection.Input));
             prm[1].Value = zbozi.Zbozi.Id;
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
-            return result == 1;
         }
+
         public static ObjednaneZbozi? Get(ObjednaneZbozi zbozi)
         {
             string sql = "Select * FROM objednane_zbozi WHERE id_objednavky = :id_objednavky AND id_zbozi = :id_zbozi";
@@ -54,10 +64,10 @@ namespace SemestralniPraceDB2.Models
 
             return new ObjednaneZbozi()
             {
-                Mnozstvi = reader.GetInt32(0),
-                Cena = reader.GetDouble(1),
-                Objednavka = new Objednavka() { Id = reader.GetInt32(2) },
-                Zbozi = new Zbozi() { Id = reader.GetInt32(3) }
+                Mnozstvi = reader.GetInt32("mnozstvi"),
+                Cena = reader.GetDouble("cena"),
+                Objednavka = new Objednavka() { Id = reader.GetInt32("id_objednavky") },
+                Zbozi = new Zbozi() { Id = reader.GetInt32("id_zbozi") }
             };
         }
 

@@ -18,7 +18,7 @@ using System.Windows.Controls;
 
 namespace SemestralniPraceDB2.Models
 {
-    public class UzivateleService
+    public static class UzivateleService
     {
         public static Uzivatel? Prihlaseny { get; set; }
         public static Uzivatel? Aktualni { get; set; }
@@ -36,18 +36,22 @@ namespace SemestralniPraceDB2.Models
 
         public static bool Update(Uzivatel uzivatel)
         {
-            string procedureName = "puzivatele";
-            List<OracleParameter> prm = MapUzivatelIntoParams(uzivatel);
+            PrepareProcedureCall(uzivatel, out string procedureName, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
-            return result == -1;
+            return result > 0;
+        }
+
+        private static void PrepareProcedureCall(Uzivatel uzivatel, out string procedureName, out List<OracleParameter> prm)
+        {
+            procedureName = "puzivatele";
+            prm = MapUzivatelIntoParams(uzivatel);
         }
 
         private static bool Create(Uzivatel uzivatel)
         {
-            string procedureName = "puzivatele";
-            List<OracleParameter> prm = MapUzivatelIntoParams(uzivatel);
+            PrepareProcedureCall(uzivatel, out string procedureName, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
-            return result == -1;
+            return result > 0;
         }
 
         public static Uzivatel? Login(string jmeno, string heslo)
@@ -110,12 +114,12 @@ namespace SemestralniPraceDB2.Models
         {
             return new Uzivatel()
             {
-                Id = reader.GetInt32(0),
-                Username = reader.GetString(1),
-                Password = reader.GetString(2),
-                Admin = reader.GetInt32(3) == 1,
-                Active = reader.GetInt32(4) == 1,
-                PosledniPrihlaseni = reader.GetDateTime(5)
+                Id = reader.GetInt32("id_uzivatele"),
+                Username = reader.GetString("username"),
+                Password = reader.GetString("password"),
+                Admin = reader.GetInt32("admin") == 1,
+                Active = reader.GetInt32("active") == 1,
+                PosledniPrihlaseni = reader.GetDateTime("posledni")
             };
         }
 
@@ -123,7 +127,7 @@ namespace SemestralniPraceDB2.Models
         {
             List<OracleParameter> prm = new List<OracleParameter>();
 
-            prm.Add(new OracleParameter("p_id_uzivatele", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm.Add(new OracleParameter("p_id_uzivatele", OracleDbType.Int32, System.Data.ParameterDirection.InputOutput));
             prm[0].Value = uzivatel.Id;
 
             prm.Add(new OracleParameter("p_username", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));

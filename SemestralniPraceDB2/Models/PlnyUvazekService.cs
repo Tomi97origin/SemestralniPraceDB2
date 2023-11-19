@@ -1,4 +1,5 @@
-﻿using SemestralniPraceDB2.Models.Entities;
+﻿using Oracle.ManagedDataAccess.Client;
+using SemestralniPraceDB2.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,17 +10,10 @@ namespace SemestralniPraceDB2.Models
 {
     public class PlnyUvazekService
     {
-        ZamestnanecService zamestnanecService;
-
-        public PlnyUvazekService()
-        {
-            zamestnanecService = new ZamestnanecService();
-        }
-
+        
         public bool Create(PlnyUvazek zamestnanec)
         {
             //TODO start transaction
-            zamestnanecService.Create(zamestnanec);
 
             throw new NotImplementedException();
         }
@@ -27,20 +21,17 @@ namespace SemestralniPraceDB2.Models
         public bool Update(PlnyUvazek zamestnanec)
         {
             //TODO start transaction
-            zamestnanecService.Update(zamestnanec);
             throw new NotImplementedException();
         }
         public bool Delete(PlnyUvazek zamestnanec)
         {
             //TODO start transaction
             //delete from PlnyUvazek
-            zamestnanecService.Delete(zamestnanec);
             //Delete where zamestnanec.Id
             throw new NotImplementedException();
         }
         public bool Get(PlnyUvazek zamestnanec)
         {
-            zamestnanecService.Get(zamestnanec);
             //fill data specific for zamestnanec
             throw new NotImplementedException();
             //return zamestnanec;
@@ -48,8 +39,12 @@ namespace SemestralniPraceDB2.Models
         public List<PlnyUvazek> GetAll()
         {
             //TODO start transaction
-            var brigadnici = zamestnanecService.GetAll();
 
+            throw new NotImplementedException();
+        }
+
+        internal static void PrepareProcedureCall(PlnyUvazek zamestnanec, out string prom, out List<OracleParameter> param)
+        {
             throw new NotImplementedException();
         }
     }
