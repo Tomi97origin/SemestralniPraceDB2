@@ -1,4 +1,4 @@
-﻿namespace SemestralniPraceDB2.Models;
+﻿namespace SemestralniPraceDB2.Models.Entities;
 
 internal class DBTable
 {

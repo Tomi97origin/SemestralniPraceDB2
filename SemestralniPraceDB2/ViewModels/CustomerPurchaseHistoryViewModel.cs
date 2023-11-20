@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.ViewModels
 {
-    partial class WelcomeViewModel : BaseViewModel
+    partial class CustomerPurchaseHistoryViewModel : BaseViewModel
     {
     }
 }

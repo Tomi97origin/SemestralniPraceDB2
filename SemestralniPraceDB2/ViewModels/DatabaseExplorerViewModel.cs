@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SemestralniPraceDB2.Models;
 using SemestralniPraceDB2.Models.Entities;
 using System;
 using System.Collections.Generic;

@@ -13,10 +13,13 @@
     <None Remove="Views\gear.png" />
     <None Remove="Views\holiday_ico.png" />
     <None Remove="Views\horseShoe_ico.png" />
+    <None Remove="Views\id-card.png" />
     <None Remove="Views\Images\archive_ico.png" />
+    <None Remove="Views\import.png" />
     <None Remove="Views\left_arrow_ico.png" />
     <None Remove="Views\logout.png" />
     <None Remove="Views\note_ico.png" />
+    <None Remove="Views\order-delivery.png" />
     <None Remove="Views\riderBoot_ico.png" />
     <None Remove="Views\save_ico.png" />
     <None Remove="Views\schedule_ico.png" />
@@ -30,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Views\Images\id-card.png" />
     <Resource Include="Views\Images\close.png" />
     <Resource Include="Views\Images\gear.png" />
     <Resource Include="Views\Images\holiday_ico.png" />
@@ -42,6 +46,8 @@
     <Resource Include="Views\Images\note_ico.png" />
     <Resource Include="Views\Images\left_arrow_ico.png" />
     <Resource Include="Views\Images\logout.png" />
+    <Resource Include="Views\Images\import.png" />
+    <Resource Include="Views\Images\order-delivery.png" />
   </ItemGroup>
 
   <ItemGroup>

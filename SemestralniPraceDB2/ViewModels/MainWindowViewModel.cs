@@ -9,20 +9,25 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SemestralniPraceDB2.ViewModels
 {
     [ObservableRecipient]
-    partial class MainWindowViewModel : BaseViewModel, IRecipient<ViewChanged>
+    partial class MainWindowViewModel : BaseViewModel, IRecipient<ViewChanged>, IRecipient<UserLogin>, IRecipient<UserLogout>
     {
         //Inicializace ViewModels
         private static readonly MakingOrderForWarehouseViewModel makingOrderForWarehouseVM = new();
-        private static readonly WelcomeViewModel welcomeVM = new();
+        private static readonly EmptyViewModel messageVM = new();
         private static readonly UserLoginViewModel userLoginVM = new();
         private static readonly UserRegistrationViewModel userRegistrationVM = new();
-        private static readonly CreateEmployeeViewModel CreateEmployeeVM = new();
-        private static readonly DatabaseExplorerViewModel DatabaseExplorerVM = new();
+        private static readonly CreateEmployeeViewModel createEmployeeVM = new();
+        private static readonly DatabaseExplorerViewModel databaseExplorerVM = new();
+        private static readonly CustomerPurchaseHistoryViewModel customerPurchaseHistoryVM = new();
+        private static readonly GoodsImportViewModel goodsImportVM = new();
 
+        private static readonly BaseViewModel defaultVM = messageVM;
+        
         [ObservableProperty]
         public BaseViewModel selectedViewModel = userLoginVM;
 
@@ -46,6 +51,8 @@ namespace SemestralniPraceDB2.ViewModels
         {
             Messenger = WeakReferenceMessenger.Default;
             Messenger.Register<ViewChanged>(this);
+            Messenger.Register<UserLogin>(this);
+            Messenger.Register<UserLogout>(this);
         }
 
         public void Receive(ViewChanged message)
@@ -54,9 +61,12 @@ namespace SemestralniPraceDB2.ViewModels
             {
                 "MakingOrderForWarehouse" => makingOrderForWarehouseVM,
                 "UserRegistration" => userRegistrationVM,
-                "CreateEmployee" => CreateEmployeeVM,
-                "DatabaseExplorer" => DatabaseExplorerVM,
-                _ => welcomeVM,
+                "CreateEmployee" => createEmployeeVM,
+                "DatabaseExplorer" => databaseExplorerVM,
+                "CustomerPurchaseHistory" => customerPurchaseHistoryVM,
+                "UserLogin" => userLoginVM,
+                "GoodsImport" => goodsImportVM,
+                _ => messageVM,
             };
 
             if (newVM != SelectedViewModel)
@@ -64,6 +74,20 @@ namespace SemestralniPraceDB2.ViewModels
                 lastSelectedViewModel = SelectedViewModel;
                 SelectedViewModel = newVM;
             }
+        }
+
+        public void Receive(UserLogout message)
+        {
+            LoggedAs = "Nepřihlášený uživatel";
+            SelectedViewModel = defaultVM;
+            MessageBox.Show("Odhlášení úspěšné.");
+        }
+
+        public void Receive(UserLogin message)
+        {
+            LoggedAs = $"Přihlášen jako {message.UserName}.";
+            SelectedViewModel = defaultVM;
+            MessageBox.Show("Přihlášení úspěšné.");
         }
 
         [RelayCommand]

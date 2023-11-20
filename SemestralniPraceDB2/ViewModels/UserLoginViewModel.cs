@@ -10,7 +10,7 @@ namespace SemestralniPraceDB2.ViewModels
 
     partial class UserLoginViewModel : BaseViewModel
     {
-        private IMessenger messenger = WeakReferenceMessenger.Default;
+        private readonly IMessenger messenger = WeakReferenceMessenger.Default;
 
         [ObservableProperty]
         public string username = "Username";
@@ -23,6 +23,7 @@ namespace SemestralniPraceDB2.ViewModels
         private void LoginUser()
         {
             MessageBox.Show($"Přihlašuji uživatele {Username} s heslem {Password} ");
+            messenger.Send(new UserLogin($"{Username}"));
         }
 
         [RelayCommand]

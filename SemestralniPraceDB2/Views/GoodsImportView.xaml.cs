@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace SemestralniPraceDB2.Views
 {
     /// <summary>
-    /// Interakční logika pro WelcomeView.xaml
+    /// Interakční logika pro GoodsImportView.xaml
     /// </summary>
-    public partial class WelcomeView : UserControl
+    public partial class GoodsImportView : UserControl
     {
-        public WelcomeView()
+        public GoodsImportView()
         {
             InitializeComponent();
         }

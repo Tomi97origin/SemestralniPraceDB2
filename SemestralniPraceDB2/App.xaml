@@ -15,8 +15,8 @@
             <views:MakingOrderForWarehouseView/>
         </DataTemplate>
         
-        <DataTemplate DataType="{x:Type viewModels:WelcomeViewModel}">
-            <views:WelcomeView/>
+        <DataTemplate DataType="{x:Type viewModels:EmptyViewModel}">
+            <views:EmptyView/>
         </DataTemplate>
         
         <DataTemplate DataType="{x:Type viewModels:UserLoginViewModel}">
@@ -33,6 +33,14 @@
 
         <DataTemplate DataType="{x:Type viewModels:DatabaseExplorerViewModel}">
             <views:DatabaseExplorerView/>
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type viewModels:CustomerPurchaseHistoryViewModel}">
+            <views:CustomerPurchaseHistoryView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModels:GoodsImportViewModel}">
+            <views:GoodsImportView/>
         </DataTemplate>
 
     </Application.Resources>

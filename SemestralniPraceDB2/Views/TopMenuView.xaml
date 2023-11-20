@@ -37,22 +37,22 @@
             <Button Command="{Binding UpdateViewCommand}"
                 CommandParameter="MakingOrderForWarehouse">
                 <StackPanel>
-                    <Image Source="/Views/Images/note_ico.png" />
+                    <Image Source="/Views/Images/order-delivery.png" />
                     <TextBlock Text="Vytvořit&#x0a;objednávku" />
                 </StackPanel>
             </Button>
             <Button Command="{Binding UpdateViewCommand}"
-                CommandParameter="NotImplementedYet">
+                CommandParameter="GoodsImport">
                 <StackPanel>
-                    <Image Source="/Views/Images/schedule_ico.png" />
-                    <TextBlock Text="Dummy 1" />
+                    <Image Source="/Views/Images/import.png" />
+                    <TextBlock Text="Příjem&#x0a;zboží" />
                 </StackPanel>
             </Button>
             <Button Command="{Binding UpdateViewCommand}"
-                CommandParameter="NotImplementedYet">
+                CommandParameter="CustomerPurchaseHistory">
                 <StackPanel>
-                    <Image Source="/Views/Images/close.png" />
-                    <TextBlock Text="Dummy 2" />
+                    <Image Source="/Views/Images/id-card.png" />
+                    <TextBlock Text="Zákaznická&#x0a;karta" />
                 </StackPanel>
             </Button>
             <Button Command="{Binding UpdateViewCommand}"
@@ -82,11 +82,10 @@
                     <TextBlock Text="Dummy 6" />
                 </StackPanel>
             </Button>
-            <Button Command="{Binding LogoutCommand}"
-                CommandParameter="NotImplementedYet">
+            <Button Command="{Binding LoginLogoutCommand}">
                 <StackPanel>
                     <Image Source="/Views/Images/logout.png" />
-                    <TextBlock Text="Odhlásit se" />
+                    <TextBlock Text="{Binding Path=LoginLogoutButtonText, FallbackValue=Přihlásit}"/>
                 </StackPanel>
             </Button>
 
