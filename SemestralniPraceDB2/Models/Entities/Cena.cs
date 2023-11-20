@@ -10,9 +10,9 @@ namespace SemestralniPraceDB2.Models.Entities
     {
         public int Id { get; set; }
         public DateTime PlatnostOd { get; set; }
-        public DateTime PlatnostDo { get; set; }
+        public DateTime? PlatnostDo { get; set; }
         public double Castka { get; set; }
-        public Zbozi Zbozi { get; set; }
+        public Zbozi? Zbozi { get; set; }
 
 
     }

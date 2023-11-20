@@ -9,8 +9,13 @@ namespace SemestralniPraceDB2.Models.Entities
     public class Role
     {
         public int Id { get; set; }
-        public string  Nazev { get; set; }
+        public string Nazev { get; set; }
 
+        public Role()
+        {
+            Id = 0;
+            Nazev = "";
+        }
         public Role(int id, string nazev)
         {
             Id = id;

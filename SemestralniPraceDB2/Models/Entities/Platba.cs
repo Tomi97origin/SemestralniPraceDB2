@@ -11,8 +11,8 @@ namespace SemestralniPraceDB2.Models.Entities
         public int Id { get; set; }
         public double Vraceno { get; set; }
         public short Debit { get; set; }
-        public string CisloKarty { get; set; }
-        public short Hotovost { get;}
+        public string? CisloKarty { get; set; }
+        public bool Hotovost { get; set; }
         public Vydavatel? Vydavatel { get; set; }
         public Vernostni_karta? Vernostni_Karta { get; set; }
     }

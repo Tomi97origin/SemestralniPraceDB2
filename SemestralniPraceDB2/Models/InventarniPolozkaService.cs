@@ -9,33 +9,43 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models
 {
-    public class InventarniPolozkaService
+    public static class InventarniPolozkaService
     {
         public static bool Create(InventarniPolozka polozka)
         {
-            string procedureName = "pinventarni_polozky";
-            List<OracleParameter> prm = MapInventarniPolozkaIntoParams(polozka);
+            PrepareProcedureCall(polozka, out string procedureName, out List<OracleParameter> prm);
             prm[0].Value = null;
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
-            return result.Result == -1;
+            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
+            return result > 0;
+        }
+
+        public static void PrepareProcedureCall(InventarniPolozka polozka, out string procedureName, out List<OracleParameter> prm)
+        {
+            procedureName = "pinventarni_polozky";
+            prm = MapInventarniPolozkaIntoParams(polozka);
         }
 
         public static bool Update(InventarniPolozka polozka)
         {
-            string procedureName = "pinventarni_polozky";
-            List<OracleParameter> prm = MapInventarniPolozkaIntoParams(polozka);
+            PrepareProcedureCall(polozka, out string procedureName, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
-            return result == -1;
+            return result > 0;
         }
         public static bool Delete(InventarniPolozka polozka)
         {
-            string sql = "DELETE FROM inventarni_polozky WHERE id_inventarni_polozky = :id_inventarni_polozky";
-            List<OracleParameter> prm = new();
-            prm.Add(new OracleParameter(":id_inventarni_polozky", OracleDbType.Int32, System.Data.ParameterDirection.Input));
-            prm[0].Value = polozka.Id;
+            PrepareDeleteCall(polozka, out string sql, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
             return result == 1;
         }
+
+        public static void PrepareDeleteCall(InventarniPolozka polozka, out string sql, out List<OracleParameter> prm)
+        {
+            sql = "DELETE FROM inventarni_polozky WHERE id_inventarni_polozky = :id_inventarni_polozky";
+            prm = new();
+            prm.Add(new OracleParameter(":id_inventarni_polozky", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = polozka.Id;
+        }
+
         public static InventarniPolozka? Get(InventarniPolozka polozka)
         {
             string sql = "SELECT * FROM inventarni_polozky WHERE id_inventarni_polozky = :id_inventarni_polozky";
@@ -57,7 +67,7 @@ namespace SemestralniPraceDB2.Models
         {
             List<OracleParameter> prm = new List<OracleParameter>();
 
-            prm.Add(new OracleParameter("p_id_inventarni_polozky", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm.Add(new OracleParameter("p_id_inventarni_polozky", OracleDbType.Int32, System.Data.ParameterDirection.InputOutput));
             prm[0].Value = polozka.Id <= 0 ? null : polozka.Id;
 
             prm.Add(new OracleParameter("p_sklad", OracleDbType.Int16, System.Data.ParameterDirection.Input));
@@ -84,16 +94,16 @@ namespace SemestralniPraceDB2.Models
         private static InventarniPolozka MapOracleResultToInventarniPolozka(OracleDataReader reader)
         {
             return new InventarniPolozka()
-                {
-                    Id = reader.GetInt32(0),
-                    Sklad = reader.GetInt16(1),
-                    Mnozstvi = reader.GetInt32(2),
-                    OznaceniPozice = reader.GetString(3),
-                    Naskladneno = reader.GetDateTime(4),
-                    Supermarket = new Supermarket() { Id = reader.GetInt32(5) },
-                    Zbozi = new Zbozi() { Id = reader.GetInt32(6) }
-                };
-            
+            {
+                Id = reader.GetInt32("id_inventarni_polozky"),
+                Sklad = reader.GetInt16("sklad"),
+                Mnozstvi = reader.GetInt32("mnozstvi"),
+                OznaceniPozice = reader.GetString("oznaceni_pozice"),
+                Naskladneno = reader.GetDateTime("naskladneno"),
+                Supermarket = new Supermarket() { Id = reader.GetInt32("id_supermarketu") },
+                Zbozi = new Zbozi() { Id = reader.GetInt32("id_zbozi") }
+            };
+
         }
 
     }

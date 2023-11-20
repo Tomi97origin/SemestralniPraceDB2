@@ -11,21 +11,26 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models
 {
-    public class AdresaService
+    public static class AdresaService
     {
         public static bool Create(Adresa adresa)
         {
-            string procedureName = "padresy";
-            List<OracleParameter> prm = MapAddressIntoParams(adresa);
-            prm[0].Value = null;
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
-            return result.Result == -1;
+            PrepareProcedureCall(adresa, out string procedureName, out List<OracleParameter> prm);
+            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
+            adresa.Id = result;
+            return result > 0;
+        }
+
+        public static void PrepareProcedureCall(Adresa adresa, out string procedureName, out List<OracleParameter> prm)
+        {
+            procedureName = "padresy";
+            prm = MapAddressIntoParams(adresa);
         }
 
         private static List<OracleParameter> MapAddressIntoParams(Adresa adresa)
         {
             List<OracleParameter> prm = new();
-            prm.Add(new OracleParameter("p_id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm.Add(new OracleParameter("p_id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.InputOutput));
             prm[0].Value = adresa.Id <= 0 ? null : adresa.Id;
             prm.Add(new OracleParameter("p_ulice", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
             prm[1].Value = adresa.Ulice;
@@ -42,20 +47,25 @@ namespace SemestralniPraceDB2.Models
 
         public static bool Update(Adresa adresa)
         {
-            string procedureName = "padresy";
-            List<OracleParameter> prm = MapAddressIntoParams(adresa);
+            PrepareProcedureCall(adresa, out string procedureName, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
-            return result == -1;
+            return result > 0;
         }
         public static bool Delete(Adresa adresa)
         {
-            string sql = "DELETE FROM adresy WHERE id_adresy = :id_adresy";
-            List<OracleParameter> prm = new();
-            prm.Add(new OracleParameter(":id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input));
-            prm[0].Value = adresa.Id;
+            PrepareDeleteCall(adresa, out string sql, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
             return result == 1;
         }
+
+        public static void PrepareDeleteCall(Adresa adresa, out string sql, out List<OracleParameter> prm)
+        {
+            sql = "DELETE FROM adresy WHERE id_adresy = :id_adresy";
+            prm = new();
+            prm.Add(new OracleParameter(":id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = adresa.Id;
+        }
+
         public static Adresa? Get(Adresa adresa)
         {
             string sql = "SELECT * FROM adresy WHERE id_adresy = :id_adresy";
@@ -70,12 +80,12 @@ namespace SemestralniPraceDB2.Models
         {
             return new Adresa()
             {
-                Id = result.GetInt32(0),
-                Ulice = result.GetString(1),
-                Cp = result.GetInt32(2),
-                Mesto = result.GetString(3),
-                Stat = result.GetString(4),
-                Psc = result.GetString(5)
+                Id = result.GetInt32("id_adresy"),
+                Ulice = result.GetString("ulice"),
+                Cp = result.IsDBNull("cp") ? (int?)null : result.GetInt32("cp"),
+                Mesto = result.GetString("mesto"),
+                Stat = result.GetString("stat"),
+                Psc = result.GetString("psc")
             };
         }
 
