@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\add.png" />
     <None Remove="Views\archive_ico.png" />
     <None Remove="Views\close.png" />
     <None Remove="Views\gear.png" />
@@ -23,6 +24,7 @@
     <None Remove="Views\riderBoot_ico.png" />
     <None Remove="Views\save_ico.png" />
     <None Remove="Views\schedule_ico.png" />
+    <None Remove="Views\shopping.png" />
     <None Remove="Views\telegram_ico.png" />
   </ItemGroup>
 
@@ -33,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Views\Images\add.png" />
     <Resource Include="Views\Images\id-card.png" />
     <Resource Include="Views\Images\close.png" />
     <Resource Include="Views\Images\gear.png" />
@@ -48,6 +51,7 @@
     <Resource Include="Views\Images\logout.png" />
     <Resource Include="Views\Images\import.png" />
     <Resource Include="Views\Images\order-delivery.png" />
+    <Resource Include="Views\Images\shopping.png" />
   </ItemGroup>
 
   <ItemGroup>

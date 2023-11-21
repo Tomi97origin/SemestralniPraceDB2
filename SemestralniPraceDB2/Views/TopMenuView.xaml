@@ -56,17 +56,17 @@
                 </StackPanel>
             </Button>
             <Button Command="{Binding UpdateViewCommand}"
-                CommandParameter="NotImplementedYet">
+                CommandParameter="AddProduct">
                 <StackPanel>
-                    <Image Source="/Views/Images/close.png" />
-                    <TextBlock Text="Dummy 3" />
+                    <Image Source="/Views/Images/add.png" />
+                    <TextBlock Text="Přidat novou&#x0a;položku" />
                 </StackPanel>
             </Button>
             <Button Command="{Binding UpdateViewCommand}"
-                CommandParameter="NotImplementedYet">
+                CommandParameter="AddProductPrice">
                 <StackPanel>
-                    <Image Source="/Views/Images/close.png" />
-                    <TextBlock Text="Dummy 4" />
+                    <Image Source="/Views/Images/shopping.png" />
+                    <TextBlock Text="Aktualizovat&#x0a;cenu zboží" />
                 </StackPanel>
             </Button>
             <Button Command="{Binding SaveCommand}">

@@ -17,5 +17,23 @@ namespace SemestralniPraceDB2.Models.Entities
 
         [DisplayName("Zkratka")]
         public string Zkratka { get; set; }
+
+        public Kategorie(int id, string nazev, string zkratka)
+        {
+            Id = id;
+            Nazev = nazev;
+            Zkratka = zkratka;
+        }
+
+        public Kategorie()
+        {
+            Id = 0;
+            Nazev = string.Empty;
+            Zkratka = string.Empty;
+        }
+        public override string ToString()
+        {
+            return $"{Nazev}({Zkratka})";
+        }
     }
 }

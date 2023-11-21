@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="SemestralniPraceDB2.Views.AddProductView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SemestralniPraceDB2.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <StackPanel Width="400" Margin="10">
+        <TextBlock Text="Nová položka zboží"
+                   FontSize="16"
+                   FontWeight="Bold"
+                   Margin="0,0,0,20"
+                   HorizontalAlignment="Center"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Content="Název:"/>
+            <TextBox Grid.Row="1" Text="{Binding NoveZbozi.Nazev}" Margin="0,0,0,10"/>
+
+            <Label Grid.Row="2" Content="Popis:"/>
+            <TextBox Grid.Row="3" Text="{Binding NoveZbozi.Popis}" Margin="0,0,0,10"/>
+
+            <Label Grid.Row="4" Content="EAN:"/>
+            <TextBox Grid.Row="5" Text="{Binding NoveZbozi.EAN}" Margin="0,0,0,10"/>
+
+            <Label Grid.Row="6" Content="Kategorie:"/>
+            <ComboBox Grid.Row="7" ItemsSource="{Binding SeznamKategorii}" SelectedItem="{Binding NoveZbozi.Kategorie}" Margin="0,0,0,10">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Nazev}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Label Grid.Row="8" Content="Výrobce:"/>
+            <ComboBox Grid.Row="9" ItemsSource="{Binding SeznamVyrobcu}" SelectedItem="{Binding NoveZbozi.Vyrobce}" Margin="0,0,0,10">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Nazev}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Button Grid.Row="10" Content="Přidat" Command="{Binding AddProductCommand}" Margin="0,10,0,0" Width="100"/>
+        </Grid>
+    </StackPanel>
+</UserControl>

@@ -25,6 +25,8 @@ namespace SemestralniPraceDB2.ViewModels
         private static readonly DatabaseExplorerViewModel databaseExplorerVM = new();
         private static readonly CustomerPurchaseHistoryViewModel customerPurchaseHistoryVM = new();
         private static readonly GoodsImportViewModel goodsImportVM = new();
+        private static readonly AddProductViewModel addProductVM = new();
+        private static readonly AddProductPriceViewModel addProductPriceVM = new();
 
         private static readonly BaseViewModel defaultVM = messageVM;
         
@@ -66,6 +68,8 @@ namespace SemestralniPraceDB2.ViewModels
                 "CustomerPurchaseHistory" => customerPurchaseHistoryVM,
                 "UserLogin" => userLoginVM,
                 "GoodsImport" => goodsImportVM,
+                "AddProduct" => addProductVM,
+                "AddProductPrice" => addProductPriceVM,
                 _ => messageVM,
             };
 

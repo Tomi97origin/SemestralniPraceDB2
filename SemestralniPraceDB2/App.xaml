@@ -43,5 +43,13 @@
             <views:GoodsImportView/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type viewModels:AddProductViewModel}">
+            <views:AddProductView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModels:AddProductPriceViewModel}">
+            <views:AddProductPriceView/>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>
