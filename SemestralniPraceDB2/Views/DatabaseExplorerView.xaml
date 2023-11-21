@@ -30,8 +30,10 @@
             </Grid.RowDefinitions>
             
             <DataGrid ItemsSource="{Binding SelectedTableData}"
-                      AutoGenerateColumns="True"/>
-            
+                      AutoGenerateColumns="True"
+                      AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"/>
+
+
             <StackPanel Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
                 <Button Content="Smazat záznam" Command="{Binding DeleteRecordCommand}"
                         Margin="0,10,0,0"/>
