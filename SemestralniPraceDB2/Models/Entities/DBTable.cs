@@ -1,6 +1,6 @@
 ﻿namespace SemestralniPraceDB2.Models.Entities;
 
-internal class DBTable
+public class DBTable
 {
     public string TableName { get; set; }
     public int RowCount { get; set; }
@@ -9,6 +9,10 @@ internal class DBTable
     {
         TableName = tableName;
         RowCount = rowsCount;
+    }
+
+    public DBTable()
+    {
     }
 
     public override string ToString()
