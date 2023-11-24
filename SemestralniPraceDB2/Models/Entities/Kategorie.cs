@@ -16,7 +16,7 @@ namespace SemestralniPraceDB2.Models.Entities
         public string Nazev { get; set; }
 
         [DisplayName("Zkratka")]
-        public string Zkratka { get; set; }
+        public string? Zkratka { get; set; }
 
         public Kategorie(int id, string nazev, string zkratka)
         {

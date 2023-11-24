@@ -62,7 +62,7 @@ namespace SemestralniPraceDB2.Models
             {
                 Id = reader.GetInt32("id_kategorie"),
                 Nazev = reader.GetString("nazev"),
-                Zkratka = reader.GetString("zkratka")
+                Zkratka = reader.IsDBNull("zkratka") ? null : reader.GetString("zkratka")
             };
         }
 
