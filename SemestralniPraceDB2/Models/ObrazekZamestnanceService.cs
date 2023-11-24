@@ -2,6 +2,7 @@
 using SemestralniPraceDB2.Models.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -34,21 +35,71 @@ namespace SemestralniPraceDB2.Models
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
             return result.Result >= 0;
         }
-        //TODO 
+
         public static bool Delete(ObrazekZamestnance obrazek)
         {
-            throw new NotImplementedException();
+            PrepareDeleteCall(obrazek, out string prom, out List<OracleParameter> param);
+            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(prom, param, System.Data.CommandType.Text).Result;
+            return result == 1;
         }
-        //TODO
-        public static bool Get(ObrazekZamestnance obrazek)
+        
+        public static ObrazekZamestnance? Get(ObrazekZamestnance obrazek)
         {
-            throw new NotImplementedException();
+            string sql = "SELECT * FROM obrazkyzamestnancu WHERE id_obrazku = :id_obrazku";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_obrazku", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = obrazek.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToObrazekZamestnance).Result;
+            return result.Count > 0 ? result[0] : null;
         }
-        //TODO
+        
         public static List<ObrazekZamestnance> GetAll()
         {
-            throw new NotImplementedException();
+            string sql = "SELECT * FROM obrazkyzamestnancu";
+            List<OracleParameter> prm = new();
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToObrazekZamestnance).Result;
+            return result;
         }
+
+        private static ObrazekZamestnance MapOracleResultToObrazekZamestnance(OracleDataReader reader)
+        {
+            ObrazekZamestnance obrazek = new ObrazekZamestnance();
+
+            obrazek.Id = reader.GetInt32("id_obrazku");
+            obrazek.Soubor = reader.GetString("soubor");
+
+            if (!reader.IsDBNull("image"))
+            {
+                byte[] imageBytes = (byte[])reader.GetValue("image");
+                obrazek.Image = ConvertBytesToImage(imageBytes);
+            }
+
+            return obrazek;
+        }
+
+        private static Image? ConvertBytesToImage(byte[] imageBytes)
+        {
+            if (imageBytes == null || imageBytes.Length == 0)
+            {
+                return null;
+            }
+
+            try
+            {
+                using (MemoryStream memoryStream = new MemoryStream(imageBytes))
+                {
+                    Image image = Image.FromStream(memoryStream);
+                    Bitmap pngImage = new Bitmap(image);
+                    return pngImage;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error converting byte array to image: {ex.Message}");
+                return null;
+            }
+        }
+
 
         private static List<OracleParameter> MapObrazekZamestnanceIntoParams(ObrazekZamestnance obrazek)
         {
@@ -73,6 +124,14 @@ namespace SemestralniPraceDB2.Models
                 image.Save(ms, ImageFormat.Png);
                 return ms.ToArray();
             }
+        }
+
+        public static void PrepareDeleteCall(ObrazekZamestnance obrazekZamestnance, out string prom, out List<OracleParameter> param)
+        {
+            prom = "DELETE FROM obrazkyzamestnancu WHERE id_obrazku = :id_obrazku";
+            param = new List<OracleParameter>();
+            param.Add(new OracleParameter(":id_obrazku", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            param[0].Value = obrazekZamestnance.Id;
         }
     }
 }

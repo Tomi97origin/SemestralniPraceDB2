@@ -90,7 +90,7 @@ namespace SemestralniPraceDB2.Models
             return result > 0;
         }*/
 
-        private static void PrepareDeleteCall(Brigadnik brigadnik, out string sql, out List<OracleParameter> prm)
+        public static void PrepareDeleteCall(Brigadnik brigadnik, out string sql, out List<OracleParameter> prm)
         {
             sql = "DELETE FROM brigadnici WHERE id_zamestnance = p_id_zamestnance";
             prm = new List<OracleParameter>();
@@ -147,7 +147,7 @@ namespace SemestralniPraceDB2.Models
                 {
                     Id = result.GetInt32("id_obrazku")
                 },
-                HodinovaSazba = result.IsDBNull("hodinova_sazba") ? (double?)null : result.GetDouble("hodinova_sazba"),
+                HodinovaSazba = result.GetDouble("hodinova_sazba"),
                 Hodiny = result.GetDouble("hodiny")
             };
 

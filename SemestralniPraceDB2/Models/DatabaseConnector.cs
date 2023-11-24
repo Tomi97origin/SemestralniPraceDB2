@@ -8,6 +8,7 @@ using System.Configuration;
 using System.Data;
 using SemestralniPraceDB2.Models.Entities;
 using Oracle.ManagedDataAccess.Types;
+using System.Data.Common;
 
 namespace SemestralniPraceDB2.Models
 {
@@ -22,7 +23,7 @@ namespace SemestralniPraceDB2.Models
         public static string GetFromDatabase()
         {
             string? dbResult = string.Empty;
-            int x = -1;
+            /*int x = -1;
             using (OracleConnection connection = DatabaseConnector.GetConnection())
             {
                 connection.Open();
@@ -54,17 +55,31 @@ namespace SemestralniPraceDB2.Models
                     }
                 }
             }
-            dbResult = x.ToString();
-            /*string query = "SELECT TABULKA,OPERACE FROM LOGY";
-            List<OracleParameter> prm = new();
-            var x = ExecuteCommandQueryAsync(query, prm, Map).Result;
-            dbResult = x.Count == 0 ? "Nenalezen" : x[0];*/
+            dbResult = x.ToString();*/
+            /*string query = "SELECT z.id_zamestnance,  z.jmeno, z.prijmeni,  z.id_vedouci,  LEVEL, (SELECT COUNT(*) FROM zamestnanci WHERE id_vedouci = z.id_zamestnance) AS num_subordinates FROM  zamestnanci z" +
+                "  where level != 1 or (SELECT COUNT(*) FROM zamestnanci WHERE id_vedouci = z.id_zamestnance) != 0 " +
+                "START WITH   z.id_vedouci = :id_vedouci " +
+                "CONNECT BY PRIOR z.id_zamestnance = z.id_vedouci " +
+                "ORDER BY LEVEL,num_subordinates desc";*/
+
+            string query = "SELECT * FROM vyrobci";
+            List <OracleParameter> prm = new();
+            /*prm.Add(new OracleParameter(":id_vedouci", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = 1;*/
+            /*var x = ExecuteCommandQueryAsync(query, prm, Map).Result;
+              dbResult = x.Count == 0 ? "Nenalezen" : x[0];*/
+            //var x = VyrobceService.GetAll();
+            //var y = KategorieService.GetAll();
+            //dbResult = y.Count.ToString();
+            var x = SystemCatalogService.GetAllTables();
             return dbResult;
         }
 
         static string Map(OracleDataReader reader)
         {
-            return reader.GetString("TABULKA");
+            var x = reader.GetSchemaTable().Columns;
+            string test = reader.GetSchemaTable().Columns.Contains("TABULKA") ? reader.GetString("TABULKA") : "";
+            return reader.GetString("jmeno") + " " + reader.GetString("prijmeni");
         }
 
 
@@ -80,7 +95,7 @@ namespace SemestralniPraceDB2.Models
                     using (OracleCommand command = new OracleCommand(query, connection))
                     {
                         command.CommandType = CommandType.Text;
-                        if (oracleParameters != null && oracleParameters.Count > 0)
+                        if (oracleParameters != null && oracleParameters.Count > 0) 
                         {
                             command.Parameters.AddRange(oracleParameters.ToArray());
                         }
@@ -93,7 +108,7 @@ namespace SemestralniPraceDB2.Models
                                 while (await reader.ReadAsync())
                                 {
                                     T result = mapResult(reader);
-                                    resultList.Add(result);
+                                     resultList.Add(result);
                                 }
                             }
 
@@ -170,12 +185,12 @@ namespace SemestralniPraceDB2.Models
             return resultList;
         }
 
-        public static async Task<int> ExecuteCommandProcedureForTransactionAsync(string query, List<OracleParameter> oracleParameters, OracleConnection connection)
+        public static async Task<int> ExecuteCommandNonQueryForTransactionAsync(string query, List<OracleParameter> oracleParameters, OracleConnection connection, CommandType commandType = CommandType.StoredProcedure)
         {
             using (OracleCommand command = new OracleCommand(query, connection))
             {
                 command.Parameters.AddRange(oracleParameters.ToArray());
-                command.CommandType = CommandType.StoredProcedure;
+                command.CommandType = commandType;
                 var result = await command.ExecuteNonQueryAsync();
                 if (oracleParameters[0].Direction == ParameterDirection.InputOutput)
                 {
