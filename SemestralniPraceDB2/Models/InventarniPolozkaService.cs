@@ -11,12 +11,10 @@ namespace SemestralniPraceDB2.Models
 {
     public static class InventarniPolozkaService
     {
-        public static bool Create(InventarniPolozka polozka)
+        public static bool Create(List<InventarniPolozka> polozky)
         {
-            PrepareProcedureCall(polozka, out string procedureName, out List<OracleParameter> prm);
-            prm[0].Value = null;
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
-            return result > 0;
+            polozky.ForEach(polozka => polozka.Id = 0);
+            return TransactionProcedureCall(polozky);
         }
 
         public static void PrepareProcedureCall(InventarniPolozka polozka, out string procedureName, out List<OracleParameter> prm)
@@ -25,11 +23,9 @@ namespace SemestralniPraceDB2.Models
             prm = MapInventarniPolozkaIntoParams(polozka);
         }
 
-        public static bool Update(InventarniPolozka polozka)
+        public static bool Update(List<InventarniPolozka> polozky)
         {
-            PrepareProcedureCall(polozka, out string procedureName, out List<OracleParameter> prm);
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
-            return result > 0;
+            return TransactionProcedureCall(polozky);
         }
         public static bool Delete(InventarniPolozka polozka)
         {
@@ -104,6 +100,32 @@ namespace SemestralniPraceDB2.Models
                 Zbozi = new Zbozi() { Id = reader.GetInt32("id_zbozi") }
             };
 
+        }
+
+        private static bool TransactionProcedureCall(List<InventarniPolozka> polozky)
+        {
+            using (OracleConnection connection = DatabaseConnector.GetConnection())
+            {
+                connection.Open();
+                using (OracleTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (InventarniPolozka polozka in polozky)
+                        {
+                            PrepareProcedureCall(polozka, out string procedure, out List<OracleParameter> parameters);
+                            polozka.Id = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(procedure, parameters, connection).Result;
+                        }
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+            }
         }
 
     }

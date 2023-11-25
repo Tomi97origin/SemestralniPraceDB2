@@ -11,19 +11,19 @@ namespace SemestralniPraceDB2.Models
 {
     public static class ObjednavkaService
     {
-        public static bool Create(Objednavka objednavka)
+        public static bool Create(Objednavka objednavka,List<ObjednaneZbozi> polozky)
         {
-            string procedureName = "pobjednavky";
-            List<OracleParameter> prm = MapObjednavkaIntoParams(objednavka);
-            prm[0].Value = null;
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
-            return result.Result > 0;
+            objednavka.Id = 0;
+            return TransactionProcedureCall(objednavka, polozky);
         }
-
+        public static void PrepareProcedureCall(Objednavka objednavka, out string procedureName, out List<OracleParameter> prm)
+        {
+            procedureName = "pobjednavky";
+            prm = MapObjednavkaIntoParams(objednavka);
+        }
         public static bool Update(Objednavka objednavka)
         {
-            string procedureName = "pobjednavky";
-            List<OracleParameter> prm = MapObjednavkaIntoParams(objednavka);
+            PrepareProcedureCall(objednavka, out string procedureName, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
             return result.Result > 0;
         }
@@ -78,7 +78,7 @@ namespace SemestralniPraceDB2.Models
             List<OracleParameter> prm = new List<OracleParameter>();
 
             prm.Add(new OracleParameter("p_id_objednavky", OracleDbType.Int32, System.Data.ParameterDirection.InputOutput));
-            prm[0].Value = objednavka.Id;
+            prm[0].Value = objednavka.Id <= 0 ? null : objednavka.Id;
 
             prm.Add(new OracleParameter("p_vytvoreno", OracleDbType.Date, System.Data.ParameterDirection.Input));
             prm[1].Value = objednavka.Vytvoreno;
@@ -96,6 +96,35 @@ namespace SemestralniPraceDB2.Models
             prm[5].Value = objednavka.Dodavatel.Id;
 
             return prm;
+        }
+
+        private static bool TransactionProcedureCall(Objednavka objednavka,List<ObjednaneZbozi> polozky)
+        {
+            using (OracleConnection connection = DatabaseConnector.GetConnection())
+            {
+                connection.Open();
+                using (OracleTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        PrepareProcedureCall(objednavka, out string procedureName, out List<OracleParameter> prm);
+                        objednavka.Id = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
+                        foreach (var polozka in polozky)
+                        {
+                            polozka.Objednavka = objednavka;
+                            ObjednaneZboziService.PrepareProcedureCall(polozka, out string procedure, out List<OracleParameter> parameters);
+                            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(procedure, parameters, connection).Result;
+                        }
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+            }
         }
 
     }
