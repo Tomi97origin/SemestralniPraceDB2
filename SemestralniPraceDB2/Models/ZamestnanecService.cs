@@ -184,8 +184,8 @@ namespace SemestralniPraceDB2.Models
                 Vedouci = result.IsDBNull("id_vedouci") ? null : new PlnyUvazek
                 {
                     Id = result.GetInt32("id_vedouci"),
-                    Jmeno = result.GetSchemaTable().Columns.Contains("manager_jmeno") ? result.GetString("manager_jmeno") : "",
-                    Prijmeni = result.GetSchemaTable().Columns.Contains("manager_prijmeni") ? result.GetString("manager_prijmeni") : ""
+                    Jmeno = result.GetString("manager_jmeno"),
+                    Prijmeni = result.GetString("manager_prijmeni")
                 },
                 Supermarket = result.IsDBNull("id_supermarketu") ? null : new Supermarket
                 {
