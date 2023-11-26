@@ -3,6 +3,7 @@ using SemestralniPraceDB2.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -68,21 +69,57 @@ namespace SemestralniPraceDB2.Models
         }
 
         //TODO USE VIEW
-        public static bool Get(Cena cena)
+        public static Cena? Get(Cena cena)
         {
-            throw new NotImplementedException();
+            string sql = "SELECT * FROM ceny WHERE id_ceny = :id_ceny";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_ceny", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = cena.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToCena).Result;
+            return result.Count == 0 ? null : result[0];
         }
 
-        //TODO USE VIEW
+        private static Cena MapOracleResultToCena(OracleDataReader reader)
+        {
+            var collumns = reader.GetColumnSchema().Select(col => col.ColumnName.ToLower()).ToList();
+            return new Cena() {
+                Id = reader.GetInt32("id_ceny"),
+                PlatnostOd = reader.GetDateTime("od"),
+                Castka = reader.GetDouble("cena"),
+                PlatnostDo = collumns.Contains("do") && !reader.IsDBNull("do") ? reader.GetDateTime("do") : null,
+                Zbozi = new Zbozi()
+                {
+                    Id = reader.GetInt32("id_zbozi"),
+                    Nazev = collumns.Contains("nazev") && !reader.IsDBNull("nazev") ? reader.GetString("nazev") : string.Empty
+                }
+            };
+        }
+
         public static List<Cena> GetAll()
         {
-            throw new NotImplementedException();
+            string sql = "SELECT * FROM historie_cen";
+            List<OracleParameter> prm = new();
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToCena).Result;
+            return result;
         }
 
-        //TODO USE VIEW
+        public static List<Cena> GetAllCurrent()
+        {
+            string sql = "SELECT * FROM historie_cen WHERE do IS NULL";
+            List<OracleParameter> prm = new();
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToCena).Result;
+            return result;
+        }
+
+        
         public static List<Cena> GetPriceHistory(Zbozi zbozi)
         {
-            throw new NotImplementedException();
+            string sql = "SELECT * FROM historie_cen WHERE id_zbozi = :id_zbozi";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_zbozi", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = zbozi.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToCena).Result;
+            return result;
         }
     }
 }
