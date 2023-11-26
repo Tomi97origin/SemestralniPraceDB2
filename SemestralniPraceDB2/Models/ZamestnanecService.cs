@@ -165,7 +165,7 @@ namespace SemestralniPraceDB2.Models
                  + "ORDER BY LEVEL, num_subordinates DESC";
             List<OracleParameter> prm = new();
             prm.Add(new OracleParameter(":id_vedouci", OracleDbType.Int32, System.Data.ParameterDirection.Input));
-            prm[0].Value = 1;
+            prm[0].Value = zamestnanec.Id;
             var subordinates = DatabaseConnector.ExecuteCommandQueryAsync(query, prm, MapOracleResultToZamestnanec).Result;
             return subordinates;
         }
