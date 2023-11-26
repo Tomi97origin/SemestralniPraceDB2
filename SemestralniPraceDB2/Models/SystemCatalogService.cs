@@ -3,6 +3,7 @@ using SemestralniPraceDB2.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace SemestralniPraceDB2.Models
         public static List<DBTable> GetAllTables()
         {
             var tables = new List<DBTable>();
-            using (OracleConnection connection = DatabaseConnector.GetConnection())
+            /*using (OracleConnection connection = DatabaseConnector.GetConnection())
             {
                 connection.Open();
                 using (OracleTransaction transaction = connection.BeginTransaction())
@@ -39,14 +40,20 @@ namespace SemestralniPraceDB2.Models
                         return tables;
                     }
                 }
-            }
+            }*/
+            string sql = "SELECT table_name,ROWCOUNT(table_name) as row_count FROM user_tables t";
+            List<OracleParameter> prm = new();
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToTable).Result;
+            tables.AddRange(result);
+            return tables;
         }
 
         private static DBTable MapOracleResultToTable(OracleDataReader reader)
         {
             return new DBTable()
             {
-                TableName = reader.GetString("table_name")
+                TableName = reader.GetString("table_name"),
+                RowCount = reader.GetInt32("row_count")
             };
         }
     }
