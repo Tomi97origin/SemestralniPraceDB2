@@ -61,6 +61,8 @@ namespace SemestralniPraceDB2.ViewModels
 
         public MakingOrderForWarehouseViewModel()
         {
+            MessageBox.Show("Hellou");
+
             SeznamDodavatelu = new(DodavatelService.GetAll());
             if (SeznamDodavatelu.Count == 0)
             {
@@ -73,6 +75,8 @@ namespace SemestralniPraceDB2.ViewModels
                 VybranyDodavatel = SeznamDodavatelu.First();
                 //ZboziSCenouService.GetPodleDodavatele(VybranyDodavatel);
             }
+
+            //CenaService.GetCurrent(new());
 
             SeznamZboziSCenou = new() //todo: toto odstranit a zavolat výše viz předpřipravený kód
                     {

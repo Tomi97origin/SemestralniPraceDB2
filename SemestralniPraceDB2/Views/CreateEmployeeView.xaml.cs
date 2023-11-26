@@ -23,7 +23,7 @@ namespace SemestralniPraceDB2.Views
     {
         public CreateEmployeeView()
         {
-            DataContext = new CreateEmployeeViewModel();
+            DataContext = MainWindowViewModel.createEmployeeVM;
             InitializeComponent();
         }
     }

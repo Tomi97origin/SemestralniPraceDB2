@@ -23,7 +23,7 @@ namespace SemestralniPraceDB2.Views
     {
         public MakingOrderForWarehouseView()
         {
-            DataContext = new MakingOrderForWarehouseViewModel();
+            DataContext = MainWindowViewModel.makingOrderForWarehouseVM;
             InitializeComponent();
         }
     }

@@ -26,7 +26,7 @@ namespace SemestralniPraceDB2.Views
     {
         public DatabaseExplorerView()
         {
-            DataContext = new DatabaseExplorerViewModel();
+            DataContext = MainWindowViewModel.databaseExplorerVM;
             InitializeComponent();
         }
 

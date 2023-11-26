@@ -23,7 +23,7 @@ namespace SemestralniPraceDB2.Views
     {
         public CustomerPurchaseHistoryView()
         {
-            DataContext = new CustomerPurchaseHistoryViewModel();
+            DataContext = MainWindowViewModel.customerPurchaseHistoryVM;
             InitializeComponent();
         }
     }

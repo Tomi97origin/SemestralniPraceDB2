@@ -21,21 +21,16 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0" Content="Platnost od:"/>
             <DatePicker Grid.Row="1" SelectedDate="{Binding NovaCena.PlatnostOd}" Margin="0,0,0,10"/>
 
-            <Label Grid.Row="2" Content="Platnost do:"/>
-            <DatePicker Grid.Row="3" SelectedDate="{Binding NovaCena.PlatnostDo}" Margin="0,0,0,10"/>
+            <Label Grid.Row="2" Content="Částka:"/>
+            <TextBox Grid.Row="3" Text="{Binding NovaCena.Castka}" Margin="0,0,0,10"/>
 
-            <Label Grid.Row="4" Content="Částka:"/>
-            <TextBox Grid.Row="5" Text="{Binding NovaCena.Castka}" Margin="0,0,0,10"/>
-
-            <Label Grid.Row="6" Content="Zboží:"/>
-            <ComboBox Grid.Row="7" ItemsSource="{Binding SeznamZbozi}" SelectedItem="{Binding NovaCena.Zbozi}" Margin="0,0,0,10">
+            <Label Grid.Row="4" Content="Zboží:"/>
+            <ComboBox Grid.Row="5" ItemsSource="{Binding SeznamZbozi}" SelectedItem="{Binding NovaCena.Zbozi}" Margin="0,0,0,10">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock>
@@ -48,7 +43,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             
-            <Button Grid.Row="8" Content="Přidat" Command="{Binding AddProductPriceCommand}" Margin="0,10,0,0"/>
+            <Button Grid.Row="6" Content="Přidat" Command="{Binding AddProductPriceCommand}" Margin="0,10,0,0"/>
         </Grid>
     </StackPanel>
 </UserControl>

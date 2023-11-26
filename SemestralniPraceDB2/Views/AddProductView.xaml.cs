@@ -23,7 +23,7 @@ namespace SemestralniPraceDB2.Views
     {
         public AddProductView()
         {
-            DataContext = new AddProductViewModel();
+            DataContext = MainWindowViewModel.addProductVM
             InitializeComponent();
         }
     }

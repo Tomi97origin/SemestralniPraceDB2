@@ -17,16 +17,16 @@ namespace SemestralniPraceDB2.ViewModels
     partial class MainWindowViewModel : BaseViewModel, IRecipient<ViewChanged>, IRecipient<UserLogin>, IRecipient<UserLogout>
     {
         //Inicializace ViewModels
-        private static readonly MakingOrderForWarehouseViewModel makingOrderForWarehouseVM = new();
-        private static readonly EmptyViewModel messageVM = new();
-        private static readonly UserLoginViewModel userLoginVM = new();
-        private static readonly UserRegistrationViewModel userRegistrationVM = new();
-        private static readonly CreateEmployeeViewModel createEmployeeVM = new();
-        private static readonly DatabaseExplorerViewModel databaseExplorerVM = new();
-        private static readonly CustomerPurchaseHistoryViewModel customerPurchaseHistoryVM = new();
-        private static readonly GoodsImportViewModel goodsImportVM = new();
-        private static readonly AddProductViewModel addProductVM = new();
-        private static readonly AddProductPriceViewModel addProductPriceVM = new();
+        public static readonly MakingOrderForWarehouseViewModel makingOrderForWarehouseVM = new();
+        public static readonly EmptyViewModel messageVM = new();
+        public static readonly UserLoginViewModel userLoginVM = new();
+        public static readonly UserRegistrationViewModel userRegistrationVM = new();
+        public static readonly CreateEmployeeViewModel createEmployeeVM = new();
+        public static readonly DatabaseExplorerViewModel databaseExplorerVM = new();
+        public static readonly CustomerPurchaseHistoryViewModel customerPurchaseHistoryVM = new();
+        public static readonly GoodsImportViewModel goodsImportVM = new();
+        public static readonly AddProductViewModel addProductVM = new();
+        public static readonly AddProductPriceViewModel addProductPriceVM = new();
 
         private static readonly BaseViewModel defaultVM = messageVM;
         

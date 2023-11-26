@@ -23,11 +23,10 @@ namespace SemestralniPraceDB2.Views
     {
         public UserLoginView()
         {
-
-            DataContext = new UserLoginViewModel();
+            DataContext = MainWindowViewModel.userLoginVM;
             InitializeComponent();
         }
-        
+
         // Pro bezpečné zacházení s heslem pomocí SecureString
         //private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         //{
