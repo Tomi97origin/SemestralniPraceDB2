@@ -14,7 +14,7 @@ namespace SemestralniPraceDB2.Models.Entities
         public int Id { get; set; }
 
         [DisplayName("Platnost od")]
-        public DateTime PlatnostOd { get; set; }
+        public DateTime? PlatnostOd { get; set; }
 
         [DisplayName("Platnost do")]
         public DateTime? PlatnostDo { get; set; }
