@@ -145,7 +145,7 @@ namespace SemestralniPraceDB2.Models
                         try
                         {
                             int result = await command.ExecuteNonQueryAsync();
-                            if (oracleParameters[0].Direction == ParameterDirection.InputOutput)
+                            if (oracleParameters.Count > 0 && oracleParameters[0].Direction == ParameterDirection.InputOutput)
                             {
                                 OracleDecimal returnId = (OracleDecimal)command.Parameters[0].Value;
                                 return returnId.ToInt32();
