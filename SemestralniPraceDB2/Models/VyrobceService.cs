@@ -72,6 +72,16 @@ namespace SemestralniPraceDB2.Models
             return result.Count == 0 ? null : result[0];
         }
 
+        public static Vyrobce? GetTransactional(Vyrobce vyrobce, OracleConnection connection)
+        {
+            string sql = "Select * FROM vyrobci WHERE id_vyrobce = :id_vyrobce";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_dodavatele", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = vyrobce.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryForTransactionAsync(sql, prm, connection,MapOracleResultToVyrobce).Result;
+            return result.Count == 0 ? null : result[0];
+        }
+
         private static Vyrobce MapOracleResultToVyrobce(OracleDataReader reader)
         {
             return new Vyrobce

@@ -147,10 +147,33 @@ namespace SemestralniPraceDB2.Models
         }
         public static List<Cena> GetAllZboziWithCurentPrice()
         {
-            string sql = "SELECT * FROM zbozi_s_cenou";
-            List<OracleParameter> prm = new();
-            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToCena).Result;
-            return result;
+            List<Cena> res = new();
+            using (OracleConnection connection = DatabaseConnector.GetConnection())
+            {
+                connection.Open();
+                using (OracleTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        string sql = "SELECT * FROM zbozi_s_cenou";
+                        List<OracleParameter> prm = new();
+                        var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToCena).Result;
+                        foreach (Cena cena in result)
+                        {
+                            if(cena.Zbozi is not null && cena.Zbozi.Vyrobce is not null)
+                            cena.Zbozi.Vyrobce = VyrobceService.GetTransactional(cena.Zbozi.Vyrobce, connection);
+                            if (cena.Zbozi is not null && cena.Zbozi.Kategorie is not null)
+                                cena.Zbozi.Kategorie = KategorieService.GetTransactional(cena.Zbozi.Kategorie, connection);
+                        }
+                        res.AddRange(result);
+                        return res;
+                    }
+                    catch (Exception ex)
+                    {
+                        return res;
+                    }
+                }
+            }
         }
     }
 }

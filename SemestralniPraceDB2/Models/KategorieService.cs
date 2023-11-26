@@ -56,6 +56,16 @@ namespace SemestralniPraceDB2.Models
             return result.Count == 0 ? null : result[0];
         }
 
+        public static Kategorie? GetTransactional(Kategorie kategorie, OracleConnection connection)
+        {
+            string sql = "SELECT * FROM kategorie WHERE id_kategorie = :id_kategorie";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_kategorie", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = kategorie.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryForTransactionAsync(sql, prm,connection, MapOracleResultToKategorie).Result;
+            return result.Count == 0 ? null : result[0];
+        }
+
         private static Kategorie MapOracleResultToKategorie(OracleDataReader reader)
         {
             return new Kategorie()
