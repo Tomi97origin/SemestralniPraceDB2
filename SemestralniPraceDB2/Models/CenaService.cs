@@ -68,7 +68,7 @@ namespace SemestralniPraceDB2.Models
             prm[0].Value = cena.Id;
         }
 
-        //TODO USE VIEW
+        
         public static Cena? Get(Cena cena)
         {
             string sql = "SELECT * FROM ceny WHERE id_ceny = :id_ceny";
@@ -95,6 +95,16 @@ namespace SemestralniPraceDB2.Models
             };
         }
 
+        public static Cena? GetCurrent(Zbozi zbozi)
+        {
+            string sql = "SELECT * FROM ceny c WHERE c.id_ceny = CURRENT_PRICE(:id_zbozi)";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_zbozi", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = zbozi.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToCena).Result;
+            return result.Count == 0 ? null : result[0];
+        }
+
         public static List<Cena> GetAll()
         {
             string sql = "SELECT * FROM historie_cen";
@@ -105,7 +115,7 @@ namespace SemestralniPraceDB2.Models
 
         public static List<Cena> GetAllCurrent()
         {
-            string sql = "SELECT * FROM historie_cen WHERE do IS NULL";
+            string sql = "SELECT * FROM historie_cen WHERE id_ceny = CURRENT_PRICE(id_zbozi)";
             List<OracleParameter> prm = new();
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToCena).Result;
             return result;
