@@ -84,13 +84,17 @@ namespace SemestralniPraceDB2.Models
             var collumns = reader.GetColumnSchema().Select(col => col.ColumnName.ToLower()).ToList();
             return new Cena() {
                 Id = reader.GetInt32("id_ceny"),
-                PlatnostOd = reader.GetDateTime("od"),
-                Castka = reader.GetDouble("cena"),
+                PlatnostOd = collumns.Contains("od") && !reader.IsDBNull("od") ? reader.GetDateTime("od") : null,
+                Castka = collumns.Contains("cena") && !reader.IsDBNull("cena") ? reader.GetDouble("cena") : 0,
                 PlatnostDo = collumns.Contains("do") && !reader.IsDBNull("do") ? reader.GetDateTime("do") : null,
                 Zbozi = new Zbozi()
                 {
                     Id = reader.GetInt32("id_zbozi"),
-                    Nazev = collumns.Contains("nazev") && !reader.IsDBNull("nazev") ? reader.GetString("nazev") : string.Empty
+                    Nazev = collumns.Contains("nazev") && !reader.IsDBNull("nazev") ? reader.GetString("nazev") : string.Empty,
+                    Popis = collumns.Contains("popis") && !reader.IsDBNull("popis") ? reader.GetString("popis") : string.Empty,
+                    EAN = collumns.Contains("ean") && !reader.IsDBNull("ean") ? reader.GetString("ean") : string.Empty,
+                    Kategorie = collumns.Contains("id_kategorie") && !reader.IsDBNull("id_kategorie") ? new Kategorie() { Id = reader.GetInt32("id_kategorie") } : null,
+                    Vyrobce = collumns.Contains("id_vyrobce") && !reader.IsDBNull("id_vyrobce") ? new Vyrobce() { Id = reader.GetInt32("id_vyrobce") } : null
                 }
             };
         }
@@ -128,6 +132,23 @@ namespace SemestralniPraceDB2.Models
             List<OracleParameter> prm = new();
             prm.Add(new OracleParameter(":id_zbozi", OracleDbType.Int32, System.Data.ParameterDirection.Input));
             prm[0].Value = zbozi.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToCena).Result;
+            return result;
+        }
+
+        public static Cena? GetZboziWithCurentPrice(Zbozi zbozi)
+        {
+            string sql = "SELECT * FROM zbozi_s_cenou WHERE id_zbozi = :id_zbozi";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_zbozi", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = zbozi.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToCena).Result;
+            return result.Count == 0 ? null : result[0];
+        }
+        public static List<Cena> GetAllZboziWithCurentPrice()
+        {
+            string sql = "SELECT * FROM zbozi_s_cenou";
+            List<OracleParameter> prm = new();
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToCena).Result;
             return result;
         }

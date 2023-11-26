@@ -56,5 +56,24 @@ namespace SemestralniPraceDB2.Models
                 RowCount = reader.GetInt32("row_count")
             };
         }
+
+        public static List<CatalogItem> GetAll()
+        {
+            List<CatalogItem> items = new();
+            string sql = "SELECT * FROM all_objects WHERE owner = USER";
+            List<OracleParameter> prm = new();
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToCatalogItem).Result;
+            items.AddRange(result);
+            return items;
+        }
+
+        private static CatalogItem MapOracleResultToCatalogItem(OracleDataReader reader)
+        {
+            return new CatalogItem()
+            {
+                Name = reader.GetString("object_name"),
+                Typ = reader.GetString("object_type"),
+            };
+        }
     }
 }

@@ -22,10 +22,10 @@ namespace SemestralniPraceDB2.Models.Entities
         public string EAN { get; set; }
 
         [DisplayName("Kategorie")]
-        public Kategorie Kategorie { get; set; }
+        public Kategorie? Kategorie { get; set; }
 
         [DisplayName("Výrobce")]
-        public Vyrobce Vyrobce { get; set; }
+        public Vyrobce? Vyrobce { get; set; }
 
         public Zbozi(int id, string nazev, string popis, string eAN, Kategorie kategorie, Vyrobce vyrobce)
         {
