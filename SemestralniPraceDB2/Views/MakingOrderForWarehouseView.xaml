@@ -7,59 +7,94 @@
              mc:Ignorable="d" 
              d:DesignHeight="450"
              d:DesignWidth="800">
-    <Grid Margin="10
-          ">
+    <Grid Margin="10,10,10,10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*" />
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="5*" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
         <!-- Levý panel -->
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0"
-               Content="Vyhledávání"
-               VerticalAlignment="Top"
-               HorizontalAlignment="Left"
-               Margin="10"
-               FontSize="18"
-               FontWeight="Bold" />
 
-            <DataGrid Grid.Row="1"
+            <Grid Grid.Row="0"
+                  VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    Content="Vyhledávání"
+                    Margin="10"
+                    FontSize="18"
+                    FontWeight="Bold" />
+                <StackPanel 
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+
+                    <Label 
+                        Content="Dodavatel:" 
+                        Width="auto" 
+                        HorizontalContentAlignment="Right" 
+                        VerticalAlignment="Center"/>
+                    <ComboBox  
+                        VerticalAlignment="Center" 
+                        Width="140"
+                        ItemsSource="{Binding SeznamDodavatelu}"
+                        SelectedItem="{Binding VybranyDodavatel}"
+                        Margin="0">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Nazev}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+            </Grid>
+
+            <DataGrid Grid.Row="2"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding YourItems}"
-                  VerticalAlignment="Stretch">
+                  ItemsSource="{Binding SeznamZboziSCenou}"
+                  VerticalAlignment="Stretch"
+                  SelectedItem="{Binding VybraneZboziSCenou}"
+                  IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Název" Binding="{Binding Nazev}" />
+                    <DataGridTextColumn Header="Popis" Binding="{Binding Popis}" />
+                    <DataGridTextColumn Header="Kategorie" Binding="{Binding KategorieZkratka}" />
+                    <DataGridTextColumn Header="Výrobce" Binding="{Binding VyrobceZkratka}" />
+                    <DataGridTextColumn Header="Čárový kód" Binding="{Binding EAN}" />
                     <DataGridTextColumn Header="Cena" Binding="{Binding Cena}" />
-                    <DataGridTextColumn Header="Čárový kód" Binding="{Binding CarovyKod}" />
                 </DataGrid.Columns>
             </DataGrid>
 
-            <StackPanel Grid.Row="2"
+            <!--<StackPanel Grid.Row="3"
                     Orientation="Vertical" 
                     VerticalAlignment="Stretch" 
                     HorizontalAlignment="Stretch" 
                     Margin="10"
                     Width="auto">
-                <!-- TextBox pro název -->
+                --><!-- TextBox pro název --><!--
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <Label Content="Název:" Width="80" HorizontalContentAlignment="Right" />
                     <TextBox Text="Zadejte název" Width="200"/>
                 </StackPanel>
 
-                <!-- TextBox pro čárový kód -->
+                --><!-- TextBox pro čárový kód --><!--
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <Label Content="Čárový kód:" Width="80" HorizontalContentAlignment="Right" />
                     <TextBox Text="Zadejte čárový kód" Width="200"/>
                 </StackPanel>
-            </StackPanel>
+            </StackPanel>-->
         </Grid>
 
         <!-- Střední panel s tlačítky -->
@@ -70,16 +105,17 @@
                 Margin="10"
                 Width="auto">
             <Button Content=">>"
-                Width="auto"
+                Width="30"
                 Height="30"
-                Command="{Binding AddItemCommand}"
+                Command="{Binding PridatPolozkuCommand}"
                 VerticalAlignment="Center"
                 Margin="5" />
 
             <Button Content="&lt;&lt;"
-                Width="auto"
+                Width="30
+                    "
                 Height="30"
-                Command="{Binding RemoveItemCommand}"
+                Command="{Binding OdebratPolozkuCommand}"
                 VerticalAlignment="Center"
                 Margin="5" />
         </StackPanel>
@@ -102,28 +138,50 @@
 
             <DataGrid Grid.Row="1"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding YourItems}"
-                  VerticalAlignment="Stretch">
+                  ItemsSource="{Binding SeznamVybranehoZbozi}"
+                  VerticalAlignment="Stretch"
+                  SelectedItem="{Binding VybraneVybraneZbozi}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Název" Binding="{Binding Nazev}" />
-                    <DataGridTextColumn Header="Cena" Binding="{Binding Cena}" />
-                    <DataGridTextColumn Header="Čárový kód" Binding="{Binding CarovyKod}" />
-                    <DataGridTextColumn Header="Množství" Binding="{Binding Mnozstvi}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="Název" Binding="{Binding Nazev}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="Čárový kód" Binding="{Binding CarovyKod}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="Cena" Binding="{Binding Cena}" />
+                    <DataGridTextColumn Header="Množství" Binding="{Binding Mnozstvi, Mode=TwoWay}" />
                 </DataGrid.Columns>
             </DataGrid>
 
-            <StackPanel Grid.Row="2"
-                    Orientation="Vertical" 
-                    VerticalAlignment="Stretch" 
-                    HorizontalAlignment="Stretch" 
-                    Margin="10"
-                    Width="auto">
+            <Grid Grid.Row="2"
+                VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel 
+                    Grid.Column="0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Left">
+
+                    <Label 
+                        Content="Supermarket:" 
+                        Width="auto" 
+                        HorizontalContentAlignment="Right" 
+                        VerticalAlignment="Center"/>
+                    <ComboBox  
+                        VerticalAlignment="Center" 
+                        Width="140"
+                        ItemsSource="{Binding SeznamSupermarketu}"
+                        SelectedItem="{Binding VybranySupermarket}"
+                        Margin="0">
+                    </ComboBox>
+                </StackPanel>
+
                 <Button Content="Potvrdit objednávku"
-                    Width="150"
+                        Grid.Column="1"
+                    Width="auto"
                     Height="30"
-                    Command="{Binding ConfirmOrderCommand}" 
+                    Command="{Binding PotvrditObjednavkuCommand}" 
                     Margin="6"/>
-            </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 

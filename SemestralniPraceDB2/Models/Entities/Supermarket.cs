@@ -26,5 +26,10 @@ namespace SemestralniPraceDB2.Models.Entities
 
         [DisplayName("Adresa")]
         public Adresa Adresa { get; set; }
+
+        public override string ToString()
+        {
+            return $"Sup: {Adresa.Mesto}, {Adresa.Ulice}";
+        }
     }
 }

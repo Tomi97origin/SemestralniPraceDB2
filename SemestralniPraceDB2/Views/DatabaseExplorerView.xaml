@@ -13,7 +13,7 @@
         </Grid.ColumnDefinitions>
 
         <!-- Levý panel: Seznam tabulek -->
-        <ListView ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}">
+        <ListView ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}" d:ItemsSource="{d:SampleData ItemCount=5}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Název tabulky" DisplayMemberBinding="{Binding TableName}"/>

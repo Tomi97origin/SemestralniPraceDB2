@@ -69,19 +69,6 @@
                     <TextBlock Text="Aktualizovat&#x0a;cenu zboží" />
                 </StackPanel>
             </Button>
-            <Button Command="{Binding SaveCommand}">
-                <StackPanel>
-                    <Image Source="/Views/Images/save_ico.png" />
-                    <TextBlock Text="Dummy 5" />
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding UpdateViewCommand}"
-                CommandParameter="NotImplementedYet">
-                <StackPanel>
-                    <Image Source="/Views/Images/archive_ico.png" />
-                    <TextBlock Text="Dummy 6" />
-                </StackPanel>
-            </Button>
             <Button Command="{Binding LoginLogoutCommand}">
                 <StackPanel>
                     <Image Source="/Views/Images/logout.png" />
