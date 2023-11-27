@@ -3,6 +3,7 @@ using SemestralniPraceDB2.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -90,8 +91,8 @@ namespace SemestralniPraceDB2.Models
             {
                 Id = reader.GetInt32("id_platby"),
                 Vraceno = reader.GetDouble("vraceno"),
-                Debit = reader.GetInt16("debit"),
-                CisloKarty = reader.GetString("cislo_karty"),
+                Debit = reader.IsDBNull("debit") ? null : reader.GetInt16("debit"),
+                CisloKarty = reader.IsDBNull("cislo_karty") ? null : reader.GetString("cislo_karty"),
                 Hotovost = reader.GetInt16("hotovost") == 1,
                 Vydavatel = reader.IsDBNull("id_vydavatele") ? null : new Vydavatel() { Id = reader.GetInt32("id_vydavatele") },
                 Vernostni_Karta = reader.IsDBNull("id_vernostni_karty") ? null : new Vernostni_karta() { Id = reader.GetInt32("id_vernostni_karty") }

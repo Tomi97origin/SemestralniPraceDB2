@@ -16,7 +16,7 @@ namespace SemestralniPraceDB2.Models.Entities
         public double Vraceno { get; set; }
 
         [DisplayName("Debit")]
-        public short Debit { get; set; }
+        public short? Debit { get; set; }
 
         [DisplayName("Číslo karty")]
         public string? CisloKarty { get; set; }
