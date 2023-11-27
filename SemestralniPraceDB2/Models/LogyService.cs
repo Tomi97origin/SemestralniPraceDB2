@@ -86,8 +86,9 @@ namespace SemestralniPraceDB2.Models
                 Tabulka = reader.GetString("tabulka"),
                 Operace = reader.GetString("operace"),
                 Cas = reader.GetDateTime("cas"),
-                Uzivatel = reader.GetString("uzivatel")
-
+                Uzivatel = reader.GetString("uzivatel"),
+                Puvodni = reader.IsDBNull("puvodni") ? string.Empty : reader.GetString("puvodni"),
+                Nove = reader.IsDBNull("nove") ? string.Empty : reader.GetString("nove")
             };
         }
 

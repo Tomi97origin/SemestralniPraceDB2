@@ -19,5 +19,8 @@ namespace SemestralniPraceDB2.Models.Entities
         public DateTime Cas { get; set; }
 
         public string Uzivatel { get; set; }
+
+        public string Puvodni { get; set; }
+        public string Nove { get; set; }
     }
 }
