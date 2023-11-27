@@ -25,7 +25,7 @@ namespace SemestralniPraceDB2.ViewModels
         public Adresa adresa = new();
 
         [ObservableProperty]
-        public ObservableCollection<string> typyUvazku = new() { "Brigádník", "Plný úvazek" };
+        public ObservableCollection<string> typyUvazku;
 
         [ObservableProperty]
         public ObservableCollection<string> supermarkety = new() { "S1", "S2" };
