@@ -96,7 +96,7 @@ namespace SemestralniPraceDB2.Models
             {
                 Id = result.GetInt32("id_zbozi"),
                 Nazev = result.GetString("nazev"),
-                Popis = result.GetString("popis"),
+                Popis = result.IsDBNull("popis") ? string.Empty : result.GetString("popis"),
                 EAN = result.GetString("ean"),
                 Kategorie = new Kategorie() { Id = result.GetInt32("id_kategorie") },
                 Vyrobce = new Vyrobce() { Id = result.GetInt32("id_vyrobce") }
