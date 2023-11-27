@@ -30,7 +30,7 @@ namespace SemestralniPraceDB2.Models.Entities
 
         override public string ToString()
         {
-            return $"{Ulice} {Cp}, {Mesto} {Psc}, {Stat}";
+            return $"{Ulice} {Cp} {Mesto} {Psc} {Stat}";
         }
 
         public Adresa(int id, string? ulice, int? cp, string? mesto, string? stat, string? psc)

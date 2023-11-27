@@ -19,18 +19,10 @@ namespace SemestralniPraceDB2.ViewModels
         public Zbozi noveZbozi = new();
 
         [ObservableProperty]
-        public ObservableCollection<Kategorie> seznamKategorii = new()
-        {
-            new Kategorie(1,"Drogerie","dro"),
-            new Kategorie(2,"Čerstvé zboží", "fresh")
-        };
+        public ObservableCollection<Kategorie> seznamKategorii;
 
         [ObservableProperty]
-        public ObservableCollection<Vyrobce> seznamVyrobcu = new()
-        {
-            new Vyrobce(1,"OPOCHEM","Opch"),
-            new Vyrobce(2,"Řeznictví Mikulov", "řez. mik.")
-        };
+        public ObservableCollection<Vyrobce> seznamVyrobcu;
 
         public AddProductViewModel()
         {

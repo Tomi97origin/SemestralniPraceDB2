@@ -27,6 +27,7 @@ namespace SemestralniPraceDB2.ViewModels
         public static readonly GoodsImportViewModel goodsImportVM = new();
         public static readonly AddProductViewModel addProductVM = new();
         public static readonly AddProductPriceViewModel addProductPriceVM = new();
+        public static readonly SystemCatalogViewModel systemCatalogVM = new();
 
         private static readonly BaseViewModel defaultVM = messageVM;
         
@@ -70,6 +71,7 @@ namespace SemestralniPraceDB2.ViewModels
                 "GoodsImport" => goodsImportVM,
                 "AddProduct" => addProductVM,
                 "AddProductPrice" => addProductPriceVM,
+                "SystemCatalog" => systemCatalogVM,
                 _ => messageVM,
             };
 

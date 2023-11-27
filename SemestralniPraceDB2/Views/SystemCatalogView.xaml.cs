@@ -17,13 +17,13 @@ using System.Windows.Shapes;
 namespace SemestralniPraceDB2.Views
 {
     /// <summary>
-    /// Interakční logika pro AddProductView.xaml
+    /// Interakční logika pro SystemCatalogView.xaml
     /// </summary>
-    public partial class AddProductView : UserControl
+    public partial class SystemCatalogView : UserControl
     {
-        public AddProductView()
+        public SystemCatalogView()
         {
-            DataContext = MainWindowViewModel.addProductVM;
+            DataContext = MainWindowViewModel.systemCatalogVM;
             InitializeComponent();
         }
     }

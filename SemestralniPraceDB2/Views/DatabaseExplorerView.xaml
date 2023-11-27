@@ -13,7 +13,10 @@
         </Grid.ColumnDefinitions>
 
         <!-- Levý panel: Seznam tabulek -->
-        <ListView ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}" d:ItemsSource="{d:SampleData ItemCount=5}">
+        <ListView
+            ItemsSource="{Binding Tables}"
+            SelectedItem="{Binding SelectedTable}"
+            d:ItemsSource="{d:SampleData ItemCount=5}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Název tabulky" DisplayMemberBinding="{Binding TableName}"/>
@@ -22,7 +25,7 @@
             </ListView.View>
         </ListView>
 
-        <!-- Pravý panel: Data Grid s tlačítkem "Smazat záznam" -->
+        <!-- Pravý panel: Data Grid s tlačítky -->
         <Grid  Grid.Column="1" Margin="30,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -34,10 +37,27 @@
                       AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"/>
 
 
-            <StackPanel Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
-                <Button Content="Smazat záznam" Command="{Binding DeleteRecordCommand}"
-                        Margin="0,10,0,0"/>
-            </StackPanel>
+            <Grid
+                Grid.Row="1" HorizontalAlignment="Stretch" Margin="0,5,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    Grid.Column="0"
+                    Content=" Smazat vybraný záznam "
+                    Command="{Binding DeleteRecordCommand}"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"/>
+                    
+                <Button
+                    Grid.Column="1"
+                    Content=" Zapsat změny "
+                    Command="{Binding AcceptChangesCommand}"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Right"/>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

@@ -1,118 +1,144 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SemestralniPraceDB2.Models;
 using SemestralniPraceDB2.Models.Entities;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
-namespace SemestralniPraceDB2.ViewModels
+namespace SemestralniPraceDB2.ViewModels;
+
+partial class DatabaseExplorerViewModel : BaseViewModel
 {
-    partial class DatabaseExplorerViewModel : BaseViewModel
+
+    [ObservableProperty]
+    public DBTable? selectedTable;
+
+
+
+    [ObservableProperty]
+    ObservableCollection<DBTable> tables;
+
+
+    [ObservableProperty]
+    private ObservableCollection<object>? selectedTableData;
+
+    public DatabaseExplorerViewModel()
     {
-
-        [ObservableProperty]
-        public DBTable? selectedTable;
-
-
-
-        [ObservableProperty]
-        ObservableCollection<DBTable> tables = new()
-        {
-            new DBTable ("AdresyLokalniTestovaci",10 ),
-            new DBTable ("RoleLokalniTestovaci",20 )
-        };
-
-
-        [ObservableProperty]
-        private ObservableCollection<object>? selectedTableData;
-
-        public DatabaseExplorerViewModel()
-        {
-            //SelectedTableData.CollectionChanged += new NotifyCollectionChangedEventHandler(CollectionChangedMethod);
-        }
-
-        private void CollectionChangedMethod(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            //different kind of changes that may have occurred in collection
-            if (e.Action == NotifyCollectionChangedAction.Add)
-            {
-                MessageBox.Show($"Změna Add v tabulce");
-            }
-            if (e.Action == NotifyCollectionChangedAction.Replace)
-            {
-                MessageBox.Show($"Změna Replace v tabulce");
-            }
-            if (e.Action == NotifyCollectionChangedAction.Remove)
-            {
-                MessageBox.Show($"Změna Remove v tabulce");
-            }
-            if (e.Action == NotifyCollectionChangedAction.Move)
-            {
-                MessageBox.Show($"Změna Move v tabulce");
-            }
-        }
-
-        partial void OnSelectedTableChanged(DBTable? value)
-        {
-            if (SelectedTable != null)
-            {
-
-                MessageBox.Show($"Vybraná tabulka se změnila. Načítám data z {value}.");
-
-                switch (SelectedTable.TableName)
-                {
-                    case "AdresyLokalniTestovaci":
-                        SelectedTableData = new()
-                        {
-                            new Adresa(1,"malá ulice",23,"Praha","CZ","45655"),
-                            new Adresa(2,"velká ulice",125,"Liberec","CZ","56551"),
-                            new Adresa(3,"střední ulice",7,"Olomouc","CZ","12344")
-                        };
-                        break;
-                    case "RoleLokalniTestovaci":
-                        SelectedTableData = new()
-                        {
-                            new Role(1,"Big boss"),
-                            new Role(2,"holka pro všechno"),
-                            new Role(3,"Skladník"),
-                            new Role(4,"Kvalifikovaný seřizovač pohonu pokladních pásů s aprobací na výuku českého jazyka z předhusitské doby")
-                        };
-                        break;
-                    default: break;
-                }
-            }
-
-
-
-        }
-
-        partial void OnSelectedTableDataChanging(ObservableCollection<object>? value)
-        {
-            MessageBox.Show($"Data v Tabulce {SelectedTable} se budou měnit na {value}");
-        }
-
-
-
-        //private void UpdateAdressInDB()
-        //{
-        //    MessageBox.Show("Dont panic!");
-        //}
-
-        //partial void OnSelectedTableDataPropertyChanged(string value)
-        //{
-        //    GetSuggestions();
-        //}
-
-        //partial void OnSelectedTableChanged(string? value)
-        //{
-        //    MessageBox.Show("Dont panic!");
-        //}
-
-        
+        tables = new(SystemCatalogService.GetAllTables());
     }
+
+
+    partial void OnSelectedTableChanged(DBTable? value)
+    {
+        if (SelectedTable != null)
+        {
+            switch (SelectedTable.TableName)
+            {
+                case "ADRESY":
+                    SelectedTableData = new(AdresaService.GetAll());
+                    break;
+
+                case "BRIGADNICI":
+                    SelectedTableData = new(BrigadnikService.GetAll());
+                    break;
+
+                case "CENY":
+                    SelectedTableData = new(CenaService.GetAll());
+                    break;
+
+                case "DODAVATELE":
+                    SelectedTableData = new(DodavatelService.GetAll());
+                    break;
+
+                case "INVENTARNI_POLOZKY":
+                    SelectedTableData = new(InventarniPolozkaService.GetAll());
+                    break;
+
+                case "KATEGORIE":
+                    SelectedTableData = new(KategorieService.GetAll());
+                    break;
+
+                case "LOGY":
+                    SelectedTableData = new(LogyService.GetAll());
+                    break;
+
+                case "OBJEDNANE_ZBOZI":
+                    SelectedTableData = new(ObjednaneZboziService.GetAll());
+                    break;
+
+                case "OBJEDNAVKY":
+                    SelectedTableData = new(ObjednavkaService.GetAll());
+                    break;
+
+                case "OBRAZKYZAMESTNANCU":
+                    SelectedTableData = new(ObrazekZamestnanceService.GetAll());
+                    break;
+
+                case "PLATBY":
+                    SelectedTableData = new(PlatbaService.GetAll());
+                    break;
+
+                case "PLNE_UVAZKY":
+                    SelectedTableData = new(PlnyUvazekService.GetAll());
+                    break;
+
+                case "POKLADNY":
+                    SelectedTableData = new(PokladnaService.GetAll());
+                    break;
+
+                case "PRODANE_ZBOZI":
+                    SelectedTableData = new(ProdaneZboziService.GetAll());
+                    break;
+
+                case "ROLE":
+                    SelectedTableData = new(RoleService.GetAll());
+                    break;
+
+                case "SUPERMARKETY":
+                    SelectedTableData = new(SupermarketService.GetAll());
+                    break;
+
+                case "UCTENKY":
+                    SelectedTableData = new(UctenkaService.GetAll());
+                    break;
+
+                case "UZIVATELE":
+                    //SelectedTableData = new(UzivateleService.GetAll());
+                    break;
+
+                case "VERNOSTNI_KARTY":
+                    SelectedTableData = new(VernostniKartaService.GetAll());
+                    break;
+
+                case "VYDAVATELE":
+                    SelectedTableData = new(VydavatelService.GetAll());
+                    break;
+
+                case "VYROBCI":
+                    SelectedTableData = new(VyrobceService.GetAll());
+                    break;
+
+                case "ZAMESTNANCI":
+                    SelectedTableData = new(ZamestnanecService.GetAll());
+                    break;
+
+                case "ZBOZI":
+                    SelectedTableData = new(ZboziService.GetAll());
+                    break;
+                default: break;
+            }
+        }
+
+
+
+    }
+
+
+    [RelayCommand]
+    private void AcceptChanges()
+    {
+        MessageBox.Show("zatím neimplementováno změny");
+    }
+
+
 }

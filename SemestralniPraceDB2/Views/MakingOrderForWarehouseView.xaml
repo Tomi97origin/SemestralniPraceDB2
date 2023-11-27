@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:SemestralniPraceDB2.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450"
-             d:DesignWidth="800">
+             d:DesignWidth="1000">
     <Grid Margin="10,10,10,10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -23,43 +23,12 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
-
-            <Grid Grid.Row="0"
-                  VerticalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Label
-                    Grid.Column="0"
+            <Label
+                    Grid.Row="0"
                     Content="Vyhledávání"
                     Margin="10"
                     FontSize="18"
                     FontWeight="Bold" />
-                <StackPanel 
-                    Grid.Column="1"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right">
-
-                    <Label 
-                        Content="Dodavatel:" 
-                        Width="auto" 
-                        HorizontalContentAlignment="Right" 
-                        VerticalAlignment="Center"/>
-                    <ComboBox  
-                        VerticalAlignment="Center" 
-                        Width="140"
-                        ItemsSource="{Binding SeznamDodavatelu}"
-                        SelectedItem="{Binding VybranyDodavatel}"
-                        Margin="0">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Nazev}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
-            </Grid>
 
             <DataGrid Grid.Row="2"
                   AutoGenerateColumns="False"
@@ -83,13 +52,17 @@
                     HorizontalAlignment="Stretch" 
                     Margin="10"
                     Width="auto">
-                --><!-- TextBox pro název --><!--
+                -->
+            <!-- TextBox pro název -->
+            <!--
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <Label Content="Název:" Width="80" HorizontalContentAlignment="Right" />
                     <TextBox Text="Zadejte název" Width="200"/>
                 </StackPanel>
 
-                --><!-- TextBox pro čárový kód --><!--
+                -->
+            <!-- TextBox pro čárový kód -->
+            <!--
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <Label Content="Čárový kód:" Width="80" HorizontalContentAlignment="Right" />
                     <TextBox Text="Zadejte čárový kód" Width="200"/>
@@ -126,15 +99,48 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0"
-               Content="Objednávka"
-               VerticalAlignment="Top"
-               HorizontalAlignment="Left"
-               Margin="10"
-               FontSize="18"
-               FontWeight="Bold" />
+            <Grid 
+                Grid.Row="0"
+                VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    Content="Objednávka"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Left"
+                    Margin="10"
+                    FontSize="18"
+                    FontWeight="Bold" />
+                <StackPanel 
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+
+                    <Label 
+                        Content="Dodavatel:" 
+                        Width="auto" 
+                        HorizontalContentAlignment="Right" 
+                        VerticalAlignment="Center"/>
+                    <ComboBox  
+                        VerticalAlignment="Center" 
+                        Width="140"
+                        ItemsSource="{Binding SeznamDodavatelu}"
+                        SelectedItem="{Binding VybranyDodavatel}"
+                        Margin="0">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Nazev}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+            </Grid>
 
             <DataGrid Grid.Row="1"
                   AutoGenerateColumns="False"
@@ -144,44 +150,57 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn IsReadOnly="True" Header="Název" Binding="{Binding Nazev}" />
                     <DataGridTextColumn IsReadOnly="True" Header="Čárový kód" Binding="{Binding CarovyKod}" />
-                    <DataGridTextColumn IsReadOnly="True" Header="Cena" Binding="{Binding Cena}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="Cena/ks" Binding="{Binding CenaKs}" />
                     <DataGridTextColumn Header="Množství" Binding="{Binding Mnozstvi, Mode=TwoWay}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="Cena" Binding="{Binding Cena}" />
                 </DataGrid.Columns>
             </DataGrid>
 
             <Grid Grid.Row="2"
                 VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel 
+                <Label 
                     Grid.Column="0"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Left">
+                    Content="Supermarket:" 
+                    Width="auto" 
+                    HorizontalContentAlignment="Right" 
+                    VerticalAlignment="Center"/>
 
-                    <Label 
-                        Content="Supermarket:" 
-                        Width="auto" 
-                        HorizontalContentAlignment="Right" 
+                <ComboBox  
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    ItemsSource="{Binding SeznamSupermarketu}"
+                    SelectedItem="{Binding VybranySupermarket}"
+                    Margin="0" HorizontalAlignment="Stretch"/>
+
+                <!--<StackPanel Grid.Column="2" Orientation="Horizontal">
+
+                    <Label
+                        Margin="30,0,0,0"
+                        Content="Cena celkem:"
                         VerticalAlignment="Center"/>
-                    <ComboBox  
-                        VerticalAlignment="Center" 
-                        Width="140"
-                        ItemsSource="{Binding SeznamSupermarketu}"
-                        SelectedItem="{Binding VybranySupermarket}"
-                        Margin="0">
-                    </ComboBox>
-                </StackPanel>
+                    <Label
+                        Content="{Binding CenaCelkem}"
+                        VerticalAlignment="Center"/>
+                    <Label
+                        Content=" Kč"
+                        VerticalAlignment="Center"/>
+                </StackPanel>-->
 
-                <Button Content="Potvrdit objednávku"
-                        Grid.Column="1"
+            </Grid>
+            <Button Content=" Potvrdit objednávku "
+                    Grid.Row="3"
                     Width="auto"
                     Height="30"
                     Command="{Binding PotvrditObjednavkuCommand}" 
-                    Margin="6"/>
-            </Grid>
+                    Margin="0,5,0,0"
+                    HorizontalAlignment="Right"/>
         </Grid>
     </Grid>
 

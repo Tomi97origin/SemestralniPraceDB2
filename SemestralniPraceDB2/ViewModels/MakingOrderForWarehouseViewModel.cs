@@ -5,35 +5,44 @@ using SemestralniPraceDB2.Models;
 using SemestralniPraceDB2.Models.Entities;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
+
 
 namespace SemestralniPraceDB2.ViewModels
 {
 
     partial class MakingOrderForWarehouseViewModel : BaseViewModel
     {
-        
+
         public partial class VybraneZbozi : ObservableObject
         {
             public int ID { get; set; }
             public string Nazev { get; set; }
             public string CarovyKod { get; set; }
-            public double Cena { get; set; }
+            public double CenaKs { get; set; }
 
             [ObservableProperty]
+            [NotifyPropertyChangedFor(nameof(Cena))]
             public int mnozstvi;
+            public double Cena => CenaKs * Mnozstvi;
 
-            public VybraneZbozi(int iD, string nazev, string carovyKod, double cena, int mnozstvi)
+            public VybraneZbozi(int iD, string nazev, string carovyKod, double cenaKs, int mnozstvi)
             {
                 ID = iD;
                 Nazev = nazev;
                 CarovyKod = carovyKod;
-                Cena = cena;
+                CenaKs = cenaKs;
                 Mnozstvi = mnozstvi;
             }
         }
+
+        [ObservableProperty]
+        public double cenaCelkem;
 
         [ObservableProperty]
         public ObservableCollection<Dodavatel> seznamDodavatelu;
@@ -59,45 +68,51 @@ namespace SemestralniPraceDB2.ViewModels
         [ObservableProperty]
         public Supermarket? vybranySupermarket;
 
+        [ObservableProperty]
+        private int someOtheMember;
+
+
+
         public MakingOrderForWarehouseViewModel()
         {
-            MessageBox.Show("Hellou");
-
             SeznamDodavatelu = new(DodavatelService.GetAll());
             if (SeznamDodavatelu.Count == 0)
             {
-                MessageBox.Show("Nebyli nalezeni žádní dodavatelé");
+                MessageBox.Show("Nebyli nalezeni žádní dodavatelé, zkontrolujte připojení k databázi.");
                 VybranyDodavatel = new();
                 SeznamZboziSCenou = new();
             }
             else
             {
                 VybranyDodavatel = SeznamDodavatelu.First();
-                //ZboziSCenouService.GetPodleDodavatele(VybranyDodavatel);
+
+                //naplnění seznamu zboží s cenou
+                SeznamZboziSCenou = new();
+                var seznam = CenaService.GetAllZboziWithCurentPrice(); //vrací seznam cen s vyplněným zbožím
+                foreach (var v in seznam)
+                {
+                    if (v.Zbozi is not null)
+                    {
+                        var z = new ZboziSCenou(v.Zbozi.Id, v.Zbozi.Nazev, v.Zbozi.Popis, v.Zbozi.Kategorie.Zkratka ?? v.Zbozi.Kategorie.Nazev, v.Zbozi.Vyrobce.Zkratka, v.Zbozi.EAN, v.Castka);
+
+                        SeznamZboziSCenou.Add(z);
+                    }
+                }
             }
 
-            //CenaService.GetCurrent(new());
-
-            SeznamZboziSCenou = new() //todo: toto odstranit a zavolat výše viz předpřipravený kód
-                    {
-                       new ZboziSCenou(10,$"nejake zbozi od dodavatele {vybranyDodavatel}",
-                       "popis tohoto", "nejZboz", "Zkratka Dod", "123123", 59.60)
-                    };
-
+            //načtení seznamu supermarketů a jejich adres
             SeznamSupermarketu = new(SupermarketService.GetAll());
+            foreach (var s in SeznamSupermarketu)
+            {
+                if (s.Adresa is not null)
+                {
+                    s.Adresa = AdresaService.Get(s.Adresa) ?? new();
+                }
+            }
         }
 
-        partial void OnVybranyDodavatelChanged(Dodavatel? value)
-        {
-            SeznamZboziSCenou = new() //todo: toto odstranit a zavolat výše viz předpřipravený kód
-                    {
-                       new ZboziSCenou(10,$"nejake zbozi od dodavatele {value}",
-                       "popis tohoto", "nejZboz", "Zkratka Dod", "123123", 59.60)
-                    };
-            SeznamVybranehoZbozi.Clear();
-        }
 
-            [RelayCommand]
+        [RelayCommand]
         public void PridatPolozku()
         {
             if (VybraneZboziSCenou is null)
@@ -139,20 +154,24 @@ namespace SemestralniPraceDB2.ViewModels
             }
         }
 
+
         [RelayCommand]
         public void PotvrditObjednavku()
         {
-            if (VybranySupermarket is null)
-            {
-                MessageBox.Show("Vyberte cílový supermarket.");
-            }
-            else if (SeznamVybranehoZbozi.Count < 1)
+            if (SeznamVybranehoZbozi.Count < 1)
             {
                 MessageBox.Show("Nelze vytvořit prázdnou objednávku.");
             }
+            else if (VybranyDodavatel is null)
+            {
+                MessageBox.Show("Vyberte dodavatele zboží.");
+            }
+            else if (VybranySupermarket is null)
+            {
+                MessageBox.Show("Vyberte cílový supermarket.");
+            }
             else
             {
-
                 StringBuilder str = new();
                 str.AppendLine("Vytvářím novou objednávku.");
                 str.AppendLine($"Od dodavatele {VybranyDodavatel.Nazev}");
@@ -168,11 +187,6 @@ namespace SemestralniPraceDB2.ViewModels
             }
         }
 
-
-
-
-
-
-
+        
     }
 }

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Win32;
+using SemestralniPraceDB2.Models;
 using SemestralniPraceDB2.Models.Entities;
 using System;
 using System.Collections.Generic;
@@ -25,16 +26,16 @@ namespace SemestralniPraceDB2.ViewModels
         public Adresa adresa = new();
 
         [ObservableProperty]
-        public ObservableCollection<string> typyUvazku;
+        public ObservableCollection<string> typyUvazku = new() { "Plný úvazek", "Brigádník" };
 
         [ObservableProperty]
-        public ObservableCollection<string> supermarkety = new() { "S1", "S2" };
+        public ObservableCollection<Supermarket> supermarkety;
 
         [ObservableProperty]
-        public ObservableCollection<string> vedouci = new() { "Jozo", "Karlos" };
-        
+        public ObservableCollection<Zamestnanec> vedouci;
+
         [ObservableProperty]
-        public ObservableCollection<string> role = new() { "Skladnik", "Vedouci prodejny", "Pracovník úklidu" };
+        public ObservableCollection<Role> role;
 
         [ObservableProperty]
         public string imagePath = string.Empty;
@@ -61,6 +62,16 @@ namespace SemestralniPraceDB2.ViewModels
 
         public CreateEmployeeViewModel()
         {
+            Supermarkety = new(SupermarketService.GetAll());
+            foreach (var supermarket in supermarkety)
+            {
+                if(supermarket.Adresa is not null)
+                {
+                    supermarket.Adresa = AdresaService.Get(supermarket.Adresa)??new();
+                }
+            }
+            Vedouci = new(ZamestnanecService.GetAll());
+            Role = new(RoleService.GetAll());
             Zamestnanec.Nastup = DateTime.Now;
         }
     }

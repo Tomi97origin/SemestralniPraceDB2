@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SemestralniPraceDB2.Models;
 using SemestralniPraceDB2.Models.Entities;
 using System;
 using System.Collections.Generic;
@@ -17,13 +18,11 @@ partial class AddProductPriceViewModel : BaseViewModel
     public Cena novaCena = new();
 
     [ObservableProperty]
-    public ObservableCollection<Zbozi> seznamZbozi = new()
-        {
-        new Zbozi (0,"Ručník","S výšivkami","123123",new Kategorie(1,"Drogerie","dro"),new Vyrobce(2,"Řeznictví Mikulov", "řez. mik."))
-        };
+    public ObservableCollection<Zbozi> seznamZbozi;
 
     public AddProductPriceViewModel()
     {
+        SeznamZbozi = new(ZboziService.GetAll());
         NovaCena.PlatnostOd = DateTime.Today;
         NovaCena.PlatnostDo = DateTime.Today.AddDays(7);
     }

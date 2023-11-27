@@ -51,5 +51,9 @@
             <views:AddProductPriceView/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type viewModels:SystemCatalogViewModel}">
+            <views:SystemCatalogView/>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>

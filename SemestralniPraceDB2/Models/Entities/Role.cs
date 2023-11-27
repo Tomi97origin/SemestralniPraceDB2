@@ -25,5 +25,9 @@ namespace SemestralniPraceDB2.Models.Entities
             Id = id;
             Nazev = nazev;
         }
+        public override string ToString()
+        {
+            return Nazev;
+        }
     }
 }
