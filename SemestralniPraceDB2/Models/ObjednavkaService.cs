@@ -127,5 +127,18 @@ namespace SemestralniPraceDB2.Models
             }
         }
 
+        public static bool ProdlouzeniSplatnostiUDodavatele(Dodavatel dodavatel,int days = 7)
+        {
+            string procedureName = "PRODLUZ_SPLATNOST_U_DODAVATLE_PRO_BUDOUCI";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter("idodavatele", OracleDbType.Varchar2, System.Data.ParameterDirection.InputOutput));
+            prm[0].Value = dodavatel.Nazev;
+
+            prm.Add(new OracleParameter("idays", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[1].Value = days;
+            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
+            return result == -1;
+        }
+
     }
 }

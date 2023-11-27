@@ -148,6 +148,12 @@ namespace SemestralniPraceDB2.Models
             return prm;
         }
 
-
+        public static bool DeleteAllOldDeactivated()
+        {
+            string procedureName = "REMOVE_OLD_DEACTIVATED_USERS";
+            List<OracleParameter> prm = new();
+            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
+            return result == -1;
+        }
     }
 }
