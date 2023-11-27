@@ -18,11 +18,17 @@ namespace SemestralniPraceDB2.Models.Entities
         [DisplayName("Debit")]
         public short? Debit { get; set; }
 
-        [DisplayName("Číslo karty")]
+        [Browsable(false)]
         public string? CisloKarty { get; set; }
 
-        [DisplayName("Hotovost")]
+        [DisplayName("Číslo karty")]
+        public string CisloKartyCensored => ReplaceAllExceptLastFour(CisloKarty?.Trim() ?? string.Empty, '#');
+
+        [Browsable(false)]
         public bool Hotovost { get; set; }
+
+        [DisplayName("Způsob platby")]
+        public string HotovostText => Hotovost ? "Hotovost" : "Kartou";
 
         [DisplayName("Vydavatel")]
         public Vydavatel? Vydavatel { get; set; }

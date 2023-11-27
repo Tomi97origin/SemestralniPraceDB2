@@ -15,11 +15,17 @@ namespace SemestralniPraceDB2.Models.Entities
         [DisplayName("Číslo")]
         public string Cislo { get; set; }
 
-        [DisplayName("Otevřeno")]
+        [Browsable(false)]
         public short Otevreno { get; set; }
 
-        [DisplayName("Automatická")]
+        [DisplayName("Otevřeno")]
+        public string OtevrenoText => Otevreno == 1 ? "Otevřeno" : "Zavřeno";
+
+        [Browsable(false)]
         public short Automaticka { get; set; }
+
+        [DisplayName("Automatická")]
+        public string AutomatickaText => Automaticka == 1 ? "Automatická" : "Neautomatická";
 
         [DisplayName("Supermarket")]
         public Supermarket Supermarket { get; set; }

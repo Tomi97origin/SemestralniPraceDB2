@@ -27,8 +27,11 @@ namespace SemestralniPraceDB2.Models.Entities
         [DisplayName("Nástup")]
         public DateTime Nastup { get; set; }
 
-        [DisplayName("Typ úvazku")]
+        [Browsable(false)]
         public short TypUvazku { get; set; }
+
+        [DisplayName("Typ úvazku")]
+        public string TypUvazkuText => TypUvazku == 0 ? "Brigádník" : "Plný úvazek";
 
         [DisplayName("Vedoucí")]
         public PlnyUvazek? Vedouci { get; set; }
@@ -48,8 +51,38 @@ namespace SemestralniPraceDB2.Models.Entities
 
         override public string ToString()
         {
-            return $"{Jmeno} {Prijmeni}, {OsobniCislo}, {TelCislo}, " +
-                $"{Nastup}, {TypUvazku}, {Vedouci}, {Supermarket}, {Adresa}, {Role}";
+            if (Jmeno is null)
+            {
+                return $"Zaměstnanec {Id}";
+            }
+            else
+            {
+                StringBuilder str = new();
+
+                str.Append($"{Jmeno}");
+
+                if (Prijmeni is not null) { str.Append($" {Prijmeni}"); }
+                //if (OsobniCislo is not null) { str.Append($", pid: {OsobniCislo}"); }
+                //if (TelCislo is not null) { str.Append($", tel: {TelCislo}"); }
+                //str.Append($", nástup: {Nastup.ToString("dd. MM. yyyy")}");
+                //if (Vedouci is not null) { str.Append($", vedoucí pracovník: {Vedouci.CeleJmeno()}"); }
+                //if (Supermarket is not null) { str.Append($", prodejna: {Supermarket}"); }
+                //if (Adresa is not null) { str.Append($", bytem: {Adresa}"); }
+                //if (Role is not null) { str.Append($", {Role}"); }
+                //if (ObrazekZamestnance is not null) { str.Append($", {ObrazekZamestnance}"); }
+
+                return str.ToString();
+            }
+        }
+
+        public string CeleJmeno()
+        {
+            StringBuilder str = new();
+
+            if (Jmeno is not null) { str.Append($"{Jmeno}"); }
+            if (Prijmeni is not null) { str.Append($" {Prijmeni}"); }
+
+            return str.ToString();
         }
     }
 }

@@ -13,18 +13,17 @@ partial class DatabaseExplorerViewModel : BaseViewModel
     [ObservableProperty]
     public DBTable? selectedTable;
 
-
-
     [ObservableProperty]
     ObservableCollection<DBTable> tables;
-
 
     [ObservableProperty]
     private ObservableCollection<object>? selectedTableData;
 
     public DatabaseExplorerViewModel()
     {
-        tables = new(SystemCatalogService.GetAllTables());
+        var dbTables = SystemCatalogService.GetAllTables();
+        dbTables.Sort((x, y) => x.TableName.CompareTo(y.TableName));
+        tables = new(dbTables);
     }
 
 
@@ -39,7 +38,16 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                     break;
 
                 case "BRIGADNICI":
-                    SelectedTableData = new(BrigadnikService.GetAll());
+                    var seznamBrigadnici = BrigadnikService.GetAll();
+                    foreach (var i in seznamBrigadnici)
+                    {
+                        if (i.Vedouci is not null) i.Vedouci = PlnyUvazekService.Get(i.Vedouci) ?? new();
+                        if (i.Supermarket is not null) i.Supermarket = SupermarketService.Get(i.Supermarket) ?? new();
+                        if (i.Adresa is not null) i.Adresa = AdresaService.Get(i.Adresa) ?? new();
+                        if (i.Role is not null) i.Role = RoleService.Get(i.Role) ?? new();
+                        if (i.ObrazekZamestnance is not null) i.ObrazekZamestnance = ObrazekZamestnanceService.Get(i.ObrazekZamestnance) ?? new();
+                    }
+                    SelectedTableData = new(seznamBrigadnici);
                     break;
 
                 case "CENY":
@@ -104,7 +112,16 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                     break;
 
                 case "PLNE_UVAZKY":
-                    SelectedTableData = new(PlnyUvazekService.GetAll());
+                    var seznamPlneUvazky = PlnyUvazekService.GetAll();
+                    foreach(var i in  seznamPlneUvazky)
+                    {
+                        if (i.Vedouci is not null) i.Vedouci = PlnyUvazekService.Get(i.Vedouci) ?? new();
+                        if (i.Supermarket is not null) i.Supermarket = SupermarketService.Get(i.Supermarket) ?? new();
+                        if (i.Adresa is not null) i.Adresa = AdresaService.Get(i.Adresa) ?? new();
+                        if (i.Role is not null) i.Role = RoleService.Get(i.Role) ?? new();
+                        if (i.ObrazekZamestnance is not null) i.ObrazekZamestnance = ObrazekZamestnanceService.Get(i.ObrazekZamestnance) ?? new();
+                    }
+                    SelectedTableData = new(seznamPlneUvazky);
                     break;
 
                 case "POKLADNY":
@@ -154,7 +171,16 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                     break;
 
                 case "ZAMESTNANCI":
-                    SelectedTableData = new(ZamestnanecService.GetAll());
+                    var seznamZamestnanci = ZamestnanecService.GetAll();
+                    foreach (var i in seznamZamestnanci)
+                    {
+                        if (i.Vedouci is not null) i.Vedouci = PlnyUvazekService.Get(i.Vedouci) ?? new();
+                        if (i.Supermarket is not null) i.Supermarket = SupermarketService.Get(i.Supermarket) ?? new();
+                        if (i.Adresa is not null) i.Adresa = AdresaService.Get(i.Adresa) ?? new();
+                        if (i.Role is not null) i.Role = RoleService.Get(i.Role) ?? new();
+                        if (i.ObrazekZamestnance is not null) i.ObrazekZamestnance = ObrazekZamestnanceService.Get(i.ObrazekZamestnance) ?? new();
+                    }
+                    SelectedTableData = new(seznamZamestnanci);
                     break;
 
                 case "ZBOZI":

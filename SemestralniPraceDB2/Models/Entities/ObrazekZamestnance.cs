@@ -17,7 +17,18 @@ namespace SemestralniPraceDB2.Models.Entities
         [DisplayName("Soubor")]
         public string? Soubor { get; set; }
 
-        [DisplayName("Obrázek")]
+        [Browsable(false)]
         public Image? Image { get; set; }
+
+        public override string ToString()
+        {
+            if(Soubor is null)
+            {
+                return $"Obrázek {Id}";
+            }else
+            {
+                return $"{Soubor}";
+            }
+        }
     }
 }

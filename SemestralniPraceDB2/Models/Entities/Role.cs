@@ -27,7 +27,14 @@ namespace SemestralniPraceDB2.Models.Entities
         }
         public override string ToString()
         {
-            return Nazev;
+            if (Nazev == string.Empty)
+            {
+                return $"Role {Id}";
+            }
+            else
+            {
+                return Nazev;
+            }
         }
     }
 }

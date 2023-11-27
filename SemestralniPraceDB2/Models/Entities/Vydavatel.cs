@@ -14,5 +14,17 @@ namespace SemestralniPraceDB2.Models.Entities
 
         [DisplayName("Název")]
         public string Nazev { get; set; }
+
+        public override string ToString()
+        {
+            if (Nazev is null)
+            {
+                return $"Kategorie {Id}";
+            }
+            else
+            {
+                return Nazev;
+            }
+        }
     }
 }

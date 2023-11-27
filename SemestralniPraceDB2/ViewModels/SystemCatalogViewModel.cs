@@ -17,7 +17,7 @@ namespace SemestralniPraceDB2.ViewModels
 
         public SystemCatalogViewModel()
         {
-                var dbObjects = SystemCatalogService.GetAll();
+            var dbObjects = SystemCatalogService.GetAll();
             systemCatalogData = new(dbObjects);
 
         }

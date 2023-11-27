@@ -59,8 +59,6 @@ namespace SemestralniPraceDB2.Models.Entities
                 str.Append(Nazev);
                 if (Popis != string.Empty) { str.Append($", {Popis}"); }
                 if (EAN != string.Empty) { str.Append($", {EAN}"); }
-                if (Kategorie is not null) { str.Append($", {Kategorie}"); }
-                if (Vyrobce is not null) { str.Append($", {Vyrobce}"); }
                 return str.ToString();
             }
         }

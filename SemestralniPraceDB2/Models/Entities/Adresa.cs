@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
@@ -30,7 +31,22 @@ namespace SemestralniPraceDB2.Models.Entities
 
         override public string ToString()
         {
-            return $"{Ulice} {Cp} {Mesto} {Psc} {Stat}";
+            if (Ulice is  null)
+            {
+                return $"Adresa {Id}";
+            }else
+            {
+                StringBuilder str = new();
+
+                str.Append($"{Ulice}");
+
+                if (Cp is not null) { str.Append($" {Cp}"); }
+                if (Mesto is not null) { str.Append($", {Mesto}"); }
+                if (Stat is not null) { str.Append($", {Stat}"); }
+                if (Psc is not null) { str.Append($", {Psc}"); }
+                
+                return str.ToString();
+            }
         }
 
         public Adresa(int id, string? ulice, int? cp, string? mesto, string? stat, string? psc)

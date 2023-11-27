@@ -29,13 +29,13 @@ namespace SemestralniPraceDB2.Models.Entities
 
         public override string ToString()
         {
-            if(Adresa is not null && Adresa.Mesto is not null)
+            if(Adresa is null || Adresa.Mesto is null)
             {
-                return $"Sup: {Adresa.Mesto}, {Adresa.Ulice}";
+                return $"Supermarket {Id}";
             }
             else
             {
-                return $"Supermarket {Id}";
+                return $"Sup: {Adresa.Mesto}, {Adresa.Ulice}";
             }
         }
     }

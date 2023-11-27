@@ -82,5 +82,6 @@ namespace SemestralniPraceDB2.Views
 
             return string.Empty;
         }
+        
     }
 }
