@@ -20,7 +20,14 @@ namespace SemestralniPraceDB2.Models.Entities
 
         public override string ToString()
         {
-            return Nazev;
+            if (Nazev is null)
+            {
+                return $"Dodavatel {Id}";
+            }
+            else
+            {
+                return Nazev;
+            }
         }
     }
 }

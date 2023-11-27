@@ -27,5 +27,36 @@ namespace SemestralniPraceDB2.Models.Entities
         [DisplayName("Dodavatel")]
         public Dodavatel Dodavatel { get; set; }
 
+        public Objednavka()
+        {
+            Id = 0;
+            Vytvoreno = DateTime.Now;
+            Splatnost = null;
+            CelkovaCena = null;
+            Supermarket = new();
+            Dodavatel = new();
+        }
+
+        public Objednavka(int id, DateTime vytvoreno, DateTime? splatnost, double? celkovaCena, Supermarket supermarket, Dodavatel dodavatel)
+        {
+            Id = id;
+            Vytvoreno = vytvoreno;
+            Splatnost = splatnost;
+            CelkovaCena = celkovaCena;
+            Supermarket = supermarket;
+            Dodavatel = dodavatel;
+        }
+
+        public override string ToString()
+        {
+            if (Dodavatel is not null && Dodavatel.Nazev is not null)
+            {
+                return $"{Dodavatel.Nazev} {Vytvoreno.ToString("dd. MM. yyyy")}";
+            }else
+            {
+                return $"{Vytvoreno.ToString("dd. MM. yyyy")}";
+
+            }
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace SemestralniPraceDB2.Models.Entities
 {
     public class Zbozi
     {
-        [Browsable (false)]
+        [Browsable(false)]
         public int Id { get; set; }
 
         [DisplayName("Název")]
@@ -49,7 +49,14 @@ namespace SemestralniPraceDB2.Models.Entities
 
         public override string ToString()
         {
-            return $"{Nazev}, {Popis}, {EAN}, {Kategorie}, {Vyrobce}";
+            if (Nazev == string.Empty)
+            {
+                return $"Zboží {Id}";
+            }
+            else
+            {
+                return $"{Nazev}, {Popis}, {EAN}, {Kategorie}, {Vyrobce}";
+            }
         }
     }
 }

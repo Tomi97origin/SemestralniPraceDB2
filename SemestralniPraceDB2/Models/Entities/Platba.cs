@@ -29,5 +29,31 @@ namespace SemestralniPraceDB2.Models.Entities
 
         [DisplayName("Věrnostní karta")]
         public Vernostni_karta? Vernostni_Karta { get; set; }
+
+        public override string ToString()
+        {
+            if (Hotovost)
+            {
+                return "Hotovost";
+            }
+            else if (CisloKarty is not null)
+            {
+                return $"Kartaou {ReplaceAllExceptLastFour(CisloKarty, '#')}";
+            }
+            else return string.Empty;
+        }
+        private static string ReplaceAllExceptLastFour(string input, char replacementChar)
+        {
+            if (input.Length <= 4)
+            {
+                // Pokud je délka řetězce menší než nebo rovna 4, nemá smysl nic měnit.
+                return new string(replacementChar, input.Length);
+            }
+
+            // Nahraď všechny znaky kromě posledních 4 znaků.
+            string replaced = new string(replacementChar, input.Length - 4) + input.Substring(input.Length - 4);
+
+            return replaced;
+        }
     }
 }

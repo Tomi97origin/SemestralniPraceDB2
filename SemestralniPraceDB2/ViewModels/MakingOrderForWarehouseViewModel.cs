@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using SemestralniPraceDB2.Models;
 using SemestralniPraceDB2.Models.Entities;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -172,6 +173,30 @@ namespace SemestralniPraceDB2.ViewModels
             }
             else
             {
+                List<ObjednaneZbozi> seznamIdObjednanehoZbozi = new();
+                CenaCelkem = 0;
+
+                foreach (var item in SeznamVybranehoZbozi)
+                {
+                    CenaCelkem += item.Cena;
+                    ObjednaneZbozi objednaneZbozi = new(item.Mnozstvi, item.Cena, new Zbozi() { Id = item.ID });
+                    seznamIdObjednanehoZbozi.Add(objednaneZbozi);
+                }
+
+
+
+                Objednavka novaObjednavka = new(
+                    0,
+                    DateTime.Now,
+                    DateTime.Now.AddDays(30),
+                    CenaCelkem,
+                    VybranySupermarket,
+                    VybranyDodavatel);
+
+
+
+                ObjednavkaService.Create(novaObjednavka, seznamIdObjednanehoZbozi);
+
                 StringBuilder str = new();
                 str.AppendLine("Vytvářím novou objednávku.");
                 str.AppendLine($"Od dodavatele {VybranyDodavatel.Nazev}");
@@ -187,6 +212,6 @@ namespace SemestralniPraceDB2.ViewModels
             }
         }
 
-        
+
     }
 }

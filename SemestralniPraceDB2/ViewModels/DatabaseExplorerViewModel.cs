@@ -47,11 +47,23 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                     break;
 
                 case "DODAVATELE":
-                    SelectedTableData = new(DodavatelService.GetAll());
+
+                    var seznamDodavatele = DodavatelService.GetAll();
+                    foreach (var i in seznamDodavatele)
+                    {
+                        i.Adresa = AdresaService.Get(i.Adresa) ?? new();
+                    }
+                    SelectedTableData = new(seznamDodavatele);
                     break;
 
                 case "INVENTARNI_POLOZKY":
-                    SelectedTableData = new(InventarniPolozkaService.GetAll());
+                    var seznamInventarniPolozky = InventarniPolozkaService.GetAll();
+                    foreach (var i in seznamInventarniPolozky)
+                    {
+                        i.Supermarket = SupermarketService.Get(i.Supermarket) ?? new();
+                        i.Zbozi = ZboziService.Get(i.Zbozi) ?? new();
+                    }
+                    SelectedTableData = new(seznamInventarniPolozky);
                     break;
 
                 case "KATEGORIE":
@@ -63,11 +75,24 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                     break;
 
                 case "OBJEDNANE_ZBOZI":
-                    SelectedTableData = new(ObjednaneZboziService.GetAll());
+                    var objednaneZbozi = ObjednaneZboziService.GetAll();
+                    foreach (var obj in objednaneZbozi)
+                    {
+                        obj.Objednavka = ObjednavkaService.Get(obj.Objednavka) ?? new();
+                        obj.Zbozi = ZboziService.Get(obj.Zbozi) ?? new();
+                    }
+
+                    SelectedTableData = new(objednaneZbozi);
                     break;
 
                 case "OBJEDNAVKY":
-                    SelectedTableData = new(ObjednavkaService.GetAll());
+                    var seznamObjednavka = ObjednavkaService.GetAll();
+                    foreach (var i in seznamObjednavka)
+                    {
+                        i.Supermarket = SupermarketService.Get(i.Supermarket) ?? new();
+                        i.Dodavatel = DodavatelService.Get(i.Dodavatel) ?? new();
+                    }
+                    SelectedTableData = new(seznamObjednavka);
                     break;
 
                 case "OBRAZKYZAMESTNANCU":
@@ -95,7 +120,12 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                     break;
 
                 case "SUPERMARKETY":
-                    SelectedTableData = new(SupermarketService.GetAll());
+                    var supermarkety = SupermarketService.GetAll();
+                    foreach (var item in supermarkety)
+                    {
+                        item.Adresa = AdresaService.Get(item.Adresa) ?? new();
+                    }
+                    SelectedTableData = new(supermarkety);
                     break;
 
                 case "UCTENKY":
@@ -134,10 +164,17 @@ partial class DatabaseExplorerViewModel : BaseViewModel
     }
 
 
+
+    [RelayCommand]
+    private void DeleteRecord()
+    {
+        MessageBox.Show("zatím neimplementováno");
+    }
+
     [RelayCommand]
     private void AcceptChanges()
     {
-        MessageBox.Show("zatím neimplementováno změny");
+        MessageBox.Show("zatím neimplementováno");
     }
 
 
