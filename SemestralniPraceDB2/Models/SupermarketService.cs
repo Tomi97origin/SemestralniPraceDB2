@@ -78,7 +78,13 @@ namespace SemestralniPraceDB2.Models
             prm.Add(new OracleParameter(":id_supermarketu", OracleDbType.Int32, System.Data.ParameterDirection.Input));
             prm[0].Value = supermarket.Id;
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToSupermarket).Result;
-            return result.Count == 0 ? null : result[0];
+            var super = result.Count == 0 ? null : result[0];
+            if (super is null)
+            {
+                return super;
+            }
+            super.Adresa = AdresaService.Get(super.Adresa);
+            return super;
         }
 
         private static Supermarket MapOracleResultToSupermarket(OracleDataReader reader)
@@ -101,6 +107,10 @@ namespace SemestralniPraceDB2.Models
             string sql = "Select * FROM supermarkety";
             List<OracleParameter> prm = new();
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToSupermarket).Result;
+            foreach (var p in result)
+            {
+                p.Adresa = AdresaService.Get(p.Adresa);
+            }
             return result;
         }
     }

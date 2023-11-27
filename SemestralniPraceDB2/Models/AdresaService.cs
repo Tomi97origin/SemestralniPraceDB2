@@ -76,6 +76,16 @@ namespace SemestralniPraceDB2.Models
             return result.Count == 0 ? null : result[0];
         }
 
+        public static Adresa? GetTransactional(Adresa adresa, OracleConnection connection)
+        {
+            string sql = "SELECT * FROM adresy WHERE id_adresy = :id_adresy";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = adresa.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryForTransactionAsync(sql, prm,connection, MapOracleResultToAddress).Result;
+            return result.Count == 0 ? null : result[0];
+        }
+
         private static Adresa MapOracleResultToAddress(OracleDataReader result)
         {
             return new Adresa()
