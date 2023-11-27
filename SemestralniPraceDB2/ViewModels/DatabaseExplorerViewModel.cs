@@ -75,14 +75,14 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                     break;
 
                 case "OBJEDNANE_ZBOZI":
-                    var objednaneZbozi = ObjednaneZboziService.GetAll();
-                    foreach (var obj in objednaneZbozi)
+                    var seznamObjednaneZbozi = ObjednaneZboziService.GetAll();
+                    foreach (var i in seznamObjednaneZbozi)
                     {
-                        obj.Objednavka = ObjednavkaService.Get(obj.Objednavka) ?? new();
-                        obj.Zbozi = ZboziService.Get(obj.Zbozi) ?? new();
+                        i.Objednavka = ObjednavkaService.Get(i.Objednavka) ?? new();
+                        i.Zbozi = ZboziService.Get(i.Zbozi) ?? new();
                     }
 
-                    SelectedTableData = new(objednaneZbozi);
+                    SelectedTableData = new(seznamObjednaneZbozi);
                     break;
 
                 case "OBJEDNAVKY":
@@ -129,6 +129,11 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                     break;
 
                 case "UCTENKY":
+                    var seznamUctenka = UctenkaService.GetAll();
+                    foreach (var i in seznamUctenka)
+                    {
+                        i.Platba = PlatbaService.Get(i.Platba) ?? new();
+                    }
                     SelectedTableData = new(UctenkaService.GetAll());
                     break;
 
