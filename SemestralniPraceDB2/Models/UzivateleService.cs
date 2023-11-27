@@ -29,7 +29,8 @@ namespace SemestralniPraceDB2.Models
                 Id = 0,
                 Username = jmeno,
                 Password = BCrypt.Net.BCrypt.HashPassword(heslo),
-                Admin = false
+                Admin = false,
+                Active = true,
             };
             return Create(uzivatel);
         }
@@ -61,7 +62,7 @@ namespace SemestralniPraceDB2.Models
             {
                 return null;
             }
-            if (uzivatel.Password == BCrypt.Net.BCrypt.HashPassword(heslo) && uzivatel.Active)
+            if (BCrypt.Net.BCrypt.Verify(heslo,uzivatel.Password) && uzivatel.Active)
             {
                 uzivatel.PosledniPrihlaseni = DateTime.Now;
                 Update(uzivatel);
@@ -73,9 +74,9 @@ namespace SemestralniPraceDB2.Models
 
         private static Uzivatel? GetUzivatele(string jmeno)
         {
-            string query = "SELECT * FROM Uzivatel WHERE username = :username";
+            string query = "SELECT * FROM uzivatele WHERE username = :username";
             List<OracleParameter> prm = new();
-            prm[0] = new OracleParameter(":username", OracleDbType.Varchar2, System.Data.ParameterDirection.Input);
+            prm.Add(new OracleParameter(":username", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
             prm[0].Value = jmeno;
 
             var result = DatabaseConnector.ExecuteCommandQueryAsync(query, prm, MapUzivatelFromReader).Result;
@@ -128,7 +129,7 @@ namespace SemestralniPraceDB2.Models
             List<OracleParameter> prm = new List<OracleParameter>();
 
             prm.Add(new OracleParameter("p_id_uzivatele", OracleDbType.Int32, System.Data.ParameterDirection.InputOutput));
-            prm[0].Value = uzivatel.Id;
+            prm[0].Value = uzivatel.Id <= 0 ? null : uzivatel.Id;
 
             prm.Add(new OracleParameter("p_username", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
             prm[1].Value = uzivatel.Username;
@@ -142,7 +143,7 @@ namespace SemestralniPraceDB2.Models
             prm.Add(new OracleParameter("p_active", OracleDbType.Int32, System.Data.ParameterDirection.Input));
             prm[4].Value = uzivatel.Active ? 1 : 0;
 
-            prm.Add(new OracleParameter("p_posledni", OracleDbType.Date, System.Data.ParameterDirection.Input));
+            prm.Add(new OracleParameter("p_posledni", OracleDbType.TimeStampTZ, System.Data.ParameterDirection.Input));
             prm[5].Value = uzivatel.PosledniPrihlaseni;
 
             return prm;
@@ -154,6 +155,14 @@ namespace SemestralniPraceDB2.Models
             List<OracleParameter> prm = new();
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
             return result == -1;
+        }
+
+        public static List<Uzivatel> GetAll()
+        {
+            string query = "SELECT * FROM uzivatele";
+            List<OracleParameter> prm = new();
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(query, prm, MapUzivatelFromReader).Result;
+            return result;
         }
     }
 }

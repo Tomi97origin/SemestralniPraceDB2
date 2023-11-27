@@ -91,7 +91,7 @@ namespace SemestralniPraceDB2.Models
                 using (OracleConnection connection = GetConnection())
                 {
                     await connection.OpenAsync();
-
+                    SetOpenConnectionDateFormat(connection);
                     using (OracleCommand command = new OracleCommand(query, connection))
                     {
                         command.CommandType = CommandType.Text;
@@ -136,6 +136,7 @@ namespace SemestralniPraceDB2.Models
                 using (OracleConnection connection = GetConnection())
                 {
                     await connection.OpenAsync();
+                    SetOpenConnectionDateFormat(connection);
 
                     using (OracleCommand command = new OracleCommand(query, connection))
                     {
@@ -167,6 +168,7 @@ namespace SemestralniPraceDB2.Models
 
         public static async Task<List<T>> ExecuteCommandQueryForTransactionAsync<T>(string query, List<OracleParameter> oracleParameters, OracleConnection connection, Func<OracleDataReader, T> mapResult)
         {
+            SetOpenConnectionDateFormat(connection);
             List<T> resultList = new List<T>();
             using (OracleCommand command = new OracleCommand(query, connection))
             {
@@ -187,6 +189,7 @@ namespace SemestralniPraceDB2.Models
 
         public static async Task<int> ExecuteCommandNonQueryForTransactionAsync(string query, List<OracleParameter> oracleParameters, OracleConnection connection, CommandType commandType = CommandType.StoredProcedure)
         {
+            SetOpenConnectionDateFormat(connection);
             using (OracleCommand command = new OracleCommand(query, connection))
             {
                 command.Parameters.AddRange(oracleParameters.ToArray());
@@ -199,6 +202,13 @@ namespace SemestralniPraceDB2.Models
                 }
                 return result;
             }
+        }
+
+        private static void SetOpenConnectionDateFormat(OracleConnection connection)
+        {
+            OracleGlobalization info = connection.GetSessionInfo();
+            info.DateFormat = "YYYY-MM-DD\"T\"HH24:mi:ss\"Z\"";
+            connection.SetSessionInfo(info);
         }
     }
 }
