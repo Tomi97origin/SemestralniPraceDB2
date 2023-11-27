@@ -24,12 +24,16 @@ namespace SemestralniPraceDB2.Models.Entities
         [DisplayName("Supermarket")]
         public Supermarket Supermarket { get; set; }
 
-        //public override string ToString()
-        //{
-        //    if (Supermarket is null)
-        //    {
-        //        return
-        //    }
-        //}
+        public override string ToString()
+        {
+            if (Supermarket is null)
+            {
+                return $"Pokladna {Id}";
+            }
+            else
+            {
+                return $"{Cislo} - {Supermarket}";
+            }
+        }
     }
 }

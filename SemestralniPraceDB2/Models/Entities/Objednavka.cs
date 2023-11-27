@@ -30,7 +30,7 @@ namespace SemestralniPraceDB2.Models.Entities
         public Objednavka()
         {
             Id = 0;
-            Vytvoreno = DateTime.Now;
+            Vytvoreno = DateTime.MinValue;
             Splatnost = null;
             CelkovaCena = null;
             Supermarket = new();
