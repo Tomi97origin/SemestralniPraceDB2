@@ -139,7 +139,7 @@ namespace SemestralniPraceDB2.Models
                 {
                     Id = result.GetInt32("id_adresy")
                 },
-                Role = new Role
+                Role = result.IsDBNull("id_role") ? null : new Role
                 {
                     Id = result.GetInt32("id_role")
                 },

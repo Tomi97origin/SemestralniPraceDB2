@@ -3,9 +3,11 @@ using SemestralniPraceDB2.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace SemestralniPraceDB2.Models
 {
@@ -126,7 +128,7 @@ namespace SemestralniPraceDB2.Models
                 {
                     Id = result.GetInt32("id_adresy")
                 },
-                Role = new Role
+                Role = result.IsDBNull("id_role") ? null : new Role
                 {
                     Id = result.GetInt32("id_role")
                 },
