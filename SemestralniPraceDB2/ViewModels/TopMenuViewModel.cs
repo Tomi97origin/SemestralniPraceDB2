@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using SemestralniPraceDB2.Models;
 using SemestralniPraceDB2.Views.DialogWindows;
 using System;
 using System.CodeDom;
@@ -72,12 +73,36 @@ partial class TopMenuViewModel : BaseViewModel, IRecipient<UserLogin>, IRecipien
 
     }
 
-
     [RelayCommand]
     private void OdlozeniSplatnosti()
     {
         new ChooseContractorWindow().ShowDialog();
     }
+
+    [RelayCommand]
+    private void DeleteDeactivated()
+    {
+        var Result = MessageBox.Show(
+            "Opravdu chcete smazat uživatele, kteří již delší dobu nezískali aktivaci účtu?",
+            "Opravdu chcete smazat?",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Question);
+
+        if (Result == MessageBoxResult.Yes)
+        {
+            UzivateleService.DeleteAllOldDeactivated();
+            MessageBox.Show("Smazáni všichni dlouho neaktivovaní užiavtelé.");
+            return;
+        }
+        else if (Result == MessageBoxResult.No)
+        {
+            return;
+        }
+
+        
+    }
+
+    
 
     public void Receive(UserLogin message)
     {
