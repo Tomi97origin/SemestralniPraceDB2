@@ -20,5 +20,17 @@ namespace SemestralniPraceDB2.Models.Entities
 
         [DisplayName("Číslo karty")]
         public string Cislo_Karty { get; set; }
+
+        public override string ToString()
+        {
+            if (Jmeno is null)
+                    {
+                return $"Kartička {Id}";
+            }
+            else
+            {
+                return Cislo_Karty;
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using SemestralniPraceDB2.Models;
 using SemestralniPraceDB2.Models.Entities;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -29,6 +30,7 @@ partial class DatabaseExplorerViewModel : BaseViewModel
 
     partial void OnSelectedTableChanged(DBTable? value)
     {
+        RefreshTablesRowCounts();
         if (SelectedTable != null)
         {
             switch (SelectedTable.TableName)
@@ -108,12 +110,19 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                     break;
 
                 case "PLATBY":
-                    SelectedTableData = new(PlatbaService.GetAll());
+                    var seznamPlatby = PlatbaService.GetAll();
+
+                    foreach (var i in seznamPlatby)
+                    {
+                        if (i.Vydavatel is not null) i.Vydavatel = VydavatelService.Get(i.Vydavatel) ?? new();
+                        if (i.Vernostni_Karta is not null) i.Vernostni_Karta = VernostniKartaService.Get(i.Vernostni_Karta) ?? new();
+                    }
+                    SelectedTableData = new(seznamPlatby);
                     break;
 
                 case "PLNE_UVAZKY":
                     var seznamPlneUvazky = PlnyUvazekService.GetAll();
-                    foreach(var i in  seznamPlneUvazky)
+                    foreach (var i in seznamPlneUvazky)
                     {
                         if (i.Vedouci is not null) i.Vedouci = PlnyUvazekService.Get(i.Vedouci) ?? new();
                         if (i.Supermarket is not null) i.Supermarket = SupermarketService.Get(i.Supermarket) ?? new();
@@ -125,11 +134,22 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                     break;
 
                 case "POKLADNY":
-                    SelectedTableData = new(PokladnaService.GetAll());
+                    var seznamPokladny = PokladnaService.GetAll();
+                    foreach (var i in seznamPokladny)
+                    {
+                        if (i.Supermarket is not null) i.Supermarket = SupermarketService.Get(i.Supermarket) ?? new();
+                    }
+                    SelectedTableData = new(seznamPokladny);
                     break;
 
                 case "PRODANE_ZBOZI":
-                    SelectedTableData = new(ProdaneZboziService.GetAll());
+                    var seznamProdaneZbozi = ProdaneZboziService.GetAll();
+                    foreach (var i in seznamProdaneZbozi)
+                    {
+                        if (i.Zbozi is not null) i.Zbozi = ZboziService.Get(i.Zbozi) ?? new();
+                        if (i.Uctenka is not null) i.Uctenka = UctenkaService.Get(i.Uctenka) ?? new();
+                    }
+                    SelectedTableData = new(seznamProdaneZbozi);
                     break;
 
                 case "ROLE":
@@ -146,16 +166,18 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                     break;
 
                 case "UCTENKY":
-                    var seznamUctenka = UctenkaService.GetAll();
-                    foreach (var i in seznamUctenka)
+                    var seznamUctenky = UctenkaService.GetAll();
+                    foreach (var i in seznamUctenky)
                     {
-                        i.Platba = PlatbaService.Get(i.Platba) ?? new();
+                        if (i.Pokladna is not null) i.Pokladna = PokladnaService.Get(i.Pokladna) ?? new();
+                        if (i.Pokladna?.Supermarket is not null) i.Pokladna.Supermarket = SupermarketService.Get(i.Pokladna.Supermarket) ?? new();
+                        if (i.Platba is not null) i.Platba = PlatbaService.Get(i.Platba) ?? new();
                     }
-                    SelectedTableData = new(UctenkaService.GetAll());
+                    SelectedTableData = new(seznamUctenky);
                     break;
 
                 case "UZIVATELE":
-                    //SelectedTableData = new(UzivateleService.GetAll());
+                    SelectedTableData = new(UzivateleService.GetAll());
                     break;
 
                 case "VERNOSTNI_KARTY":
@@ -184,7 +206,13 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                     break;
 
                 case "ZBOZI":
-                    SelectedTableData = new(ZboziService.GetAll());
+                    var seznamZbozi = ZboziService.GetAll();
+                    foreach(var i in seznamZbozi)
+                    {
+                        if (i.Kategorie is not null) i.Kategorie = KategorieService.Get(i.Kategorie) ?? new();
+                        if (i.Vyrobce is not null) i.Vyrobce = VyrobceService.Get(i.Vyrobce) ?? new();
+                    }
+                    SelectedTableData = new(seznamZbozi);
                     break;
                 default: break;
             }
@@ -194,7 +222,16 @@ partial class DatabaseExplorerViewModel : BaseViewModel
 
     }
 
-
+    private void RefreshTablesRowCounts()
+    {
+        var freshDBTables = SystemCatalogService.GetAllTables();
+        freshDBTables.Sort((x, y) => x.TableName.CompareTo(y.TableName));
+        
+        for(int i = 0; i < freshDBTables.Count; i++)
+        {
+            Tables[i].RowCount = freshDBTables[i].RowCount;
+        }
+    }
 
     [RelayCommand]
     private void DeleteRecord()

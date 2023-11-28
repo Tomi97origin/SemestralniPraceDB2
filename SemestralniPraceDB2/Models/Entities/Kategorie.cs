@@ -33,7 +33,7 @@ namespace SemestralniPraceDB2.Models.Entities
         }
         public override string ToString()
         {
-            if (Nazev is null)
+            if (Nazev == string.Empty)
             {
                 return $"Kategorie {Id}";
             }
@@ -42,7 +42,7 @@ namespace SemestralniPraceDB2.Models.Entities
                 StringBuilder str = new();
 
                 str.Append(Nazev);
-                if (Zkratka is not null) { str.Append($" ({Nazev})"); }
+                if (Zkratka?.Length > 0 ) { str.Append($" ({Zkratka})"); }
 
                 return str.ToString();
             }

@@ -23,5 +23,21 @@ namespace SemestralniPraceDB2.Models.Entities
 
         [DisplayName("Platba")]
         public Platba Platba { get; set; }
+
+        public override string ToString()
+        {
+            if (Vytvoreno == DateTime.MinValue)
+            {
+                return $"Účtenka {Id}";
+            }else
+            {
+                StringBuilder str = new();
+                
+                str.Append(Vytvoreno.ToString("dd. MM. yyyy"));
+                if (CelkovaCena != 0) str.Append($", {CelkovaCena} Kč") ;
+
+                return str.ToString();
+            }
+        }
     }
 }

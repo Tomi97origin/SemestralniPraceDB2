@@ -33,7 +33,21 @@ namespace SemestralniPraceDB2.Models.Entities
         }
         public override string ToString()
         {
-            return $"{Nazev}({Zkratka})";
+
+            if (Nazev == string.Empty)
+            {
+                return $"Výrobce {Id}";
+            }
+            else
+            {
+                StringBuilder str = new();
+
+                str.Append(Nazev);
+                if (Zkratka != string.Empty) { str.Append($" ({Zkratka})"); }
+
+                return str.ToString();
+            }
+
         }
     }
 }

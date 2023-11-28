@@ -44,9 +44,9 @@ namespace SemestralniPraceDB2.Models.Entities
             }
             else if (CisloKarty is not null)
             {
-                return $"Kartaou {ReplaceAllExceptLastFour(CisloKarty, '#')}";
+                return $"Kartou {ReplaceAllExceptLastFour(CisloKarty, '#')}";
             }
-            else return string.Empty;
+            else return "Kartou";
         }
         private static string ReplaceAllExceptLastFour(string input, char replacementChar)
         {

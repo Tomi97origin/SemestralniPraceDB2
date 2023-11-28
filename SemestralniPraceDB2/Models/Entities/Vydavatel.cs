@@ -19,7 +19,7 @@ namespace SemestralniPraceDB2.Models.Entities
         {
             if (Nazev is null)
             {
-                return $"Kategorie {Id}";
+                return $"Vydavatel {Id}";
             }
             else
             {

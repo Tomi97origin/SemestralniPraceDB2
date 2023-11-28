@@ -1,9 +1,13 @@
-﻿namespace SemestralniPraceDB2.Models.Entities;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public class DBTable
+namespace SemestralniPraceDB2.Models.Entities;
+
+public partial class DBTable : ObservableObject
 {
     public string TableName { get; set; }
-    public int RowCount { get; set; }
+
+    [ObservableProperty]
+    public int rowCount;
 
     public DBTable(string tableName, int rowsCount)
     {
