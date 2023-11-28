@@ -55,5 +55,9 @@
             <views:SystemCatalogView/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type viewModels:SubordinatesViewModel}">
+            <views:SubordinatesView/>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>

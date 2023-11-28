@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="SemestralniPraceDB2.Views.SubordinatesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SemestralniPraceDB2.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Levý panel: Seznam zaměstnanců -->
+        <Label 
+            Content="Vyberte zaměstnance"
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="5,0,5,5"
+            FontSize="18"
+            FontWeight="Bold" />
+
+        <ListView
+            Grid.Row="1"
+            Grid.Column="0"
+        ItemsSource="{Binding Employees}"
+        SelectedItem="{Binding SelectedEmployee}"
+        d:ItemsSource="{d:SampleData ItemCount=5}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Jméno" DisplayMemberBinding="{Binding Jmeno}"/>
+                    <GridViewColumn Header="Příjmení" DisplayMemberBinding="{Binding Prijmeni}"/>
+                    <GridViewColumn Header="Číslo" DisplayMemberBinding="{Binding OsobniCislo}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!-- Pravý panel: Data Grid s podřízenými daného zaměstnance-->
+        <Label 
+            Content="Podřízení:"
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="30,0,5,5"
+            FontSize="18"
+            FontWeight="Bold" />
+        
+        <Grid  
+            Grid.Column="1"
+            Grid.Row="1"
+            Margin="30,0,0,0">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+            <DataGrid 
+                ItemsSource="{Binding SelectedEmployeeSubordinates}"
+                IsReadOnly="True"
+                AutoGenerateColumns="True"
+                AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"/>
+
+        </Grid>
+    </Grid>
+</UserControl>

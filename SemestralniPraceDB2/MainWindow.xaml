@@ -33,7 +33,9 @@
         <Separator Grid.Row="4"
                    Background="LightGray" />
 
-        <Grid Grid.Row="5" >
+        <Grid 
+            Grid.Row="5" 
+            Margin="0,0,0,3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5*"/>
                 <ColumnDefinition Width="1*"/>
@@ -65,17 +67,12 @@
                     </Button>
                 </StackPanel>
 
-                <Button Width="100"
-                        Height="25"
-                        Margin="5"
-                        Content="Modální okno"
-                        Command="{Binding OtevritDialogCommand}"/>
-
-                <Label  Content="{Binding StatusLabelText}"
+                
+                <!--<Label  Content="{Binding StatusLabelText}"
                         VerticalAlignment="Center"
                         Width="auto"
                         FontSize="11"
-                        FontStyle="Italic" />
+                        FontStyle="Italic" />-->
             </StackPanel>
 
             <StackPanel Orientation="Horizontal"
