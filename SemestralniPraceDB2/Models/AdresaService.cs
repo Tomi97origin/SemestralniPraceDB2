@@ -86,7 +86,7 @@ namespace SemestralniPraceDB2.Models
             return result.Count == 0 ? null : result[0];
         }
 
-        private static Adresa MapOracleResultToAddress(OracleDataReader result)
+        internal static Adresa MapOracleResultToAddress(OracleDataReader result)
         {
             return new Adresa()
             {

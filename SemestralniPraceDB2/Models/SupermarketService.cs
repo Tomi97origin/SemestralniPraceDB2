@@ -73,18 +73,12 @@ namespace SemestralniPraceDB2.Models
 
         public static Supermarket? Get(Supermarket supermarket)
         {
-            string sql = "Select * FROM supermarkety WHERE id_supermarketu = :id_supermarketu";
+            string sql = "Select * FROM supermarkety JOIN adresy USING(id_adresy) WHERE id_supermarketu = :id_supermarketu";
             List<OracleParameter> prm = new();
             prm.Add(new OracleParameter(":id_supermarketu", OracleDbType.Int32, System.Data.ParameterDirection.Input));
             prm[0].Value = supermarket.Id;
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToSupermarket).Result;
-            var super = result.Count == 0 ? null : result[0];
-            if (super is null)
-            {
-                return super;
-            }
-            super.Adresa = AdresaService.Get(super.Adresa);
-            return super;
+            return result.Count == 0 ? null : result[0];
         }
 
         private static Supermarket MapOracleResultToSupermarket(OracleDataReader reader)
@@ -96,21 +90,15 @@ namespace SemestralniPraceDB2.Models
                 RozlohaSkladu = reader.GetDouble("rozloha_skladu"),
                 ParkovaciMista = reader.GetInt32("parkovaci_mista"),
                 Voziky = reader.GetInt32("voziky"),
-                Adresa = new Adresa {
-                    Id = reader.GetInt32("id_adresy")
-                }
+                Adresa = AdresaService.MapOracleResultToAddress(reader)
             };
         }
 
         public static List<Supermarket> GetAll()
         {
-            string sql = "Select * FROM supermarkety";
+            string sql = "Select * FROM supermarkety JOIN adresy USING(id_adresy)";
             List<OracleParameter> prm = new();
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToSupermarket).Result;
-            foreach (var p in result)
-            {
-                p.Adresa = AdresaService.Get(p.Adresa);
-            }
             return result;
         }
     }

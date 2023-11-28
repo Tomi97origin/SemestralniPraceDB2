@@ -20,7 +20,7 @@ namespace SemestralniPraceDB2.Models
             prm[0].Value = null;
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
             obrazek.Id = result.Result;
-            return result.Result >= 0;
+            return result.Result > 0;
         }
 
         public static void PrepareProcedureCall(ObrazekZamestnance obrazek, out string procedureName, out List<OracleParameter> prm)
@@ -33,7 +33,7 @@ namespace SemestralniPraceDB2.Models
         {
             PrepareProcedureCall(obrazek, out string procedureName, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
-            return result.Result >= 0;
+            return result.Result > 0;
         }
 
         public static bool Delete(ObrazekZamestnance obrazek)
