@@ -102,5 +102,13 @@ namespace SemestralniPraceDB2.Models
                 Vyrobce = new Vyrobce() { Id = result.GetInt32("id_vyrobce") }
             };
         }
+
+        public static bool ZlevniNejmeneProdavane()
+        {
+            string procedureName = "ZLEVNI_NEJMENE_PRODAVANE";
+            List<OracleParameter> prm = new();
+            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
+            return result == -1;
+        }
     }
 }
