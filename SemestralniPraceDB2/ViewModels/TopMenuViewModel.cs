@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using SemestralniPraceDB2.Views.DialogWindows;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
@@ -69,6 +70,13 @@ partial class TopMenuViewModel : BaseViewModel, IRecipient<UserLogin>, IRecipien
         }
 
 
+    }
+
+
+    [RelayCommand]
+    private void OdlozeniSplatnosti()
+    {
+        new ChooseContractorWindow().ShowDialog();
     }
 
     public void Receive(UserLogin message)

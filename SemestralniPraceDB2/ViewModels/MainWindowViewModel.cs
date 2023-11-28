@@ -1,11 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using SemestralniPraceDB2.Models;
+using SemestralniPraceDB2.ViewModels.DialogViewModels;
 using SemestralniPraceDB2.Views;
+using SemestralniPraceDB2.Views.DialogWindows;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +34,7 @@ namespace SemestralniPraceDB2.ViewModels
         public static readonly SystemCatalogViewModel systemCatalogVM = new();
 
         private static readonly BaseViewModel defaultVM = messageVM;
-        
+
         [ObservableProperty]
         public BaseViewModel selectedViewModel = userLoginVM;
 
@@ -96,14 +100,6 @@ namespace SemestralniPraceDB2.ViewModels
             MessageBox.Show("Přihlášení úspěšné.");
         }
 
-        [RelayCommand]
-        private void ConnectAndGet()
-        {
-            DatabaseResult = new DatabaseResult
-            {
-                Text = DatabaseConnector.GetFromDatabase()
-            };
-        }
 
         [RelayCommand]
         private void UpdateView(string parameter)

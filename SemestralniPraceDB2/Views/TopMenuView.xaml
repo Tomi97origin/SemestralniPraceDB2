@@ -12,9 +12,9 @@
 
         <Menu Height="20" Background="AliceBlue">
 
-            <MenuItem Header="Nastavení" >
-                <MenuItem Header="Položka" 
-                          Command="{Binding MenuItemCommand}"/>
+            <MenuItem Header="Objednávky" >
+                <MenuItem Header="Odložení splatnosti" 
+                          Command="{Binding OdlozeniSplatnostiCommand}"/>
             </MenuItem>
 
             <MenuItem Header="Správa zaměstnanců" >
