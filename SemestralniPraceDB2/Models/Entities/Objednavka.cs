@@ -21,6 +21,9 @@ namespace SemestralniPraceDB2.Models.Entities
         [DisplayName("Celková cena")]
         public double? CelkovaCena { get; set; }
 
+        [DisplayName("Přijato")]
+        public bool Prijato { get; set; } = false;
+
         [DisplayName("Supermarket")]
         public Supermarket Supermarket { get; set; }
 
@@ -30,7 +33,7 @@ namespace SemestralniPraceDB2.Models.Entities
         public Objednavka()
         {
             Id = 0;
-            Vytvoreno = DateTime.MinValue;
+            Vytvoreno = DateTime.Now;
             Splatnost = null;
             CelkovaCena = null;
             Supermarket = new();

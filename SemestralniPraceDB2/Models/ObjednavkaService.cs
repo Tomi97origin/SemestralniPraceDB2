@@ -60,14 +60,19 @@ namespace SemestralniPraceDB2.Models
                 Vytvoreno = reader.GetDateTime("vytvoreno"),
                 Splatnost = reader.IsDBNull("splatnost") ? (DateTime?)null : reader.GetDateTime("splatnost"),
                 CelkovaCena = reader.IsDBNull("celkova_cena") ? (double?)null : reader.GetDouble("celkova_cena"),
+                Prijato = reader.IsDBNull("prijato") ? false : reader.GetInt32("prijato") == 0 ? false : true, 
                 Supermarket = new Supermarket() { Id = reader.GetInt32("id_supermarketu") },
                 Dodavatel = new Dodavatel() { Id = reader.GetInt32("id_dodavatele") }
             };
         }
 
-        public static List<Objednavka> GetAll()
+        public static List<Objednavka> GetAll(bool pouzeNeprijate = false)
         {
             string sql = "Select * FROM objednavky";
+            if (pouzeNeprijate)
+            {
+                sql += " WHERE prijato = 0";
+            }
             List<OracleParameter> prm = new();
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToObjednavka).Result;
             return result;
@@ -89,11 +94,14 @@ namespace SemestralniPraceDB2.Models
             prm.Add(new OracleParameter("p_celkova_cena", OracleDbType.Double, System.Data.ParameterDirection.Input));
             prm[3].Value = objednavka.CelkovaCena;
 
+            prm.Add(new OracleParameter("p_prijato", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[4].Value = objednavka.Prijato ? 1 : 0;
+
             prm.Add(new OracleParameter("p_id_supermarketu", OracleDbType.Int32, System.Data.ParameterDirection.Input));
-            prm[4].Value = objednavka.Supermarket.Id;
+            prm[5].Value = objednavka.Supermarket.Id;
 
             prm.Add(new OracleParameter("p_id_dodavatele", OracleDbType.Int32, System.Data.ParameterDirection.Input));
-            prm[5].Value = objednavka.Dodavatel.Id;
+            prm[6].Value = objednavka.Dodavatel.Id;
 
             return prm;
         }
@@ -138,6 +146,15 @@ namespace SemestralniPraceDB2.Models
             prm[1].Value = days;
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
             return result == -1;
+        }
+        public static bool Prijato(Objednavka obj)
+        {
+            var objednavka = Get(obj);
+            if (objednavka == null) {  
+                return false; 
+            }
+            objednavka.Prijato = true;
+            return Update(objednavka);
         }
 
     }
