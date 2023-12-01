@@ -65,6 +65,7 @@ namespace SemestralniPraceDB2.ViewModels
 
         public void Receive(ViewChanged message)
         {
+            //změna viewModelu
             BaseViewModel newVM = message.ViewName switch
             {
                 "MakingOrderForWarehouse" => makingOrderForWarehouseVM,
@@ -79,7 +80,14 @@ namespace SemestralniPraceDB2.ViewModels
                 "SystemCatalog" => systemCatalogVM,
                 "Subordinates" => subordinatesVM,
                 _ => messageVM,
-            };
+            } ;
+
+            //refresh potřebných ViewModelů
+            switch (message.ViewName)
+            {
+                case "GoodsImport": goodsImportVM.Refresh();
+                    break;
+            }
 
             if (newVM != SelectedViewModel)
             {

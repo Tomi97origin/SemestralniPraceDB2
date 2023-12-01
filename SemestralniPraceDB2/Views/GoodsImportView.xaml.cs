@@ -1,8 +1,11 @@
 ﻿using SemestralniPraceDB2.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,6 +28,76 @@ namespace SemestralniPraceDB2.Views
         {
             DataContext = MainWindowViewModel.goodsImportVM;
             InitializeComponent();
+        }
+        private void DataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (((PropertyDescriptor)e.PropertyDescriptor).IsBrowsable == false)
+            {
+                // Skryj sloupce s atributem [Browsable(false)]
+                e.Cancel = true;
+            }
+            else
+            {
+                // Změň název sloupce pomocí atributu DisplayName
+                var displayName = GetPropertyDisplayName(e.PropertyDescriptor);
+
+                if (!string.IsNullOrEmpty(displayName))
+                {
+                    e.Column.Header = displayName;
+                }
+            }
+        }
+
+        //Github (https://stackoverflow.com/questions/13579034/how-do-you-rename-datagrid-columns-when-autogeneratecolumns-true)
+        public static string GetPropertyDisplayName(object descriptor)
+        {
+            if (descriptor is PropertyDescriptor pd)
+            {
+                // Check for DisplayName attribute and set the column header accordingly
+
+                if (pd.Attributes[typeof(DisplayNameAttribute)] is DisplayNameAttribute displayName && displayName != DisplayNameAttribute.Default)
+                {
+                    return displayName.DisplayName;
+                }
+
+            }
+            else
+            {
+                var pi = descriptor as PropertyInfo;
+
+                if (pi != null)
+                {
+                    // Check for DisplayName attribute and set the column header accordingly
+                    Object[] attributes = pi.GetCustomAttributes(typeof(DisplayNameAttribute), true);
+                    for (int i = 0; i < attributes.Length; ++i)
+                    {
+                        if (attributes[i] is DisplayNameAttribute displayName && displayName != DisplayNameAttribute.Default)
+                        {
+                            return displayName.DisplayName;
+                        }
+                    }
+                }
+            }
+
+            return string.Empty;
+        }
+
+        //Github (https://stackoverflow.com/questions/1268552/how-do-i-get-a-textbox-to-only-accept-numeric-input-in-wpf)
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        //Github (https://stackoverflow.com/questions/938145/make-wpf-textbox-as-cut-copy-and-paste-restricted)
+        private void textBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (e.Command == ApplicationCommands.Copy ||
+                e.Command == ApplicationCommands.Cut ||
+                e.Command == ApplicationCommands.Paste)
+            {
+                e.Handled = true;
+            }
         }
     }
 }
