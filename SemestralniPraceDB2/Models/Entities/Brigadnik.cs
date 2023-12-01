@@ -7,13 +7,24 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class Brigadnik : Zamestnanec
+    public class Brigadnik : Zamestnanec, IDBEntity
     {
         [DisplayName("Hodinová sazba")]
         public double? HodinovaSazba { set; get; }
 
         [DisplayName("Hodiny")]
         public double Hodiny { set; get; }
+
+        public string DataToText()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append($"{HodinovaSazba} ");
+            sb.Append($"{Hodiny} ");
+
+            return sb.ToString().Trim();
+        }
+
 
         public override string ToString()
         {

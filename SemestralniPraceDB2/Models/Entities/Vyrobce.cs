@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class Vyrobce
+    public class Vyrobce : IDBEntity
     {
         [Browsable (false)]
         public int Id { get; set; }
@@ -49,5 +49,16 @@ namespace SemestralniPraceDB2.Models.Entities
             }
 
         }
+
+        public string DataToText()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append($"{Nazev} ");
+            sb.Append($"{Zkratka} ");
+
+            return sb.ToString().Trim();
+        }
+
     }
 }

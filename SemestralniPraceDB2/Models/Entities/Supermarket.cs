@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class Supermarket
+    public class Supermarket : IDBEntity
     {
         [Browsable(false)]
         public int Id { get; set; }
@@ -26,6 +26,20 @@ namespace SemestralniPraceDB2.Models.Entities
 
         [DisplayName("Adresa")]
         public Adresa Adresa { get; set; }
+
+        public string DataToText()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append($"{RozlohaProdejny} ");
+            sb.Append($"{RozlohaSkladu} ");
+            sb.Append($"{ParkovaciMista} ");
+            sb.Append($"{Voziky} ");
+            sb.Append($"{Adresa.DataToText()} ");
+
+            return sb.ToString().Trim();
+        }
+
 
         public override string ToString()
         {

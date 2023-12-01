@@ -20,14 +20,14 @@ partial class DatabaseExplorerViewModel : BaseViewModel
     ObservableCollection<DBTable> tables;
 
     [ObservableProperty]
-    private ObservableCollection<object>? selectedTableData;
+    private ObservableCollection<IDBEntity>? selectedTableData;
 
     [ObservableProperty]
     private string? textToSearch;
 
     private List<string> tableDataStrings = new();
 
-    private ObservableCollection<object>? backupSelectedTableData;
+    private ObservableCollection<IDBEntity>? backupSelectedTableData;
 
 
     public DatabaseExplorerViewModel()
@@ -54,7 +54,7 @@ partial class DatabaseExplorerViewModel : BaseViewModel
         {
             foreach (var i in SelectedTableData)
             {
-                tableDataStrings.Add(i.ToString() ?? string.Empty);
+                tableDataStrings.Add(i.DataToText()?.ToUpper() ?? string.Empty);
             }
         }
     }
@@ -264,9 +264,15 @@ partial class DatabaseExplorerViewModel : BaseViewModel
     [RelayCommand]
     private void FilterTableData()
     {
+        if (TextToSearch is null)
+        {
+            CancelFilter();
+            return;
+        }
+
         List<int> indexySNalezem = new();
         //string pattern = $"@\"{TextToSearch}\"";
-        string pattern = $@"\b\w*{TextToSearch}\w*\b";
+        string pattern = $@"\b\w*{TextToSearch?.ToUpper()}\w*\b";
 
         // Pro každý řetězec v listu
         for (int i = 0; i < tableDataStrings.Count; i++)

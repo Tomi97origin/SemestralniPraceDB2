@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class Vernostni_karta
+    public class Vernostni_karta : IDBEntity
     {
         [Browsable(false)]
         public int Id { get; set; }
@@ -20,6 +20,18 @@ namespace SemestralniPraceDB2.Models.Entities
 
         [DisplayName("Číslo karty")]
         public string Cislo_Karty { get; set; }
+
+        public string DataToText()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append($"{Jmeno} ");
+            sb.Append($"{Zalozeni} ");
+            sb.Append($"{Cislo_Karty} ");
+
+            return sb.ToString().Trim();
+        }
+
 
         public override string ToString()
         {

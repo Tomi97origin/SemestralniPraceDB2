@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class Uctenka
+    public class Uctenka : IDBEntity
     {
         [Browsable (false)]
         public int Id { get; set; }
@@ -23,6 +23,19 @@ namespace SemestralniPraceDB2.Models.Entities
 
         [DisplayName("Platba")]
         public Platba Platba { get; set; }
+
+        public string DataToText()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append($"{Vytvoreno} ");
+            sb.Append($"{CelkovaCena} ");
+            sb.Append($"{Pokladna.DataToText()} ");
+            sb.Append($"{Platba.DataToText()} ");
+
+            return sb.ToString().Trim();
+        }
+
 
         public override string ToString()
         {

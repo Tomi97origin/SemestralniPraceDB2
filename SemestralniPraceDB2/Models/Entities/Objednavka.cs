@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class Objednavka
+    public class Objednavka : IDBEntity
     {
         [Browsable(false)]
         public int Id { get; set; }
@@ -61,5 +61,20 @@ namespace SemestralniPraceDB2.Models.Entities
 
             }
         }
+
+        public string DataToText()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append($"{Vytvoreno} ");
+            sb.Append($"{Splatnost} ");
+            sb.Append($"{CelkovaCena} ");
+            sb.Append($"{Prijato} ");
+            sb.Append($"{Supermarket.DataToText()} ");
+            sb.Append($"{Dodavatel.DataToText()} ");
+
+            return sb.ToString().Trim();
+        }
+
     }
 }

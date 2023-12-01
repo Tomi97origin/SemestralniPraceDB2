@@ -8,7 +8,7 @@ using System.Windows.Controls.Primitives;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class Cena
+    public class Cena : IDBEntity
     {
         [Browsable(false)]
         public int Id { get; set; }
@@ -24,6 +24,19 @@ namespace SemestralniPraceDB2.Models.Entities
 
         [DisplayName("Zboží")]
         public Zbozi? Zbozi { get; set; }
+
+        public string DataToText()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append($"{PlatnostOd} ");
+            sb.Append($"{PlatnostDo} ");
+            sb.Append($"{Castka} ");
+            sb.Append($"{Zbozi?.DataToText()} ");
+
+            return sb.ToString().Trim();
+        }
+
 
         public override string ToString()
         {

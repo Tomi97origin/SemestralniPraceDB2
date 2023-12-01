@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class Zbozi
+    public class Zbozi : IDBEntity
     {
         [Browsable(false)]
         public int Id { get; set; }
@@ -62,5 +62,19 @@ namespace SemestralniPraceDB2.Models.Entities
                 return str.ToString();
             }
         }
+
+        public string DataToText()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append($"{Nazev} ");
+            sb.Append($"{Popis} ");
+            sb.Append($"{EAN} ");
+            sb.Append($"{Kategorie?.DataToText()} ");
+            sb.Append($"{Vyrobce?.DataToText()} ");
+
+            return sb.ToString().Trim();
+        }
+
     }
 }

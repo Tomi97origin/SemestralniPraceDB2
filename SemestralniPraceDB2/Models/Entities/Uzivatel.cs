@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class Uzivatel
+    public class Uzivatel : IDBEntity
     {
         [Browsable(false)]
         public int Id { get; set; }
@@ -26,5 +26,19 @@ namespace SemestralniPraceDB2.Models.Entities
 
         [DisplayName("Poslední přihlášení")]
         public DateTime PosledniPrihlaseni { get; set; }
+
+        public string DataToText()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append($"{Username} ");
+            sb.Append($"{Password} ");
+            sb.Append($"{Admin} ");
+            sb.Append($"{Active} ");
+            sb.Append($"{PosledniPrihlaseni} ");
+
+            return sb.ToString().Trim();
+        }
+
     }
 }

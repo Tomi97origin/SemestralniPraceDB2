@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class Platba
+    public class Platba : IDBEntity
     {
         [Browsable(false)]
         public int Id { get; set; }
@@ -63,6 +63,20 @@ namespace SemestralniPraceDB2.Models.Entities
             string replaced = new string(replacementChar, input.Length - 4) + input.Substring(input.Length - 4);
 
             return replaced;
+        }
+
+        public string DataToText()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append($"{Vraceno} ");
+            sb.Append($"{DebitText} ");
+            sb.Append($"{CisloKartyCensored} ");
+            sb.Append($"{HotovostText} ");
+            sb.Append($"{Vydavatel?.DataToText()} ");
+            sb.Append($"{Vernostni_Karta?.DataToText()} ");
+
+            return sb.ToString().Trim();
         }
     }
 }

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class ObjednaneZbozi
+    public class ObjednaneZbozi : IDBEntity
     {
-        
+
         [DisplayName("Množství")]
         public int Mnozstvi { get; set; }
 
@@ -35,5 +35,17 @@ namespace SemestralniPraceDB2.Models.Entities
             Cena = cena;
             Zbozi = zbozi;
         }
+        public string DataToText()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append($"{Mnozstvi} ");
+            sb.Append($"{Cena} ");
+            sb.Append($"{Objednavka.DataToText()} ");
+            sb.Append($"{Zbozi.DataToText()} ");
+
+            return sb.ToString().Trim();
+        }
+
     }
 }

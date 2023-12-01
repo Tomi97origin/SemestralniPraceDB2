@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class Role
+    public class Role : IDBEntity
     {
         [Browsable(false)]
         public int Id { get; set; }
@@ -36,5 +36,16 @@ namespace SemestralniPraceDB2.Models.Entities
                 return Nazev;
             }
         }
+
+        public string DataToText()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append($"{Nazev} ");
+
+            return sb.ToString().Trim();
+        }
+
+
     }
 }

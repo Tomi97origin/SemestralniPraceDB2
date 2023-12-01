@@ -9,7 +9,7 @@ using System.Windows.Controls;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class Adresa
+    public class Adresa:IDBEntity
     {
         [Browsable(false)]
         public int Id { get; set; }
@@ -47,6 +47,19 @@ namespace SemestralniPraceDB2.Models.Entities
                 
                 return str.ToString();
             }
+        }
+
+        public string DataToText()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append($"{Ulice} ");
+            sb.Append($"{Cp} ");
+            sb.Append($"{Mesto} ");
+            sb.Append($"{Stat} ");
+            sb.Append($"{Psc} ");
+
+            return sb.ToString().Trim();
         }
 
         public Adresa(int id, string? ulice, int? cp, string? mesto, string? stat, string? psc)

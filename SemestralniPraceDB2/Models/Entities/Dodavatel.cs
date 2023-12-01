@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class Dodavatel
+    public class Dodavatel : IDBEntity
     {
         [Browsable(false)]
         public int Id { get; set; }
@@ -17,6 +17,17 @@ namespace SemestralniPraceDB2.Models.Entities
 
         [DisplayName("Adresa")]
         public Adresa Adresa { get; set; }
+
+        public string DataToText()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append($"{Nazev} ");
+            sb.Append($"{Adresa.DataToText()} ");
+
+            return sb.ToString().Trim();
+        }
+
 
         public override string ToString()
         {

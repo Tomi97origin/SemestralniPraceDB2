@@ -9,7 +9,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class ObrazekZamestnance
+    public class ObrazekZamestnance : IDBEntity
     {
         [Browsable(false)]
         public int Id { get; set; }
@@ -19,6 +19,11 @@ namespace SemestralniPraceDB2.Models.Entities
 
         [Browsable(false)]
         public Image? Image { get; set; }
+
+        public string DataToText()
+        {
+            return string.Empty;
+        }
 
         public override string ToString()
         {

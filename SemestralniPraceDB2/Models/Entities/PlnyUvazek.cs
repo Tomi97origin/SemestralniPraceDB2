@@ -6,10 +6,22 @@ using System.Threading.Tasks;
 
 namespace SemestralniPraceDB2.Models.Entities
 {
-    public class PlnyUvazek : Zamestnanec
+    public class PlnyUvazek : Zamestnanec, IDBEntity
     {
         public double Plat { set; get; }
         public DateTime PlatnostDo { set; get; }
+
+        public string DataToText()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append($"{Plat} ");
+            sb.Append($"{PlatnostDo} ");
+
+            return sb.ToString().Trim();
+        }
+
+
         public override string ToString()
         {
             return base.ToString();
