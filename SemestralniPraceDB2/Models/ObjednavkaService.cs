@@ -66,9 +66,13 @@ namespace SemestralniPraceDB2.Models
             };
         }
 
-        public static List<Objednavka> GetAll()
+        public static List<Objednavka> GetAll(bool pouzeNeprijate = false)
         {
             string sql = "Select * FROM objednavky";
+            if (pouzeNeprijate)
+            {
+                sql += " WHERE prijato = 0";
+            }
             List<OracleParameter> prm = new();
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToObjednavka).Result;
             return result;
