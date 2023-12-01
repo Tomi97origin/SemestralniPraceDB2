@@ -23,7 +23,7 @@ namespace SemestralniPraceDB2.Models
 
         public static void PrepareProcedureCall(Cena cena, out string procedureName, out List<OracleParameter> prm)
         {
-            procedureName = "pcena";
+            procedureName = "pceny";
             prm = MapCenaIntoParams(cena);
         }
 
@@ -32,7 +32,7 @@ namespace SemestralniPraceDB2.Models
             List<OracleParameter> prm = new List<OracleParameter>();
 
             prm.Add(new OracleParameter("p_id_ceny", OracleDbType.Int32, System.Data.ParameterDirection.InputOutput));
-            prm[0].Value = cena.Id;
+            prm[0].Value = cena.Id <= 0 ? null : cena.Id;
 
             prm.Add(new OracleParameter("p_od", OracleDbType.Date, System.Data.ParameterDirection.Input));
             prm[1].Value = cena.PlatnostOd;
