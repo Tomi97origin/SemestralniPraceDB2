@@ -32,8 +32,11 @@ namespace SemestralniPraceDB2.ViewModels
         {
             if(SelectedPurchase is not null)
             {
-            //todo
-                //SelectedPurchaseDetails = new(ProdaneZboziService.GetFromPlatba(SelectedPurchase);
+                SelectedPurchaseDetails = new(ProdaneZboziService.GetFromPlatba(SelectedPurchase));
+                foreach (var i in SelectedPurchaseDetails)
+                {
+                    if (i.Uctenka is not null) i.Uctenka = UctenkaService.Get(i.Uctenka)??new();
+                }
             }
         }
 
@@ -42,8 +45,12 @@ namespace SemestralniPraceDB2.ViewModels
         {
             if (CustomerCardNumber is not null)
             {
-                //var karta = VernostniKartaService.GetFromCardNumber(CustomerCardNumber);
-                //PurchaseList = new(PlatbaService.GetPlatbyZakaznika(karta));
+                PurchaseList = new(PlatbaService.GetPlatbyZakaznika(CustomerCardNumber));
+                foreach(var i in PurchaseList)
+                {
+                    if (i.Vernostni_Karta is not null) i.Vernostni_Karta = VernostniKartaService.Get(i.Vernostni_Karta);
+                    if (i.Vydavatel is not null) i.Vydavatel = VydavatelService.Get(i.Vydavatel);
+                }
             }
             else
             {

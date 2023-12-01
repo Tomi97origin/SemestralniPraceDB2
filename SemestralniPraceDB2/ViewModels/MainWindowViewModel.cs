@@ -37,7 +37,7 @@ namespace SemestralniPraceDB2.ViewModels
         private static readonly BaseViewModel defaultVM = messageVM;
 
         [ObservableProperty]
-        public BaseViewModel selectedViewModel = userLoginVM;
+        public BaseViewModel selectedViewModel = databaseExplorerVM; //todo zde by mělo být userLoginVM
 
         public BaseViewModel? lastSelectedViewModel = null;
 

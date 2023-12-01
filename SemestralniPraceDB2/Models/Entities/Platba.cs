@@ -15,8 +15,11 @@ namespace SemestralniPraceDB2.Models.Entities
         [DisplayName("Vráceno")]
         public double Vraceno { get; set; }
 
-        [DisplayName("Debit")]
+        [Browsable(false)]
         public short? Debit { get; set; }
+
+        [DisplayName("Typ karty")]
+        public string? DebitText => Debit == 1 ? "Debit" : "Kredit";
 
         [Browsable(false)]
         public string? CisloKarty { get; set; }
