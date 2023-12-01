@@ -79,7 +79,7 @@ namespace SemestralniPraceDB2.Models
             return result;
         }
 
-        public static List<ObjednaneZbozi> GetFromObjenavka(Objednavka objednavka)
+        public static List<ObjednaneZbozi> GetFromObjednavka(Objednavka objednavka)
         {
             string sql = "Select * FROM objednane_zbozi WHERE id_objednavky = :id_objednavky";
             List<OracleParameter> prm = new();
