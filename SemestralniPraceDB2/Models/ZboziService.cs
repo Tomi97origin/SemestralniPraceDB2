@@ -3,7 +3,9 @@ using SemestralniPraceDB2.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -90,16 +92,17 @@ namespace SemestralniPraceDB2.Models
         }
 
 
-        private static Zbozi MapOracleResultToZbozi(OracleDataReader result)
+        internal static Zbozi MapOracleResultToZbozi(OracleDataReader result)
         {
+            var collumns = result.GetColumnSchema().Select(col => col.ColumnName.ToLower()).ToList();
             return new Zbozi()
             {
                 Id = result.GetInt32("id_zbozi"),
-                Nazev = result.GetString("nazev"),
-                Popis = result.IsDBNull("popis") ? string.Empty : result.GetString("popis"),
-                EAN = result.GetString("ean"),
-                Kategorie = new Kategorie() { Id = result.GetInt32("id_kategorie") },
-                Vyrobce = new Vyrobce() { Id = result.GetInt32("id_vyrobce") }
+                Nazev = collumns.Contains("nazev") ? result.GetString("nazev") : string.Empty,
+                Popis = collumns.Contains("popis") && !result.IsDBNull("popis") ? result.GetString("popis"): string.Empty,
+                EAN = collumns.Contains("ean") ? result.GetString("ean") : string.Empty,
+                Kategorie = !collumns.Contains("id_kategorie") ? null : new Kategorie() { Id = result.GetInt32("id_kategorie") },
+                Vyrobce = !collumns.Contains("id_vyrobce") ? null : new Vyrobce() { Id = result.GetInt32("id_vyrobce") }
             };
         }
 

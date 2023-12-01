@@ -85,7 +85,7 @@ namespace SemestralniPraceDB2.Models
                 Mnozstvi = reader.GetInt32("mnozstvi"),
                 Cena = reader.GetDouble("cena"),
                 Uctenka = new Uctenka() { Id = reader.GetInt32("id_uctenky") },
-                Zbozi = new Zbozi() { Id = reader.GetInt32("id_zbozi") }
+                Zbozi = ZboziService.MapOracleResultToZbozi(reader)
             };
         }
 
@@ -105,5 +105,15 @@ namespace SemestralniPraceDB2.Models
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToProdaneZbozi).Result;
             return result;
         }
+        public static List<ProdaneZbozi> GetFromPlatba(Platba platba)
+        {
+            string sql = "SELECT p.*,z.* FROM prodane_zbozi p JOIN UCTENKY u ON p.id_uctenky = u.id_uctenky JOIN ZBOZI z ON z.id_zbozi = p.id_zbozi WHERE u.id_platby = :id_platby";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_platby", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = platba.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToProdaneZbozi).Result;
+            return result;
+        }
+
     }
 }
