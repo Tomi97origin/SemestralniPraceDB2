@@ -29,16 +29,46 @@
         <Grid  Grid.Column="1" Margin="30,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            
+
             <DataGrid ItemsSource="{Binding SelectedTableData}"
                       AutoGenerateColumns="True"
                       AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"/>
 
+            <Grid
+                Grid.Row="1"
+                HorizontalAlignment="Stretch"
+                Margin="0,5,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    Grid.Column="0"
+                    Height="30"
+                    HorizontalAlignment="Stretch"
+                    Text="{Binding TextToSearch}"/>
+                <Button
+                    Grid.Column="1"
+                    Content=" Vyhledej "
+                    Command="{Binding FilterTableDataCommand}"
+                    Height="30"
+                    Margin="5,0,0,0"
+                    HorizontalAlignment="Left"/>
+                <Button
+                    Grid.Column="2"
+                    Content=" Zruš Filtr "
+                    Command="{Binding CancelFilterCommand}"
+                    Height="30"
+                    Margin="5,0,0,0"
+                    HorizontalAlignment="Left"/>
+            </Grid>
 
             <Grid
-                Grid.Row="1" HorizontalAlignment="Stretch" Margin="0,5,0,0">
+                Grid.Row="2" HorizontalAlignment="Stretch" Margin="0,10,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -50,7 +80,7 @@
                     Command="{Binding DeleteRecordCommand}"
                     Margin="0,0,0,0"
                     HorizontalAlignment="Left"/>
-                    
+
                 <Button
                     Grid.Column="1"
                     Content=" Zapsat změny "

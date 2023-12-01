@@ -3,7 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using SemestralniPraceDB2.Models;
 using SemestralniPraceDB2.Models.Entities;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace SemestralniPraceDB2.ViewModels;
@@ -20,6 +22,14 @@ partial class DatabaseExplorerViewModel : BaseViewModel
     [ObservableProperty]
     private ObservableCollection<object>? selectedTableData;
 
+    [ObservableProperty]
+    private string? textToSearch;
+
+    private List<string> tableDataStrings = new();
+
+    private ObservableCollection<object>? backupSelectedTableData;
+
+
     public DatabaseExplorerViewModel()
     {
         var dbTables = SystemCatalogService.GetAllTables();
@@ -31,6 +41,27 @@ partial class DatabaseExplorerViewModel : BaseViewModel
     partial void OnSelectedTableChanged(DBTable? value)
     {
         RefreshTablesRowCounts();
+
+        NaplnTableDataPodleSelectedTable();
+        backupSelectedTableData = SelectedTableData;
+
+        NaplnTableDataStrings();
+    }
+
+    private void NaplnTableDataStrings()
+    {
+        if (SelectedTableData is not null)
+        {
+            foreach (var i in SelectedTableData)
+            {
+                tableDataStrings.Add(i.ToString() ?? string.Empty);
+            }
+        }
+    }
+
+
+    private void NaplnTableDataPodleSelectedTable()
+    {
         if (SelectedTable != null)
         {
             switch (SelectedTable.TableName)
@@ -207,7 +238,7 @@ partial class DatabaseExplorerViewModel : BaseViewModel
 
                 case "ZBOZI":
                     var seznamZbozi = ZboziService.GetAll();
-                    foreach(var i in seznamZbozi)
+                    foreach (var i in seznamZbozi)
                     {
                         if (i.Kategorie is not null) i.Kategorie = KategorieService.Get(i.Kategorie) ?? new();
                         if (i.Vyrobce is not null) i.Vyrobce = VyrobceService.Get(i.Vyrobce) ?? new();
@@ -217,20 +248,61 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                 default: break;
             }
         }
-
-
-
     }
 
     private void RefreshTablesRowCounts()
     {
         var freshDBTables = SystemCatalogService.GetAllTables();
         freshDBTables.Sort((x, y) => x.TableName.CompareTo(y.TableName));
-        
-        for(int i = 0; i < freshDBTables.Count; i++)
+
+        for (int i = 0; i < freshDBTables.Count; i++)
         {
             Tables[i].RowCount = freshDBTables[i].RowCount;
         }
+    }
+
+    [RelayCommand]
+    private void FilterTableData()
+    {
+        List<int> indexySNalezem = new();
+        //string pattern = $"@\"{TextToSearch}\"";
+        string pattern = $@"\b\w*{TextToSearch}\w*\b";
+
+        // Pro každý řetězec v listu
+        for (int i = 0; i < tableDataStrings.Count; i++)
+        {
+            // Vyhledání shody s regulárním výrazem
+            MatchCollection matches = Regex.Matches(tableDataStrings[i], pattern);
+
+            // Pokud byla shoda nalezena, ukládám index
+            if (matches.Count > 0)
+            {
+                indexySNalezem.Add(i);
+            }
+        }
+
+        //vymazání SelectedTableData
+        SelectedTableData = new();
+
+        //naplnění SelectedTableData z backupSelectedTableData podle nalezených indexů
+        if (backupSelectedTableData is not null)
+        {
+            for (int i = 0; i < backupSelectedTableData.Count; i++)
+            {
+                if(indexySNalezem.Contains(i))
+                {
+                    SelectedTableData.Add(backupSelectedTableData[i]);
+                }
+            }
+        }
+
+    }
+
+
+    [RelayCommand]
+    private void CancelFilter()
+    {
+        SelectedTableData = backupSelectedTableData;
     }
 
     [RelayCommand]
@@ -244,6 +316,7 @@ partial class DatabaseExplorerViewModel : BaseViewModel
     {
         MessageBox.Show("zatím neimplementováno");
     }
+
 
 
 }
