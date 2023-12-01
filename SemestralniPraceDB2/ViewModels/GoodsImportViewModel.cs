@@ -11,6 +11,7 @@ namespace SemestralniPraceDB2.ViewModels
 {
     partial class GoodsImportViewModel : BaseViewModel
     {
+
         public class AcceptedItem
         {
             public int Count { get; set; }
@@ -24,7 +25,7 @@ namespace SemestralniPraceDB2.ViewModels
         }
 
         [ObservableProperty]
-        public ObservableCollection<Objednavka> allOrders = new(ObjednavkaService.GetAll());
+        public ObservableCollection<Objednavka> allOrders = new();
 
         [ObservableProperty]
         public Objednavka? selectedOrder;
@@ -46,6 +47,10 @@ namespace SemestralniPraceDB2.ViewModels
 
         private int loadedOrderId = -1;
 
+        public GoodsImportViewModel()
+        {
+            Refresh();
+        }
 
         [RelayCommand]
         public void LoadOrder()
@@ -119,7 +124,7 @@ namespace SemestralniPraceDB2.ViewModels
             }
             if (AccepterEqualsSelectedOrder())
             {
-                //todo vložit service nastav objednávka přijatá použij loadedOrderId
+                ObjednavkaService.Prijato(new() { Id = loadedOrderId });
                 MessageBox.Show("Objednávka přijatá");
                 Refresh();
                 SelectedOrder = null;
@@ -173,7 +178,13 @@ namespace SemestralniPraceDB2.ViewModels
 
         public void Refresh()
         {
-            AllOrders = new(ObjednavkaService.GetAll());
+            AllOrders = new(ObjednavkaService.GetAll(true));
+
+            foreach (var i in AllOrders)
+            {
+                i.Supermarket = SupermarketService.Get(i.Supermarket) ?? new();
+                i.Dodavatel = DodavatelService.Get(i.Dodavatel) ?? new();
+            }
         }
     }
 }
