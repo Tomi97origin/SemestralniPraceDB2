@@ -83,11 +83,11 @@ namespace SemestralniPraceDB2.Models
             return result.Count == 0 ? null : result[0];
         }
 
-        public static void Emulate(string jmeno)
+        public static void Emulate(Uzivatel uzivatel)
         {
             if (Prihlaseny?.Admin == true)
             {
-                var emulated = GetUzivatele(jmeno);
+                var emulated = GetUzivatele(uzivatel.Username);
                 if (emulated != null && emulated.Active)
                 {
                     Aktualni = emulated;
