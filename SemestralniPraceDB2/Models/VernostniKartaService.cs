@@ -93,5 +93,15 @@ namespace SemestralniPraceDB2.Models
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToVernostni_karta).Result;
             return result;
         }
+
+        public static Vernostni_karta? GetFromCardNumber(string cislo_karty)
+        {
+            string sql = "Select * FROM vernostni_karty WHERE cislo_karty = :cislo_karty";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":cislo_karty", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
+            prm[0].Value = cislo_karty;
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToVernostni_karta).Result;
+            return result.Count == 0 ? null : result[0];
+        }
     }
 }
