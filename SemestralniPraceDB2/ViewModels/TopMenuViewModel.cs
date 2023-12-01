@@ -112,7 +112,7 @@ partial class TopMenuViewModel : BaseViewModel, IRecipient<UserLogin>, IRecipien
         if (Result == MessageBoxResult.Yes)
         {
             UzivateleService.DeleteAllOldDeactivated();
-            MessageBox.Show("Smazáni všichni dlouho neaktivovaní užiavtelé.", "Provedeno", MessageBoxButton.OK, MessageBoxImage.Information);s
+            MessageBox.Show("Smazáni všichni dlouho neaktivovaní užiavtelé.", "Provedeno", MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         else if (Result == MessageBoxResult.No)
