@@ -27,12 +27,7 @@ namespace SemestralniPraceDB2.Models.Entities
 
         public override string ToString()
         {
-            string zboziInfo = String.Empty;
-            if (Zbozi is not null)
-            {
-                zboziInfo = $", zboží: {Zbozi.Nazev} ({Zbozi.EAN}))";
-            }
-            return $"Od {PlatnostOd:dd.mm.yyyy}, Do {PlatnostDo:dd.mm.yyyy}, {Castka} Kč" + zboziInfo;
+            return $"{Zbozi}, od {PlatnostOd:dd.MM.yyyy}, {Castka} Kč";
         }
 
 

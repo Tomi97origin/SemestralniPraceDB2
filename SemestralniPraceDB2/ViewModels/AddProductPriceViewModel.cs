@@ -24,12 +24,29 @@ partial class AddProductPriceViewModel : BaseViewModel
     {
         SeznamZbozi = new(ZboziService.GetAll());
         NovaCena.PlatnostOd = DateTime.Today;
-        NovaCena.PlatnostDo = DateTime.Today.AddDays(7);
     }
 
     [RelayCommand]
     public void AddProductPrice()
     {
-        MessageBox.Show($"Přidávám novou cenu: {NovaCena}.");
+        if (NewPriceIsValid())
+        {
+            CenaService.Create(NovaCena);
+            MessageBox.Show($"Přidána nová cena:\n{NovaCena}.");
+        }
+        else
+        {
+            MessageBox.Show("Cena není vyplněna validně");
+        }
+    }
+
+    private bool NewPriceIsValid()
+    {
+        if (NovaCena.Castka <= 0) return false;
+        if (NovaCena.PlatnostOd <= DateTime.Now) return false;
+        if (NovaCena.Zbozi is null) return false;
+
+
+        return true;
     }
 }
