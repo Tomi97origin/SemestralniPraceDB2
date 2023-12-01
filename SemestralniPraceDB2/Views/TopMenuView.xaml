@@ -30,6 +30,11 @@
                 <MenuItem Header="Odstraň staré, neaktivované uživatele"
                           Command="{Binding DeleteDeactivatedCommand}"/>
             </MenuItem>
+            
+            <MenuItem Header="Zboží" >
+                <MenuItem Header="Zlevni nejméně prodávané zboží"
+                          Command="{Binding SetTheLeastSaledGoodsCheaperCommand}"/>
+            </MenuItem>
 
             <MenuItem Header="Databáze" >
                 <MenuItem Header="Systémový katalog" 

@@ -80,6 +80,27 @@ partial class TopMenuViewModel : BaseViewModel, IRecipient<UserLogin>, IRecipien
     }
 
     [RelayCommand]
+    private void SetTheLeastSaledGoodsCheaper()
+    {
+        var Result = MessageBox.Show(
+            "Opravdu chcete zlevnit málo prodávané zboží?",
+            "Opravdu chcete zlevnit?",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Question);
+
+        if (Result == MessageBoxResult.Yes)
+        {
+            ZboziService.ZlevniNejmeneProdavane();
+            MessageBox.Show("Zboží zlevněno.","Provedeno", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+        else if (Result == MessageBoxResult.No)
+        {
+            return;
+        }
+    }
+
+    [RelayCommand]
     private void DeleteDeactivated()
     {
         var Result = MessageBox.Show(
@@ -91,7 +112,7 @@ partial class TopMenuViewModel : BaseViewModel, IRecipient<UserLogin>, IRecipien
         if (Result == MessageBoxResult.Yes)
         {
             UzivateleService.DeleteAllOldDeactivated();
-            MessageBox.Show("Smazáni všichni dlouho neaktivovaní užiavtelé.");
+            MessageBox.Show("Smazáni všichni dlouho neaktivovaní užiavtelé.", "Provedeno", MessageBoxButton.OK, MessageBoxImage.Information);s
             return;
         }
         else if (Result == MessageBoxResult.No)

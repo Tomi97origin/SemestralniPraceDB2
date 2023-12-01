@@ -8,3 +8,4 @@
 <a href="https://www.flaticon.com/free-icons/order" title="order icons">Order icons created by vectorsmarket15 - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/item" title="item icons">Item icons created by Andrejs Kirma - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/price" title="price icons">Price icons created by toempong - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/sale" title="sale icons">Sale icons created by Freepik - Flaticon</a>
