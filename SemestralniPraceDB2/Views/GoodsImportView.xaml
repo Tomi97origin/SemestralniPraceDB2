@@ -122,7 +122,6 @@
                     <TextBox 
                         Text="{Binding EANToAccept}" 
                         Width="150"
-                        PreviewTextInput="NumberValidationTextBox"
                         CommandManager.PreviewExecuted="textBox_PreviewExecuted"
                         ContextMenu="{x:Null}" />
                     

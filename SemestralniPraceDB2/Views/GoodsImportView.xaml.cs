@@ -89,6 +89,7 @@ namespace SemestralniPraceDB2.Views
             e.Handled = regex.IsMatch(e.Text);
         }
 
+        
         //Github (https://stackoverflow.com/questions/938145/make-wpf-textbox-as-cut-copy-and-paste-restricted)
         private void textBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
         {
