@@ -52,7 +52,7 @@ namespace SemestralniPraceDB2.ViewModels
         {
             if (SelectedOrder is not null)
             {
-                SelectedOrderItems = new(ObjednaneZboziService.GetFromObjenavka(SelectedOrder));
+                SelectedOrderItems = new(ObjednaneZboziService.GetFromObjednavka(SelectedOrder));
                 foreach (var i in SelectedOrderItems)
                 {
                     i.Zbozi = ZboziService.Get(i.Zbozi) ?? new();
