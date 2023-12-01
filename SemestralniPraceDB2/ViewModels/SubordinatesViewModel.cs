@@ -16,7 +16,7 @@ namespace SemestralniPraceDB2.ViewModels
         Zamestnanec? selectedEmployee;
 
         [ObservableProperty]
-        ObservableCollection<Zamestnanec> employees = new(ZamestnanecService.GetAll());
+        ObservableCollection<Zamestnanec> employees = new(PlnyUvazekService.GetAll());
 
         [ObservableProperty]
         ObservableCollection<Zamestnanec>? selectedEmployeeSubordinates;
