@@ -107,12 +107,12 @@ namespace SemestralniPraceDB2.Models
             return result;
         }
 
-        public static List<Platba> GetPlatbyZakaznika(Vernostni_karta vernostni_karta)
+        public static List<Platba> GetPlatbyZakaznika(string cisloVernostniKarty)
         {
-            string sql = "SELECT * FROM platby WHERE id_vernostni_karty = :id_vernostni_karty";
+            string sql = "SELECT p.* FROM PLATBY p JOIN vernostni_karty v ON p.id_vernostni_karty = v.id_vernostni_karty WHERE v.cislo_karty =   :cislo_karty";
             List<OracleParameter> prm = new();
-            prm.Add(new OracleParameter(":id_vernostni_karty", OracleDbType.Int32, System.Data.ParameterDirection.Input));
-            prm[0].Value = vernostni_karta.Id;
+            prm.Add(new OracleParameter(":cislo_karty", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = cisloVernostniKarty;
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToPlatba).Result;
             return result;
         }
