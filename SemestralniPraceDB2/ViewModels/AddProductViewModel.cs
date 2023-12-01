@@ -38,7 +38,26 @@ namespace SemestralniPraceDB2.ViewModels
         [RelayCommand]
         public void AddProduct()
         {
-            MessageBox.Show($"Přidávám nové zboží: {NoveZbozi}.");
+            if (NewProductIsValid())
+            {
+                ZboziService.Create(NoveZbozi);
+                MessageBox.Show($"Přidána nové zboží:\n{NoveZbozi}.");
+            }
+            else
+            {
+                MessageBox.Show("Zboží není vyplněno validně");
+            }
+        }
+
+        private bool NewProductIsValid()
+        {
+            if (NoveZbozi.Nazev == string.Empty) return false;
+            if (NoveZbozi.Popis == string.Empty) return false;
+            if (NoveZbozi.EAN == string.Empty) return false;
+            if (NoveZbozi.Kategorie is null) return false;
+            if (NoveZbozi.Vyrobce is null) return false;
+
+            return true;
         }
     }
 }

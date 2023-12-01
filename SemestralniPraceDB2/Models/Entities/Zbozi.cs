@@ -43,8 +43,8 @@ namespace SemestralniPraceDB2.Models.Entities
             Nazev = string.Empty;
             Popis = string.Empty;
             EAN = string.Empty;
-            Kategorie = new();
-            Vyrobce = new();
+            Kategorie = null;
+            Vyrobce = null;
         }
 
         public override string ToString()
