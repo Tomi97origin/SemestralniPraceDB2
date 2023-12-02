@@ -88,6 +88,13 @@
                     <TextBlock Text="Aktualizovat&#x0a;cenu zboží" />
                 </StackPanel>
             </Button>
+            <Button Command="{Binding UpdateViewCommand}"
+                CommandParameter="PasswordChange">
+                <StackPanel>
+                    <Image Source="/Views/Images/padlock.png" />
+                    <TextBlock Text="Změnit&#x0a;heslo"/>
+                </StackPanel>
+            </Button>
             <Button Command="{Binding LoginLogoutCommand}">
                 <StackPanel>
                     <Image Source="/Views/Images/logout.png" />

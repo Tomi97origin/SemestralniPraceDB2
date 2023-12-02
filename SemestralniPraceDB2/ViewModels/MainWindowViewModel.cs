@@ -34,6 +34,7 @@ namespace SemestralniPraceDB2.ViewModels
         public static readonly SystemCatalogViewModel systemCatalogVM = new();
         public static readonly SubordinatesViewModel subordinatesVM = new();
         public static readonly UserActivationViewModel userActivationVM = new();
+        public static readonly PasswordChangeViewModel passwordChangeVM = new();
 
         private static readonly BaseViewModel defaultVM = messageVM;
 
@@ -81,6 +82,7 @@ namespace SemestralniPraceDB2.ViewModels
                 "SystemCatalog" => systemCatalogVM,
                 "Subordinates" => subordinatesVM,
                 "UserActivation" => userActivationVM,
+                "PasswordChange" => passwordChangeVM,
                 _ => messageVM,
             } ;
 

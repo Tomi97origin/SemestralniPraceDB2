@@ -63,5 +63,9 @@
             <views:UserActivationView/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type viewModels:PasswordChangeViewModel}">
+            <views:PasswordChangeView/>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>

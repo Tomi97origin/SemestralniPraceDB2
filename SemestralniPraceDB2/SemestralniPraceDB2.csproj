@@ -21,6 +21,7 @@
     <None Remove="Views\logout.png" />
     <None Remove="Views\note_ico.png" />
     <None Remove="Views\order-delivery.png" />
+    <None Remove="Views\padlock.png" />
     <None Remove="Views\riderBoot_ico.png" />
     <None Remove="Views\save_ico.png" />
     <None Remove="Views\schedule_ico.png" />
@@ -53,6 +54,7 @@
     <Resource Include="Views\Images\import.png" />
     <Resource Include="Views\Images\order-delivery.png" />
     <Resource Include="Views\Images\shopping.png" />
+    <Resource Include="Views\Images\padlock.png" />
   </ItemGroup>
 
   <ItemGroup>
