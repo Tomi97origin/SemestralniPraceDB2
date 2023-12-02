@@ -31,6 +31,7 @@ namespace SemestralniPraceDB2.Models
                 Password = BCrypt.Net.BCrypt.HashPassword(heslo),
                 Admin = false,
                 Active = true,
+                PosledniPrihlaseni = DateTime.Now
             };
             return Create(uzivatel);
         }
