@@ -165,5 +165,11 @@ namespace SemestralniPraceDB2.Models
             var result = DatabaseConnector.ExecuteCommandQueryAsync(query, prm, MapUzivatelFromReader).Result;
             return result;
         }
+
+        public static bool UpdateWithNewPassword(Uzivatel uzivatel, string noveHeslo)
+        {
+            uzivatel.Password = BCrypt.Net.BCrypt.HashPassword(noveHeslo);
+            return Update(uzivatel);
+        }
     }
 }
