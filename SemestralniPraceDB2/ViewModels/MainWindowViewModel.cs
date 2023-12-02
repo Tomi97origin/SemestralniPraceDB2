@@ -33,11 +33,12 @@ namespace SemestralniPraceDB2.ViewModels
         public static readonly AddProductPriceViewModel addProductPriceVM = new();
         public static readonly SystemCatalogViewModel systemCatalogVM = new();
         public static readonly SubordinatesViewModel subordinatesVM = new();
+        public static readonly UserActivationViewModel userActivationVM = new();
 
         private static readonly BaseViewModel defaultVM = messageVM;
 
         [ObservableProperty]
-        public BaseViewModel selectedViewModel = databaseExplorerVM; //todo zde by mělo být userLoginVM
+        public BaseViewModel selectedViewModel = userLoginVM;
 
         public BaseViewModel? lastSelectedViewModel = null;
 
@@ -79,6 +80,7 @@ namespace SemestralniPraceDB2.ViewModels
                 "AddProductPrice" => addProductPriceVM,
                 "SystemCatalog" => systemCatalogVM,
                 "Subordinates" => subordinatesVM,
+                "UserActivation" => userActivationVM,
                 _ => messageVM,
             } ;
 
@@ -86,6 +88,10 @@ namespace SemestralniPraceDB2.ViewModels
             switch (message.ViewName)
             {
                 case "GoodsImport": goodsImportVM.Refresh();
+                    break;
+                case "UserActivation": userActivationVM.Refresh();
+                    break;
+                case "DatabaseExplorer": databaseExplorerVM.Refresh();
                     break;
             }
 

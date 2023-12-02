@@ -59,5 +59,9 @@
             <views:SubordinatesView/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type viewModels:UserActivationViewModel}">
+            <views:UserActivationView/>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>

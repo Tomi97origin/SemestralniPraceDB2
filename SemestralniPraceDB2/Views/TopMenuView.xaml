@@ -29,6 +29,9 @@
             <MenuItem Header="Uživatelé" >
                 <MenuItem Header="Odstraň staré, neaktivované uživatele"
                           Command="{Binding DeleteDeactivatedCommand}"/>
+                <MenuItem Header="Aktivace uživatelů"
+                          Command="{Binding UpdateViewCommand}"
+                          CommandParameter="UserActivation"/>
             </MenuItem>
             
             <MenuItem Header="Zboží" >

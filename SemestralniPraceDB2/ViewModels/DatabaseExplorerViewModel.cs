@@ -33,9 +33,8 @@ partial class DatabaseExplorerViewModel : BaseViewModel
 
     public DatabaseExplorerViewModel()
     {
-        var dbTables = SystemCatalogService.GetAllTables();
-        dbTables.Sort((x, y) => x.TableName.CompareTo(y.TableName));
-        tables = new(dbTables);
+        Tables = new();
+        Refresh();
     }
 
 
@@ -326,6 +325,10 @@ partial class DatabaseExplorerViewModel : BaseViewModel
         MessageBox.Show("zatím neimplementováno");
     }
 
-
-
+    internal void Refresh()
+    {
+        var dbTables = SystemCatalogService.GetAllTables();
+        dbTables.Sort((x, y) => x.TableName.CompareTo(y.TableName));
+        Tables = new(dbTables);
+    }
 }
