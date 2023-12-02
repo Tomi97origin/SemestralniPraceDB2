@@ -43,6 +43,8 @@
                 <MenuItem Header="Prohlížeč tabulek" 
                           Command="{Binding UpdateViewCommand}"
                           CommandParameter="DatabaseExplorer"/>
+                <MenuItem Header="Exportovat logy" 
+                          Command="{Binding ExportLogsCommand}"/>
             </MenuItem>
 
         </Menu>

@@ -1,17 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Win32;
+using Newtonsoft.Json;
 using SemestralniPraceDB2.Models;
 using SemestralniPraceDB2.Views.DialogWindows;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Xps;
+using System.Xml;
 
 namespace SemestralniPraceDB2.ViewModels;
 
@@ -80,6 +84,47 @@ partial class TopMenuViewModel : BaseViewModel, IRecipient<UserLogin>, IRecipien
     }
 
     [RelayCommand]
+    private void ExportLogs()
+    {
+        var logs = LogyService.GetAll();
+        if (logs.Count > 0)
+        {
+            // Vytvoření instance SaveFileDialog
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+            // Nastavení výchozího názvu souboru (nepovinné)
+            saveFileDialog.FileName = "DB_logs.txt";
+
+            // Nastavení filtru souborů (nepovinné)
+            saveFileDialog.Filter = "JSON strukturovaný soubor (*.json)|*.json";
+
+            // Zobrazení dialogového okna a získání výsledku
+            bool? result = saveFileDialog.ShowDialog();
+
+            // Zpracování výsledku dialogu
+            if (result == true)
+            {
+                // Získání vybrané cesty k uložení souboru
+                string filePath = saveFileDialog.FileName;
+
+                // Serializace seznamu do JSON
+                string jsonText = JsonConvert.SerializeObject(logs, Newtonsoft.Json.Formatting.Indented);
+
+                // Uložení JSON do souboru
+                File.WriteAllText(filePath, jsonText);
+            }
+            else
+            {
+                return;
+            }
+        }
+        else
+        {
+            MessageBox.Show("Nepodařilo se načíst žádné logy.");
+        }
+    }
+
+    [RelayCommand]
     private void SetTheLeastSaledGoodsCheaper()
     {
         var Result = MessageBox.Show(
@@ -91,7 +136,7 @@ partial class TopMenuViewModel : BaseViewModel, IRecipient<UserLogin>, IRecipien
         if (Result == MessageBoxResult.Yes)
         {
             ZboziService.ZlevniNejmeneProdavane();
-            MessageBox.Show("Zboží zlevněno.","Provedeno", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Zboží zlevněno.", "Provedeno", MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         else if (Result == MessageBoxResult.No)
@@ -120,10 +165,10 @@ partial class TopMenuViewModel : BaseViewModel, IRecipient<UserLogin>, IRecipien
             return;
         }
 
-        
+
     }
 
-    
+
 
     public void Receive(UserLogin message)
     {
