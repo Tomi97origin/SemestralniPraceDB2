@@ -51,6 +51,7 @@ partial class DatabaseExplorerViewModel : BaseViewModel
 
     private void NaplnTableDataStrings()
     {
+        tableDataStrings = new();
         if (SelectedTableData is not null)
         {
             foreach (var i in SelectedTableData)
@@ -70,12 +71,6 @@ partial class DatabaseExplorerViewModel : BaseViewModel
             {
                 case "ADRESY":
                     SelectedTableData = new(AdresaService.GetAll());
-                    //var t1 = SelectedTableData.First().GetType();
-                    //for(int i = 0;i<SelectedTableData.Count;i++)
-                    //{
-                    //    SelectedTableData[i] = (Adresa)SelectedTableData[i];
-                    //}
-                    //var t2 = SelectedTableData.First().GetType();
                     break;
 
                 case "BRIGADNICI":

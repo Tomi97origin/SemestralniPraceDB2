@@ -15,6 +15,7 @@ namespace SemestralniPraceDB2.Models.Entities
         {
             StringBuilder sb = new StringBuilder();
 
+            sb.Append($"{base.DataToText()} ");
             sb.Append($"{Plat} ");
             sb.Append($"{PlatnostDo} ");
 

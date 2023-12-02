@@ -23,7 +23,7 @@ namespace SemestralniPraceDB2.Models.Entities
             StringBuilder sb = new StringBuilder();
 
             sb.Append($"{Nazev} ");
-            sb.Append($"{Adresa.DataToText()} ");
+            sb.Append($"{Adresa?.DataToText()} ");
 
             return sb.ToString().Trim();
         }

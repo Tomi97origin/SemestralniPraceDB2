@@ -35,7 +35,7 @@ namespace SemestralniPraceDB2.Models.Entities
             sb.Append($"{RozlohaSkladu} ");
             sb.Append($"{ParkovaciMista} ");
             sb.Append($"{Voziky} ");
-            sb.Append($"{Adresa.DataToText()} ");
+            sb.Append($"{Adresa?.DataToText()} ");
 
             return sb.ToString().Trim();
         }
