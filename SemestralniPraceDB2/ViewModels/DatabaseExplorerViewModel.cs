@@ -5,6 +5,7 @@ using SemestralniPraceDB2.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 
@@ -20,14 +21,14 @@ partial class DatabaseExplorerViewModel : BaseViewModel
     ObservableCollection<DBTable> tables;
 
     [ObservableProperty]
-    private ObservableCollection<IDBEntity>? selectedTableData;
+    private ObservableCollection<object>? selectedTableData;
 
     [ObservableProperty]
     private string? textToSearch;
 
     private List<string> tableDataStrings = new();
 
-    private ObservableCollection<IDBEntity>? backupSelectedTableData;
+    private ObservableCollection<object>? backupSelectedTableData;
 
 
     public DatabaseExplorerViewModel()
@@ -54,7 +55,8 @@ partial class DatabaseExplorerViewModel : BaseViewModel
         {
             foreach (var i in SelectedTableData)
             {
-                tableDataStrings.Add(i.DataToText()?.ToUpper() ?? string.Empty);
+                var dbEntity = i as IDBEntity;
+                tableDataStrings.Add(dbEntity?.DataToText()?.ToUpper() ?? string.Empty);
             }
         }
     }
@@ -68,6 +70,12 @@ partial class DatabaseExplorerViewModel : BaseViewModel
             {
                 case "ADRESY":
                     SelectedTableData = new(AdresaService.GetAll());
+                    //var t1 = SelectedTableData.First().GetType();
+                    //for(int i = 0;i<SelectedTableData.Count;i++)
+                    //{
+                    //    SelectedTableData[i] = (Adresa)SelectedTableData[i];
+                    //}
+                    //var t2 = SelectedTableData.First().GetType();
                     break;
 
                 case "BRIGADNICI":

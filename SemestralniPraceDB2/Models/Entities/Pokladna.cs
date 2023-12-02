@@ -37,7 +37,7 @@ namespace SemestralniPraceDB2.Models.Entities
             sb.Append($"{Cislo} ");
             sb.Append($"{OtevrenoText} ");
             sb.Append($"{AutomatickaText} ");
-            sb.Append($"{Supermarket.DataToText()} ");
+            sb.Append($"{Supermarket?.DataToText()} ");
 
             return sb.ToString().Trim();
         }
