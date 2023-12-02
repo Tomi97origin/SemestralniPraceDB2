@@ -29,6 +29,9 @@ namespace SemestralniPraceDB2.ViewModels
         public ObservableCollection<string> typyUvazku = new() { "Plný úvazek", "Brigádník" };
 
         [ObservableProperty]
+        public string? vybranyTypUvazku;
+
+        [ObservableProperty]
         public ObservableCollection<Supermarket> supermarkety;
 
         [ObservableProperty]
@@ -55,21 +58,14 @@ namespace SemestralniPraceDB2.ViewModels
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == true)
             {
-                imagePath = openFileDialog.FileName;
-                zamestnanecImage = new BitmapImage(new Uri(imagePath));
+                ImagePath = openFileDialog.FileName;
+                ZamestnanecImage = new BitmapImage(new Uri(ImagePath));
             }
         }
 
         public CreateEmployeeViewModel()
         {
             Supermarkety = new(SupermarketService.GetAll());
-            foreach (var supermarket in supermarkety)
-            {
-                if(supermarket.Adresa is not null)
-                {
-                    supermarket.Adresa = AdresaService.Get(supermarket.Adresa)??new();
-                }
-            }
             Vedouci = new(ZamestnanecService.GetAll());
             Role = new(RoleService.GetAll());
             Zamestnanec.Nastup = DateTime.Now;

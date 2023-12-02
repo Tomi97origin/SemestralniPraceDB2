@@ -5,21 +5,26 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SemestralniPraceDB2.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" Background="CadetBlue">
     
-    <Grid>
+    <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Grid  Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
+        <!--Levý panel-->
+        <Grid  
+            Grid.Column="0"
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -53,7 +58,7 @@
 
             <!-- Typ Úvazku -->
             <Label Content="Typ úvazku:" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" Margin="3" />
-            <ComboBox ItemsSource="{Binding TypyUvazku}" SelectedItem="{Binding Zamestnanec.TypUvazku}" Grid.Row="5" Grid.Column="1" Width="200" Margin="3" />
+            <ComboBox ItemsSource="{Binding TypyUvazku}" SelectedItem="{Binding VybranyTypUvazku}" Grid.Row="5" Grid.Column="1" Width="200" Margin="3" Name="typUvazkuComboBox" SelectionChanged="ComboBoxTypUvazku_SelectionChanged"/>
 
             <!-- Supermarket -->
             <Label Content="Supermarket:" VerticalAlignment="Center" Grid.Row="6" Grid.Column="0" Margin="3" />
@@ -67,11 +72,27 @@
             <!-- Role -->
             <Label Content="Role:" VerticalAlignment="Center" Grid.Row="8" Grid.Column="0" Margin="3" />
             <ComboBox ItemsSource="{Binding Role}" SelectedItem="{Binding Zamestnanec.Role}" Grid.Row="8" Grid.Column="1" Width="200" Margin="3" />
+
+            <StackPanel Grid.Column="1" Grid.Row="9" Background="Azure" Height="auto">
+
+                <ComboBox Name="comboBox" SelectionChanged="ComboBox_SelectionChanged">
+                    <ComboBoxItem Content="Element1" />
+                    <ComboBoxItem Content="Element2" />
+                    <!-- Další položky... -->
+                </ComboBox>
+                
+                <TextBox Text="AAA" Name="textBlockElement1" Visibility="Visible" Background="Beige"/>
+
+                <TextBox Text="BBB" Name="textBlockElement2" Visibility="Visible" Background="Bisque"/>
+            
+            </StackPanel>
         </Grid>
 
-        <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" >
 
-            <Grid  Margin="10">
+        <!--Pravý panel-->
+        <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" >
+
+            <Grid >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="70" />
                     <ColumnDefinition Width="200" />
@@ -107,23 +128,39 @@
 
             </Grid>
 
-            <!-- Prvky pro výběr a zobrazení obrázku -->
-            <StackPanel Orientation="Horizontal" Margin="3">
-                <Button Content="Vybrat obrázek" Command="{Binding ChooseImageCommand}" />
-                <TextBlock Text="{Binding ImagePath}" Width="200" Margin="5,0,0,0" />
+
+            <!-- Obrázek ve stackpanelu pro background-->
+            <StackPanel 
+                Margin="0,20,0,0" 
+                Background="White" 
+                HorizontalAlignment="Center">
+                <Image
+                    Source="{Binding ZamestnanecImage}" 
+                    Grid.Column="1" 
+                    Grid.Row="10" 
+                    Width="100"
+                    Height="100" />
             </StackPanel>
+
+             <TextBlock
+                 Text="{Binding ImagePath}"
+                 Width="400"
+                 Margin="0,5,0,0"
+                 Background="AliceBlue"/>
             
-
-            <!-- Obrázek -->
-            <StackPanel Orientation="Horizontal" Margin="3" Background="White" HorizontalAlignment="Center">
-                <Image Source="{Binding ZamestnanecImage}" Grid.Column="1" Grid.Row="10" Width="100" Height="100" Margin="3"/>
-            </StackPanel>
-
+            <Button 
+                Content="Vybrat obrázek" 
+                Width="150"
+                Height="30"
+                Margin="0,10,0,0"
+                Command="{Binding ChooseImageCommand}" />
+            
             <Button Content="Uložit zaměstnance"
                     Command="{Binding CreateEmployeeCommand}"
-                    Width="200"
-                    Height="30"
-                    Margin="3,50,3,3" />
+                    Width="150"
+                    Height="40"
+                    Margin="3,50,3,3" 
+                    HorizontalAlignment="Right"/>
         </StackPanel>
     </Grid>
 
