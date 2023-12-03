@@ -61,7 +61,7 @@ namespace SemestralniPraceDB2.Models
             List<OracleParameter> prm = new List<OracleParameter>();
 
             prm.Add(new OracleParameter("p_id_zamestnance", OracleDbType.Int32, System.Data.ParameterDirection.InputOutput));
-            prm[0].Value = zamestnanec.Id < 0 ? null : zamestnanec.Id;
+            prm[0].Value = zamestnanec.Id <= 0 ? null : zamestnanec.Id;
 
             prm.Add(new OracleParameter("p_jmeno", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
             prm[1].Value = zamestnanec.Jmeno;
