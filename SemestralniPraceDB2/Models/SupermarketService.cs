@@ -81,7 +81,7 @@ namespace SemestralniPraceDB2.Models
             return result.Count == 0 ? null : result[0];
         }
 
-        private static Supermarket MapOracleResultToSupermarket(OracleDataReader reader)
+        internal static Supermarket MapOracleResultToSupermarket(OracleDataReader reader)
         {
             return new Supermarket
             {
@@ -97,6 +97,14 @@ namespace SemestralniPraceDB2.Models
         public static List<Supermarket> GetAll()
         {
             string sql = "Select * FROM supermarkety JOIN adresy USING(id_adresy)";
+            List<OracleParameter> prm = new();
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToSupermarket).Result;
+            return result;
+        }
+
+        public static List<Supermarket> GetAllInOrderOfSales()
+        {
+            string sql = "Select id_supermarketu,rozloha_prodejny,rozloha_skladu,parkovaci_mista,voziky,a.id_adresy,ulice,cp,mesto,stat,psc,SALES_SUPERMARKET_ORDER(id_supermarketu) as prodeje  FROM supermarkety s JOIN adresy a ON s.id_adresy = a.id_adresy ORDER BY prodeje";
             List<OracleParameter> prm = new();
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToSupermarket).Result;
             return result;
