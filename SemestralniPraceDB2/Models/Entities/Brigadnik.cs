@@ -15,6 +15,16 @@ namespace SemestralniPraceDB2.Models.Entities
         [DisplayName("Hodiny")]
         public double Hodiny { set; get; }
 
+        public Brigadnik(Zamestnanec zamestnanec, double? hodinovaSazba, double hodiny):base(zamestnanec)
+        {
+            HodinovaSazba = hodinovaSazba;
+            Hodiny = hodiny;
+        }
+
+        public Brigadnik()
+        {
+        }
+
         public string DataToText()
         {
             StringBuilder sb = new StringBuilder();

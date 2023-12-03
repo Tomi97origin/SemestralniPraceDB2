@@ -66,55 +66,108 @@ namespace SemestralniPraceDB2.ViewModels
         [RelayCommand]
         private void CreateEmployee()
         {
-            ObrazekZamestnance obr = new() { Image = ZamestnanecImage, Soubor = System.IO.Path.GetFileName(ImagePath) };
-            Zamestnanec.ObrazekZamestnance = obr;
-
             switch (VybranyTypUvazku)
             {
                 case "Plný úvazek":
-                    Zamestnanec.TypUvazku = 1;
-
-                    string chybnePole = ZamestnanecIsValid();
-                    if (chybnePole != string.Empty)
-                    {
-                        MessageBox.Show($"Chybně vyplněné pole {chybnePole}");
-                        return;
-                    }
-                    else if (Plat is null)
-                    {
-                        MessageBox.Show("Zadejte plat");
-                        return;
-                    }
-                    else if (PlatnostDo < DateTime.Now)
-                    {
-                        MessageBox.Show("Zadejte Platnost do");
-                        return;
-                    }
-                    else
-                    {
-                        double platNumber;
-                        try
-                        {
-                            platNumber = Double.Parse(Plat);
-                        }
-                        catch (FormatException)
-                        {
-                            MessageBox.Show("Nesprávná hodnota Plat.");
-                            return;
-                        }
-
-                        PlnyUvazek novyZamestnanec = new(Zamestnanec, platNumber, PlatnostDo);
-                        ZamestnanecService.Create(novyZamestnanec); //todo: toto nějak nefachá
-                        MessageBox.Show($"Vytvářím nového zaměstnance {Zamestnanec.DataToText()}, s adresou {Zamestnanec.Adresa?.DataToText()}, obr: {Zamestnanec.ObrazekZamestnance.Soubor}={Zamestnanec.ObrazekZamestnance.Image}");
-                    }
+                    VlozPlnyUvazekdoDB();
                     break;
 
                 case "Brigádník":
-                    Zamestnanec.TypUvazku = 0;
+                    VlozBrigadnikDoDB();
                     break;
                 default:
                     MessageBox.Show("Vyberte typ úvazku.");
                     return;
+            }
+        }
+
+        private void VlozBrigadnikDoDB()
+        {
+            string chybnePole;
+            Zamestnanec.TypUvazku = 0;
+
+            chybnePole = ZamestnanecIsValid();
+            if (chybnePole != string.Empty)
+            {
+                MessageBox.Show($"Chybně vyplněné pole {chybnePole}");
+                return;
+            }
+            else if (HodinovaSazba is null)
+            {
+                MessageBox.Show("Zadejte Hodinovou sazbu");
+                return;
+            }
+            else if (Hodiny is null)
+            {
+                MessageBox.Show("Zadejte Hodiny");
+                return;
+            }
+            else
+            {
+                double hodinovaSazbaNumber;
+                double hodinyNumber;
+                try
+                {
+                    hodinovaSazbaNumber = Double.Parse(HodinovaSazba);
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("Nesprávná hodnota Hodinová sazba.");
+                    return;
+                }
+                try
+                {
+                    hodinyNumber = Double.Parse(Hodiny);
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("Nesprávná hodnota Hodiny.");
+                    return;
+                }
+
+                Brigadnik novyZamestnanec = new(Zamestnanec, hodinovaSazbaNumber, hodinyNumber);
+                ZamestnanecService.Create(novyZamestnanec);
+                //MessageBox.Show($"Vytvářím nového Brigádníka {Zamestnanec.DataToText()}, s adresou {Zamestnanec.Adresa?.DataToText()}, obr: {Zamestnanec.ObrazekZamestnance.Soubor}={Zamestnanec.ObrazekZamestnance.Image}");
+            }
+        }
+
+        private void VlozPlnyUvazekdoDB()
+        {
+            string chybnePole;
+            Zamestnanec.TypUvazku = 1;
+
+            chybnePole = ZamestnanecIsValid();
+            if (chybnePole != string.Empty)
+            {
+                MessageBox.Show($"Chybně vyplněné pole {chybnePole}");
+                return;
+            }
+            else if (Plat is null)
+            {
+                MessageBox.Show("Zadejte plat");
+                return;
+            }
+            else if (PlatnostDo < DateTime.Now)
+            {
+                MessageBox.Show("Zadejte Platnost do");
+                return;
+            }
+            else
+            {
+                double platNumber;
+                try
+                {
+                    platNumber = Double.Parse(Plat);
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("Nesprávná hodnota Plat.");
+                    return;
+                }
+
+                PlnyUvazek novyZamestnanec = new(Zamestnanec, platNumber, PlatnostDo);
+                ZamestnanecService.Create(novyZamestnanec); //todo: toto nějak nefachá
+                                                            //MessageBox.Show($"Vytvářím nového zaměstnance {Zamestnanec.DataToText()}, s adresou {Zamestnanec.Adresa?.DataToText()}, obr: {Zamestnanec.ObrazekZamestnance.Soubor}={Zamestnanec.ObrazekZamestnance.Image}");
             }
         }
 
@@ -216,6 +269,8 @@ namespace SemestralniPraceDB2.ViewModels
                 ZamestnanecImage = new Bitmap(ImagePath);
                 ImageToShow = new(new Uri(ImagePath));
             }
+            ObrazekZamestnance obr = new() { Image = ZamestnanecImage, Soubor = System.IO.Path.GetFileName(ImagePath) };
+            Zamestnanec.ObrazekZamestnance = obr;
         }
 
         public CreateEmployeeViewModel()
