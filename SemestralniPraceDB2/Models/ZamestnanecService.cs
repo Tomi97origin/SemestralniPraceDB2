@@ -147,11 +147,10 @@ namespace SemestralniPraceDB2.Models
 
         public static List<Zamestnanec> GetAll()
         {
-            List<Zamestnanec> all = new List<Zamestnanec>();
-            all.AddRange(PlnyUvazekService.GetAll());
-            all.AddRange(BrigadnikService.GetAll());
-            all.OrderBy(x => x.Id);
-            return all;
+            string sql = "SELECT z.*,  m.jmeno AS manager_jmeno, m.prijmeni AS manager_prijmeni FROM  zamestnanci z LEFT JOIN zamestnanci m ON z.id_vedouci = m.id_zamestnance order by z.id_zamestnance ";
+            List<OracleParameter> prm = new();
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToZamestnanec).Result;
+            return result;
         }
 
         public static List<Zamestnanec> GetSubordinates(Zamestnanec zamestnanec)
