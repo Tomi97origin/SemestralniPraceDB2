@@ -229,7 +229,6 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                     var seznamZamestnanci = ZamestnanecService.GetAll();
                     foreach (var i in seznamZamestnanci)
                     {
-                        if (i.Vedouci is not null) i.Vedouci = PlnyUvazekService.Get(i.Vedouci) ?? new();
                         if (i.Supermarket is not null) i.Supermarket = SupermarketService.Get(i.Supermarket) ?? new();
                         if (i.Adresa is not null) i.Adresa = AdresaService.Get(i.Adresa) ?? new();
                         if (i.Role is not null) i.Role = RoleService.Get(i.Role) ?? new();

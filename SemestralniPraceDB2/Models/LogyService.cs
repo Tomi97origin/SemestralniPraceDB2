@@ -94,7 +94,7 @@ namespace SemestralniPraceDB2.Models
 
         public static List<Log> GetAll()
         {
-            string sql = "SELECT * FROM logy";
+            string sql = "SELECT * FROM logy ORDER BY id";
             List<OracleParameter> prm = new();
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToLog).Result;
             return result;
