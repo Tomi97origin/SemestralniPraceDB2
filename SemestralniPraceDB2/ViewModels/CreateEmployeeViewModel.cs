@@ -104,8 +104,8 @@ namespace SemestralniPraceDB2.ViewModels
                         }
 
                         PlnyUvazek novyZamestnanec = new(Zamestnanec, platNumber, PlatnostDo);
-                        PlnyUvazekService.Create(novyZamestnanec); //todo: toto nějak nefachá
-                        //MessageBox.Show($"Vytvářím nového zaměstnance {Zamestnanec.DataToText()}, s adresou {Zamestnanec.Adresa?.DataToText()}, obr: {Zamestnanec.ObrazekZamestnance.Soubor}={Zamestnanec.ObrazekZamestnance.Image}");
+                        ZamestnanecService.Create(novyZamestnanec); //todo: toto nějak nefachá
+                        MessageBox.Show($"Vytvářím nového zaměstnance {Zamestnanec.DataToText()}, s adresou {Zamestnanec.Adresa?.DataToText()}, obr: {Zamestnanec.ObrazekZamestnance.Soubor}={Zamestnanec.ObrazekZamestnance.Image}");
                     }
                     break;
 
