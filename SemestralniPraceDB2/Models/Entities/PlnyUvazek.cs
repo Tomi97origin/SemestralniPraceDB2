@@ -11,7 +11,13 @@ namespace SemestralniPraceDB2.Models.Entities
         public double Plat { set; get; }
         public DateTime PlatnostDo { set; get; }
 
-        public string DataToText()
+        public PlnyUvazek(Zamestnanec zamestnanec, double plat, DateTime platnostDo) : base(zamestnanec)
+        {
+            Plat = plat;
+            PlatnostDo = platnostDo;
+        }
+
+        public new string DataToText()
         {
             StringBuilder sb = new StringBuilder();
 
@@ -22,6 +28,9 @@ namespace SemestralniPraceDB2.Models.Entities
             return sb.ToString().Trim();
         }
 
+        public PlnyUvazek()
+        {
+        }
 
         public override string ToString()
         {

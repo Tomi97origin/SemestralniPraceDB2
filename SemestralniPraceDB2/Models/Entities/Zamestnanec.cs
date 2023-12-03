@@ -9,6 +9,7 @@ namespace SemestralniPraceDB2.Models.Entities
 {
     public class Zamestnanec : IDBEntity
     {
+
         [Browsable(false)]
         public int Id { get; set; }
 
@@ -48,6 +49,26 @@ namespace SemestralniPraceDB2.Models.Entities
         [DisplayName("Obrázek zaměstnance")]
         public ObrazekZamestnance? ObrazekZamestnance { get; set; }
 
+
+        public Zamestnanec(Zamestnanec zamestnanec)
+        {
+            Id = zamestnanec.Id;
+            Jmeno = zamestnanec.Jmeno;
+            Prijmeni = zamestnanec.Prijmeni;
+            OsobniCislo = zamestnanec.OsobniCislo;
+            TelCislo = zamestnanec.TelCislo;
+            Nastup = zamestnanec.Nastup;
+            TypUvazku = zamestnanec.TypUvazku;
+            Vedouci = zamestnanec.Vedouci;
+            Supermarket = zamestnanec.Supermarket;
+            Adresa = zamestnanec.Adresa;
+            Role = zamestnanec.Role;
+            ObrazekZamestnance = zamestnanec.ObrazekZamestnance;
+        }
+
+        public Zamestnanec()
+        {
+        }
 
         override public string ToString()
         {

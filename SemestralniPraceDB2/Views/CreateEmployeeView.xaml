@@ -34,6 +34,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <!-- Jméno -->
@@ -59,33 +60,38 @@
             <!-- Typ Úvazku -->
             <Label Content="Typ úvazku:" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" Margin="3" />
             <ComboBox ItemsSource="{Binding TypyUvazku}" SelectedItem="{Binding VybranyTypUvazku}" Grid.Row="5" Grid.Column="1" Width="200" Margin="3" Name="typUvazkuComboBox" SelectionChanged="ComboBoxTypUvazku_SelectionChanged"/>
+            
+            <!--Pokud je typ úvazku BRIGÁDNÍK-->
+            <!-- HodinovaSazba -->
+            <Label Content="Hodinová sazba:" VerticalAlignment="Center" Grid.Row="6" Grid.Column="0" Margin="3" Name="labelHodinovaSazba" Visibility="Hidden"/>
+            <TextBox Text="{Binding HodinovaSazba}" Grid.Row="6" Grid.Column="1" Width="200" Margin="3" Name="textBoxHodinovaSazba" Visibility="Hidden" />
+
+            <!-- Hodiny -->
+            <Label Content="Hodiny:" VerticalAlignment="Center" Grid.Row="7" Grid.Column="0" Margin="3" Name="labelHodiny" Visibility="Hidden"/>
+            <TextBox Text="{Binding Hodiny}" Grid.Row="7" Grid.Column="1" Width="200" Margin="3" Name="textBoxHodiny" Visibility="Hidden" />
+
+            <!--Pokud je typ úvazku PLNÝ ÚVAZEK-->
+            <!-- Plat -->
+            <Label Content="Plat:" VerticalAlignment="Center" Grid.Row="6" Grid.Column="0" Margin="3" Name="labelPlat" Visibility="Hidden" />
+            <TextBox Text="{Binding Plat}" Grid.Row="6" Grid.Column="1" Width="200" Margin="3"  Name="textBoxPlat" Visibility="Hidden"/>
+
+            <!-- PlatnostDo (Datepicker) -->
+            <Label Content="Platnost do:" VerticalAlignment="Center" Grid.Row="7" Grid.Column="0" Margin="3" Name="labelPlatnostDo" Visibility="Hidden" />
+            <DatePicker SelectedDate="{Binding PlatnostDo}" Grid.Row="7" Grid.Column="1" Width="200" Margin="3"  Name="datePickerPlatnostDo" Visibility="Hidden"/>
 
             <!-- Supermarket -->
-            <Label Content="Supermarket:" VerticalAlignment="Center" Grid.Row="6" Grid.Column="0" Margin="3" />
-            <ComboBox ItemsSource="{Binding Supermarkety}" SelectedItem="{Binding Zamestnanec.Supermarket}" Grid.Row="6" Grid.Column="1" Width="200" Margin="3" />
+            <Label Content="Supermarket:" VerticalAlignment="Center" Grid.Row="8" Grid.Column="0" Margin="3" />
+            <ComboBox ItemsSource="{Binding Supermarkety}" SelectedItem="{Binding Zamestnanec.Supermarket}" Grid.Row="8" Grid.Column="1" Width="200" Margin="3" />
 
             <!-- Vedoucí -->
-            <Label Content="Vedoucí:" VerticalAlignment="Center" Grid.Row="7" Grid.Column="0" Margin="3" />
-            <ComboBox ItemsSource="{Binding Vedouci}" SelectedItem="{Binding Zamestnanec.Vedouci}" Grid.Row="7" Grid.Column="1" Width="200" Margin="3"/>
+            <Label Content="Vedoucí:" VerticalAlignment="Center" Grid.Row="9" Grid.Column="0" Margin="3" />
+            <ComboBox ItemsSource="{Binding Vedouci}" SelectedItem="{Binding Zamestnanec.Vedouci}" Grid.Row="9" Grid.Column="1" Width="200" Margin="3"/>
 
 
             <!-- Role -->
-            <Label Content="Role:" VerticalAlignment="Center" Grid.Row="8" Grid.Column="0" Margin="3" />
-            <ComboBox ItemsSource="{Binding Role}" SelectedItem="{Binding Zamestnanec.Role}" Grid.Row="8" Grid.Column="1" Width="200" Margin="3" />
+            <Label Content="Role:" VerticalAlignment="Center" Grid.Row="10" Grid.Column="0" Margin="3" />
+            <ComboBox ItemsSource="{Binding Role}" SelectedItem="{Binding Zamestnanec.Role}" Grid.Row="10" Grid.Column="1" Width="200" Margin="3" />
 
-            <StackPanel Grid.Column="1" Grid.Row="9" Background="Azure" Height="auto">
-
-                <ComboBox Name="comboBox" SelectionChanged="ComboBox_SelectionChanged">
-                    <ComboBoxItem Content="Element1" />
-                    <ComboBoxItem Content="Element2" />
-                    <!-- Další položky... -->
-                </ComboBox>
-                
-                <TextBox Text="AAA" Name="textBlockElement1" Visibility="Visible" Background="Beige"/>
-
-                <TextBox Text="BBB" Name="textBlockElement2" Visibility="Visible" Background="Bisque"/>
-            
-            </StackPanel>
         </Grid>
 
 
@@ -108,23 +114,23 @@
 
                 <!-- Ulice -->
                 <Label Content="Ulice:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="3" />
-                <TextBox Text="{Binding Adresa.Ulice}" Grid.Row="0" Grid.Column="1" Margin="3" />
+                <TextBox Text="{Binding Zamestnanec.Adresa.Ulice}" Grid.Row="0" Grid.Column="1" Margin="3" />
 
                 <!-- ČP -->
                 <Label Content="ČP:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="3" />
-                <TextBox Text="{Binding Adresa.Cp}" Grid.Row="1" Grid.Column="1" Margin="3" />
+                <TextBox Text="{Binding Zamestnanec.Adresa.Cp}" Grid.Row="1" Grid.Column="1" Margin="3" />
 
                 <!-- Město -->
                 <Label Content="Město:" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="3" />
-                <TextBox Text="{Binding Adresa.Mesto}" Grid.Row="2" Grid.Column="1" Margin="3" />
+                <TextBox Text="{Binding Zamestnanec.Adresa.Mesto}" Grid.Row="2" Grid.Column="1" Margin="3" />
 
                 <!-- PSČ -->
                 <Label Content="PSČ:" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" Margin="3" />
-                <TextBox Text="{Binding Adresa.Psc}" Grid.Row="4" Grid.Column="1" Margin="3" />
+                <TextBox Text="{Binding Zamestnanec.Adresa.Psc}" Grid.Row="4" Grid.Column="1" Margin="3" />
                 
                 <!-- Stát -->
                 <Label Content="Stát:" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" Margin="3" />
-                <TextBox Text="{Binding Adresa.Stat}" Grid.Row="3" Grid.Column="1" Margin="3" />
+                <TextBox Text="{Binding Zamestnanec.Adresa.Stat}" Grid.Row="3" Grid.Column="1" Margin="3" />
 
             </Grid>
 
@@ -135,7 +141,7 @@
                 Background="White" 
                 HorizontalAlignment="Center">
                 <Image
-                    Source="{Binding ZamestnanecImage}" 
+                    Source="{Binding ImageToShow}" 
                     Grid.Column="1" 
                     Grid.Row="10" 
                     Width="100"

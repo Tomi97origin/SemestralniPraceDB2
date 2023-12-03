@@ -27,41 +27,34 @@ namespace SemestralniPraceDB2.Views
             InitializeComponent();
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // Skryj všechny TextBlocky
-            textBlockElement1.Visibility = Visibility.Collapsed;
-            textBlockElement2.Visibility = Visibility.Collapsed;
-
-            // Zobraz příslušný TextBlock podle výběru v ComboBoxu
-            var i = comboBox.SelectedIndex;
-            switch (i)
-            {
-                case 0:
-                    textBlockElement1.Visibility = Visibility.Visible;
-                    break;
-                case 1:
-                    textBlockElement2.Visibility = Visibility.Visible;
-                    break;
-                    // Další případy pro další elementy...
-            }
-        }
+       
         private void ComboBoxTypUvazku_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Skryj všechny TextBlocky
-            textBlockElement1.Visibility = Visibility.Collapsed;
-            textBlockElement2.Visibility = Visibility.Collapsed;
+            // Skryj všechny elementy
+            labelHodinovaSazba.Visibility = Visibility.Hidden;
+            textBoxHodinovaSazba.Visibility = Visibility.Hidden;
+            labelHodiny.Visibility = Visibility.Hidden;
+            textBoxHodiny.Visibility = Visibility.Hidden;
 
-            // Zobraz příslušný TextBlock podle výběru v ComboBoxu
-            var i = typUvazkuComboBox.SelectedIndex;
-            var x = typUvazkuComboBox.SelectedItem;
-            switch (x)
+            labelPlat.Visibility = Visibility.Hidden;
+            textBoxPlat.Visibility = Visibility.Hidden;
+            labelPlatnostDo.Visibility = Visibility.Hidden;
+            datePickerPlatnostDo.Visibility = Visibility.Hidden;
+
+            // Zobraz příslušný elementy podle výběru v ComboBoxu
+            switch (typUvazkuComboBox.SelectedItem)
             {
                 case "Plný úvazek":
-                    textBlockElement1.Visibility = Visibility.Visible;
+                    labelPlat.Visibility = Visibility.Visible;
+                    textBoxPlat.Visibility = Visibility.Visible;
+                    labelPlatnostDo.Visibility = Visibility.Visible;
+                    datePickerPlatnostDo.Visibility = Visibility.Visible;
                     break;
                 case "Brigádník":
-                    textBlockElement2.Visibility = Visibility.Visible;
+                    labelHodinovaSazba.Visibility = Visibility.Visible;
+                    textBoxHodinovaSazba.Visibility = Visibility.Visible;
+                    labelHodiny.Visibility = Visibility.Visible;
+                    textBoxHodiny.Visibility = Visibility.Visible;
                     break;
                     // Další případy pro další elementy...
             }
