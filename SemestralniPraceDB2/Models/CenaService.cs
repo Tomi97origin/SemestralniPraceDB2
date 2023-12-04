@@ -145,6 +145,7 @@ namespace SemestralniPraceDB2.Models
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToCena).Result;
             return result.Count == 0 ? null : result[0];
         }
+
         public static List<Cena> GetAllZboziWithCurentPrice()
         {
             List<Cena> res = new();

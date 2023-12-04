@@ -128,11 +128,19 @@
                 </Button>
                 <Button Command="{Binding UpdateViewCommand}"
                 CommandParameter="AddProduct">
-                    <StackPanel Style="{StaticResource ButtonStackPanel}">
-                        <Image Source="/Views/Images/add.png" />
-                        <TextBlock Text="Přidat novou&#x0a;položku" />
-                    </StackPanel>
-                </Button>
+                <StackPanel>
+                    <Image Source="/Views/Images/add.png" />
+                    <TextBlock Text="Přidat novou&#x0a;položku" />
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding UpdateViewCommand}"
+                CommandParameter="MakingOrderForCustomer">
+                <StackPanel>
+                        <Image Source="/Views/Images/receipt.png" />
+                    <TextBlock Text="Zadat nakup&#x0a;zakaznika" />
+                </StackPanel>
+            </Button>
+
                 <Button Command="{Binding UpdateViewCommand}"
                 CommandParameter="AddProductPrice">
                     <StackPanel Style="{StaticResource ButtonStackPanel}">

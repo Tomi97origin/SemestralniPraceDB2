@@ -3,9 +3,11 @@ using SemestralniPraceDB2.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls.Primitives;
 
 namespace SemestralniPraceDB2.Models
 {
@@ -128,5 +130,71 @@ namespace SemestralniPraceDB2.Models
             }
         }
 
+        private static InventarniPolozkaSCenou MapOracleResultToInventarniPolozkaSCenou(OracleDataReader reader)
+        {
+            var collumns = reader.GetColumnSchema().Select(col => col.ColumnName.ToLower()).ToList();
+            return new InventarniPolozkaSCenou()
+            {
+
+                IdInventPolozky = reader.GetInt32("id_inventarni_polozky"),
+                IdZbozi = reader.GetInt32("id_zbozi"),
+                Nazev = collumns.Contains("nazev") && !reader.IsDBNull("nazev") ? reader.GetString("nazev") : string.Empty,
+                Popis = collumns.Contains("popis") && !reader.IsDBNull("popis") ? reader.GetString("popis") : string.Empty,
+                EAN = collumns.Contains("ean") && !reader.IsDBNull("ean") ? reader.GetString("ean") : string.Empty,
+                Mnozstvi = reader.GetInt32("mnozstvi"),
+                Cena = collumns.Contains("cena") && !reader.IsDBNull("cena") ? reader.GetDouble("cena") : 0,
+                Kategorie = collumns.Contains("knazev") && !reader.IsDBNull("knazev") ? reader.GetString("knazev") : string.Empty,
+                Vyrobce = collumns.Contains("vnazev") && !reader.IsDBNull("vnazev") ? reader.GetString("vnazev") : string.Empty,
+            };
+
+        }
+
+        public static List<InventarniPolozkaSCenou> GetAllZboziWithCurentPriceFromInventory(Supermarket supermarket)
+        {
+            List<InventarniPolozkaSCenou> res = new();
+            using (OracleConnection connection = DatabaseConnector.GetConnection())
+            {
+                connection.Open();
+                using (OracleTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        string sql = "SELECT i.id_inventarni_polozky,z.id_zbozi,z.nazev,z.popis,z.ean,i.mnozstvi,z.cena,v.nazev as vnazev,k.nazev as knazev FROM zbozi_s_cenou z JOIN inventarni_polozky i ON z.id_zbozi = i.id_zbozi JOIN vyrobci v ON z.id_vyrobce = v.id_vyrobce JOIN kategorie k ON z.id_kategorie = k.id_kategorie WHERE i.id_supermarketu = :id_supermarketu";
+                        List<OracleParameter> prm = new();
+                        prm.Add(new OracleParameter(":id_supermarketu", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+                        prm[0].Value = supermarket.Id;
+                        var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToInventarniPolozkaSCenou).Result;
+                        res.AddRange(result);
+                        return res;
+                    }
+                    catch (Exception ex)
+                    {
+                        return res;
+                    }
+                }
+            }
+        }
+
+        internal static InventarniPolozka? GetTransactional(InventarniPolozka polozka, OracleConnection connection)
+        {
+            string sql = "SELECT * FROM inventarni_polozky WHERE id_inventarni_polozky = :id_inventarni_polozky";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_inventarni_polozky", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = polozka.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryForTransactionAsync(sql, prm,connection, MapOracleResultToInventarniPolozka).Result;
+            return result.Count == 0 ? null : result[0];
+        }
+
+        internal static void UpdateTransactional(InventarniPolozka polozka, OracleConnection connection)
+        {
+            PrepareProcedureCall(polozka, out string procedure, out List<OracleParameter> parameters);
+            polozka.Id = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(procedure, parameters, connection).Result;
+        }
+
+        internal static void DeleteTransactional(InventarniPolozka polozka, OracleConnection connection)
+        {
+            PrepareDeleteCall(polozka, out string sql, out List<OracleParameter> prm);
+            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
+        }
     }
 }

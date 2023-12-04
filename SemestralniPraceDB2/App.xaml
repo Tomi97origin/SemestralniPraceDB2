@@ -14,7 +14,11 @@
         <DataTemplate DataType="{x:Type viewModels:MakingOrderForWarehouseViewModel}">
             <views:MakingOrderForWarehouseView/>
         </DataTemplate>
-        
+
+        <DataTemplate DataType="{x:Type viewModels:MakingOrderForCustomerViewModel}">
+            <views:MakingOrderForCustomerView/>
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type viewModels:EmptyViewModel}">
             <views:EmptyView/>
         </DataTemplate>

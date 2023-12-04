@@ -16,6 +16,7 @@
     <None Remove="Views\horseShoe_ico.png" />
     <None Remove="Views\id-card.png" />
     <None Remove="Views\Images\archive_ico.png" />
+    <None Remove="Views\Images\receipt.png" />
     <None Remove="Views\import.png" />
     <None Remove="Views\left_arrow_ico.png" />
     <None Remove="Views\logout.png" />
@@ -44,6 +45,7 @@
     <Resource Include="Views\Images\holiday_ico.png" />
     <Resource Include="Views\Images\horseShoe_ico.png" />
     <Resource Include="Views\Images\archive_ico.png" />
+    <Resource Include="Views\Images\receipt.png" />
     <Resource Include="Views\Images\riderBoot_ico.png" />
     <Resource Include="Views\Images\save_ico.png" />
     <Resource Include="Views\Images\schedule_ico.png" />

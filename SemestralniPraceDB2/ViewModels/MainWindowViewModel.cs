@@ -22,6 +22,7 @@ namespace SemestralniPraceDB2.ViewModels
     {
         //Inicializace ViewModels
         public static readonly MakingOrderForWarehouseViewModel makingOrderForWarehouseVM = new();
+        public static readonly MakingOrderForCustomerViewModel makingOrderForCustomerVM = new();
         public static readonly EmptyViewModel emptyVM = new();
         public static readonly UserLoginViewModel userLoginVM = new();
         public static readonly UserRegistrationViewModel userRegistrationVM = new();
@@ -75,6 +76,7 @@ namespace SemestralniPraceDB2.ViewModels
             BaseViewModel newVM = message.ViewName switch
             {
                 "MakingOrderForWarehouse" => makingOrderForWarehouseVM,
+                "MakingOrderForCustomer" => makingOrderForCustomerVM,
                 "UserRegistration" => userRegistrationVM,
                 "CreateEmployee" => createEmployeeVM,
                 "DatabaseExplorer" => databaseExplorerVM,

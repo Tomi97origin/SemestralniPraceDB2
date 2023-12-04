@@ -101,5 +101,58 @@ namespace SemestralniPraceDB2.Models
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToUctenka).Result;
             return result;
         }
+        public static bool Create(Uctenka uctenka, List<ProdaneZbozi> polozky, List<InventarniPolozkaSCenou> vybrane)
+        {
+            return TransactionProcedureCall(uctenka, polozky, vybrane);
+        }
+
+
+        private static bool TransactionProcedureCall(Uctenka uctenka, List<ProdaneZbozi> polozky, List<InventarniPolozkaSCenou> vybrane)
+        {
+            using (OracleConnection connection = DatabaseConnector.GetConnection())
+            {
+                connection.Open();
+                using (OracleTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (var item in vybrane)
+                        {
+                            InventarniPolozka inventarniPolozka = InventarniPolozkaService.GetTransactional(new InventarniPolozka() { Id = item.IdInventPolozky },connection);
+                            inventarniPolozka.Mnozstvi -= item.Mnozstvi;
+                            if (inventarniPolozka.Mnozstvi > 0)
+                            {
+                                InventarniPolozkaService.UpdateTransactional(inventarniPolozka,connection);
+                            } else if(inventarniPolozka.Mnozstvi == 0)
+                            {
+                                InventarniPolozkaService.DeleteTransactional(inventarniPolozka, connection);
+                            }
+                            else
+                            {
+                                throw new Exception("Neplatne mnozstvi");
+                            }
+                            
+                        }
+                        PlatbaService.PrepareProcedureCall(uctenka.Platba, out string procedureName, out List<OracleParameter> prm);
+                        uctenka.Platba.Id = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
+                        PrepareProcedureCall(uctenka, out procedureName, out prm);
+                        uctenka.Id = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
+                        foreach (var polozka in polozky)
+                        {
+                            polozka.Uctenka = uctenka;
+                            ProdaneZboziService.PrepareProcedureCall(polozka, out string procedure, out List<OracleParameter> parameters);
+                            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(procedure, parameters, connection).Result;
+                        }
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+            }
+        }
     }
 }

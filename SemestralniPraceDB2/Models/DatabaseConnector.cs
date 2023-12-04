@@ -63,7 +63,7 @@ namespace SemestralniPraceDB2.Models
                 "ORDER BY LEVEL,num_subordinates desc";*/
 
             string query = "SELECT * FROM vyrobci";
-            List <OracleParameter> prm = new();
+            List<OracleParameter> prm = new();
             /*prm.Add(new OracleParameter(":id_vedouci", OracleDbType.Int32, System.Data.ParameterDirection.Input));
             prm[0].Value = 1;*/
             /*var x = ExecuteCommandQueryAsync(query, prm, Map).Result;
@@ -71,7 +71,9 @@ namespace SemestralniPraceDB2.Models
             //var x = VyrobceService.GetAll();
             //var y = KategorieService.GetAll();
             //dbResult = y.Count.ToString();
-            var x = SystemCatalogService.GetAllTables();
+            //UzivateleService.Registration("admin", "admin");
+            //var x = UzivateleService.Login("admin","admin");
+            var x = ZboziService.ZlevniNejmeneProdavane();
             return dbResult;
         }
 
@@ -95,7 +97,7 @@ namespace SemestralniPraceDB2.Models
                     using (OracleCommand command = new OracleCommand(query, connection))
                     {
                         command.CommandType = CommandType.Text;
-                        if (oracleParameters != null && oracleParameters.Count > 0) 
+                        if (oracleParameters != null && oracleParameters.Count > 0)
                         {
                             command.Parameters.AddRange(oracleParameters.ToArray());
                         }
@@ -108,14 +110,15 @@ namespace SemestralniPraceDB2.Models
                                 while (await reader.ReadAsync())
                                 {
                                     T result = mapResult(reader);
-                                     resultList.Add(result);
+                                    resultList.Add(result);
                                 }
                             }
 
                             return resultList;
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
+                            Console.WriteLine(ex.ToString());
                             return new List<T>();
                         }
                     }
