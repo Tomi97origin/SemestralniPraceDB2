@@ -66,13 +66,19 @@ partial class TopMenuViewModel : BaseViewModel, IRecipient<UserLogin>, IRecipien
         else if (isSomebodyLogged)
         {
             //Proveď odhlášení
-            //UzivateleService.Logout(); TODO UNCOMMENT
+            UzivateleService.LogOut();
             
             //Pošli zprávu o odhlášení:
             messenger.Send(new UserLogout());
         }
 
 
+    }
+
+    [RelayCommand]
+    private void StopEmulation()
+    {
+        UzivateleService.StopEmulating();
     }
 
     [RelayCommand]
@@ -187,4 +193,5 @@ partial class TopMenuViewModel : BaseViewModel, IRecipient<UserLogin>, IRecipien
         }
         else throw new ApplicationException("Unexpected Error: Can not logout when no user is logged in.");
     }
+
 }

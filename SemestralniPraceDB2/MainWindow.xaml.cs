@@ -1,4 +1,6 @@
-﻿using SemestralniPraceDB2.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using SemestralniPraceDB2.ViewModels;
 using System.Windows;
 
 namespace SemestralniPraceDB2;
@@ -6,11 +8,36 @@ namespace SemestralniPraceDB2;
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow : Window
+[ObservableRecipient]
+[ObservableObject]
+public partial class MainWindow : Window, IRecipient<UserEmulation>, IRecipient<UserStopEmulation>, IRecipient<UserLogout>
 {
     public MainWindow()
     {
         DataContext = new MainWindowViewModel();
+
+        Messenger = WeakReferenceMessenger.Default;
+        Messenger.Register<UserEmulation>(this);
+        Messenger.Register<UserStopEmulation>(this);
+        Messenger.Register<UserLogout>(this);
+
         InitializeComponent();
+    }
+
+
+
+    public void Receive(UserEmulation message)
+    {
+        ButtonStopEmulation.Visibility = Visibility.Visible;
+    }
+
+    public void Receive(UserStopEmulation message)
+    {
+        ButtonStopEmulation.Visibility = Visibility.Collapsed;
+    }
+
+    public void Receive(UserLogout message)
+    {
+        ButtonStopEmulation.Visibility = Visibility.Collapsed;
     }
 }

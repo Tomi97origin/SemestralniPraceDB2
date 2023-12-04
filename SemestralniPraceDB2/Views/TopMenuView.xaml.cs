@@ -12,7 +12,7 @@ namespace SemestralniPraceDB2.Views;
 /// 
 [ObservableRecipient]
 [ObservableObject]
-public partial class TopMenuView : UserControl, IRecipient<UserLogin>, IRecipient<UserLogout>
+public partial class TopMenuView : UserControl, IRecipient<UserLogin>, IRecipient<UserLogout>, IRecipient<UserEmulation>, IRecipient<UserStopEmulation>
 {
     public TopMenuView()
     {
@@ -22,11 +22,17 @@ public partial class TopMenuView : UserControl, IRecipient<UserLogin>, IRecipien
         Messenger = WeakReferenceMessenger.Default;
         Messenger.Register<UserLogin>(this);
         Messenger.Register<UserLogout>(this);
+        Messenger.Register<UserEmulation>(this);
+        Messenger.Register<UserStopEmulation>(this);
     }
 
     public void Receive(UserLogin message)
     {
-        MenuTlacitkaProPrihlasene.Visibility = Visibility.Visible;
+        if (message.prihlasenyUzivatel.Active)
+        {
+            MenuTlacitkaProPrihlasene.Visibility = Visibility.Visible;
+        }
+
         if (message.prihlasenyUzivatel.Admin)
         {
             MenuTlacitkaProAdmina.Visibility = Visibility.Visible;
@@ -37,6 +43,29 @@ public partial class TopMenuView : UserControl, IRecipient<UserLogin>, IRecipien
     {
         MenuTlacitkaProPrihlasene.Visibility = Visibility.Collapsed;
         MenuTlacitkaProAdmina.Visibility = Visibility.Hidden;
+    }
+
+    public void Receive(UserEmulation message)
+    {
+        MenuTlacitkaProPrihlasene.Visibility = Visibility.Collapsed;
+        MenuTlacitkaProAdmina.Visibility = Visibility.Hidden;
+
+        if (message.emulovanyUzivatel.Active)
+        {
+            MenuTlacitkaProPrihlasene.Visibility = Visibility.Visible;
+        }
+
+        if (message.emulovanyUzivatel.Admin)
+        {
+            MenuTlacitkaProAdmina.Visibility = Visibility.Visible;
+        }
+    }
+
+    public void Receive(UserStopEmulation message)
+    {
+        //Zobraz oba panely, protože po konci emulace nemůže být přihlášen nikdo jiný než Admin
+        MenuTlacitkaProPrihlasene.Visibility = Visibility.Visible;
+        MenuTlacitkaProAdmina.Visibility = Visibility.Visible;
     }
 }
 
