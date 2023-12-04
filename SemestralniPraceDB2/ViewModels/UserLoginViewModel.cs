@@ -41,7 +41,7 @@ namespace SemestralniPraceDB2.ViewModels
                     return;
                 }
 
-                MessageBox.Show($"Přihlášení úspěšné.");
+                //MessageBox.Show($"Přihlášení úspěšné.");
                 MainWindowViewModel.topMenuVM.UpdateView("default");
                 messenger.Send(new UserLogin(prihlasenyUzivatel));
             }

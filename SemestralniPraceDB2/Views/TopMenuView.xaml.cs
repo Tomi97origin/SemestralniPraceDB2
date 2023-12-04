@@ -14,7 +14,7 @@ namespace SemestralniPraceDB2.Views;
 [ObservableObject]
 public partial class TopMenuView : UserControl, IRecipient<UserLogin>, IRecipient<UserLogout>
 {
-    public TopMenuView() 
+    public TopMenuView()
     {
         DataContext = new TopMenuViewModel();
         InitializeComponent();
@@ -24,11 +24,13 @@ public partial class TopMenuView : UserControl, IRecipient<UserLogin>, IRecipien
         Messenger.Register<UserLogout>(this);
     }
 
-    public void Receive(UserLogin prihlasenyUzivatel)
+    public void Receive(UserLogin message)
     {
-        if (prihlasenyUzivatel is not null) { }
-       MenuTlacitkaProPrihlasene.Visibility = Visibility.Visible;
-       MenuTlacitkaProAdmina.Visibility = Visibility.Visible;
+        MenuTlacitkaProPrihlasene.Visibility = Visibility.Visible;
+        if (message.prihlasenyUzivatel.Admin)
+        {
+            MenuTlacitkaProAdmina.Visibility = Visibility.Visible;
+        }
     }
 
     public void Receive(UserLogout message)
