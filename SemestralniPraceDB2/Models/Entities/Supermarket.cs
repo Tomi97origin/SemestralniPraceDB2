@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -26,6 +27,16 @@ namespace SemestralniPraceDB2.Models.Entities
 
         [DisplayName("Adresa")]
         public Adresa Adresa { get; set; }
+
+        [Browsable(false)]
+        public string OznaceniProdejny
+        {
+            get
+            {
+                return ToString();
+            }
+        }
+
 
         public string DataToText()
         {

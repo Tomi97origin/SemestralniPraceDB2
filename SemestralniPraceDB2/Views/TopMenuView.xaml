@@ -38,6 +38,12 @@
                 <MenuItem Header="Zlevni nejméně prodávané zboží"
                           Command="{Binding SetTheLeastSaledGoodsCheaperCommand}"/>
             </MenuItem>
+            
+            <MenuItem Header="Statistiky" >
+                <MenuItem Header="Prodávané zboží na prodejnách"
+                          Command="{Binding UpdateViewCommand}"
+                          CommandParameter="StatisticsSales"/>
+            </MenuItem>
 
             <MenuItem Header="Databáze" >
                 <MenuItem Header="Systémový katalog" 
