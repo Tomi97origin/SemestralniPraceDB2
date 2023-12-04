@@ -31,14 +31,13 @@ partial class TopMenuViewModel : BaseViewModel, IRecipient<UserLogin>, IRecipien
 
     public TopMenuViewModel()
     {
-
         Messenger = WeakReferenceMessenger.Default;
         Messenger.Register<UserLogin>(this);
         Messenger.Register<UserLogout>(this);
     }
 
     [RelayCommand]
-    private void UpdateView(string parameter)
+    public void UpdateView(string parameter)
     {
         messenger.Send(new ViewChanged(parameter));
     }
@@ -57,21 +56,20 @@ partial class TopMenuViewModel : BaseViewModel, IRecipient<UserLogin>, IRecipien
     }
 
     [RelayCommand]
-    private void LoginLogout()
+    private void LoginLogout() //pozn.: toto by mohla být dvě tlačítka, která by se zobrazovala/skrývala na základě toho zda je někdo přihlášený
     {
         if (!isSomebodyLogged)
         {
-            //proveď přihlášení
+            //Změň View na přihlašovací okno
             messenger.Send(new ViewChanged("UserLogin"));
-
         }
         else if (isSomebodyLogged)
         {
-            //proveď odhlášení
-            //todo call logoutCurrentUser();
-
-            //uměle vyvolána zpráva o odhlášení:
-            messenger.Send(new UserLogout()); //todo smazat, toto musí volat funkce obsluhující odhlašování
+            //Proveď odhlášení
+            //UzivateleService.Logout(); TODO UNCOMMENT
+            
+            //Pošli zprávu o odhlášení:
+            messenger.Send(new UserLogout());
         }
 
 

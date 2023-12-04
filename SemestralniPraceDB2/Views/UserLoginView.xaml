@@ -87,8 +87,7 @@
                 <Label Content="Ještě nemáte hotovou registraci?" />
                 <Button
                     Content="Registrace"
-                    Command="{Binding UpdateViewCommand}"
-                    CommandParameter="UserRegistration"
+                    Command="{Binding SwitchToRegistrationCommand}"
                     Width="100"
                     Height="30"
                     Margin="10"/>

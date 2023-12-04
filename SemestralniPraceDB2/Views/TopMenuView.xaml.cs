@@ -1,4 +1,7 @@
-﻿using SemestralniPraceDB2.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using SemestralniPraceDB2.ViewModels;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace SemestralniPraceDB2.Views;
@@ -6,12 +9,32 @@ namespace SemestralniPraceDB2.Views;
 /// <summary>
 /// Interakční logika pro TopMenuView.xaml
 /// </summary>
-public partial class TopMenuView : UserControl
+/// 
+[ObservableRecipient]
+[ObservableObject]
+public partial class TopMenuView : UserControl, IRecipient<UserLogin>, IRecipient<UserLogout>
 {
-    public TopMenuView()
+    public TopMenuView() 
     {
         DataContext = new TopMenuViewModel();
         InitializeComponent();
+
+        Messenger = WeakReferenceMessenger.Default;
+        Messenger.Register<UserLogin>(this);
+        Messenger.Register<UserLogout>(this);
+    }
+
+    public void Receive(UserLogin prihlasenyUzivatel)
+    {
+        if (prihlasenyUzivatel is not null) { }
+       MenuTlacitkaProPrihlasene.Visibility = Visibility.Visible;
+       MenuTlacitkaProAdmina.Visibility = Visibility.Visible;
+    }
+
+    public void Receive(UserLogout message)
+    {
+        MenuTlacitkaProPrihlasene.Visibility = Visibility.Collapsed;
+        MenuTlacitkaProAdmina.Visibility = Visibility.Hidden;
     }
 }
 

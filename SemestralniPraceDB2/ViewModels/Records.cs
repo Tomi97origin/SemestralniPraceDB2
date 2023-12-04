@@ -1,5 +1,7 @@
-﻿namespace SemestralniPraceDB2.ViewModels;
+﻿using SemestralniPraceDB2.Models.Entities;
+
+namespace SemestralniPraceDB2.ViewModels;
 
 public record class ViewChanged(string ViewName);
-public record class UserLogin(string UserName);
+public record class UserLogin(Uzivatel prihlasenyUzivatel);
 public record class UserLogout();

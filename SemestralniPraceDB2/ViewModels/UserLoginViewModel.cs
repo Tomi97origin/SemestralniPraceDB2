@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using SemestralniPraceDB2.Models;
 using System.Security;
 using System.Windows;
 using System.Windows.Controls.Primitives;
@@ -22,14 +23,34 @@ namespace SemestralniPraceDB2.ViewModels
         [RelayCommand]
         private void LoginUser()
         {
-            MessageBox.Show($"Přihlašuji uživatele {Username} s heslem {Password} ");
-            messenger.Send(new UserLogin($"{Username}"));
+            if(string.IsNullOrEmpty(Username))
+            {
+                MessageBox.Show("Zadejte platné uživatelské jméno.");
+            }
+            else if(string.IsNullOrEmpty(Password))
+            {
+                MessageBox.Show("Zadejte platné heslo.");
+            }
+            else
+            {
+                var prihlasenyUzivatel = UzivateleService.Login(Username, Password);
+
+                if(prihlasenyUzivatel is null)
+                {
+                    MessageBox.Show("Přihlášení se nezdařilo, zkuste to znovu.");
+                    return;
+                }
+
+                MessageBox.Show($"Přihlášení úspěšné.");
+                MainWindowViewModel.topMenuVM.UpdateView("default");
+                messenger.Send(new UserLogin(prihlasenyUzivatel));
+            }
         }
 
         [RelayCommand]
-        private void UpdateView(string parameter)
+        private void SwitchToRegistration()
         {
-            messenger.Send(new ViewChanged(parameter));
+            MainWindowViewModel.topMenuVM.UpdateView("UserRegistration");
         }
 
 

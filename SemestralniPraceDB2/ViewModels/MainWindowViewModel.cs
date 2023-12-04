@@ -22,7 +22,7 @@ namespace SemestralniPraceDB2.ViewModels
     {
         //Inicializace ViewModels
         public static readonly MakingOrderForWarehouseViewModel makingOrderForWarehouseVM = new();
-        public static readonly EmptyViewModel messageVM = new();
+        public static readonly EmptyViewModel emptyVM = new();
         public static readonly UserLoginViewModel userLoginVM = new();
         public static readonly UserRegistrationViewModel userRegistrationVM = new();
         public static readonly CreateEmployeeViewModel createEmployeeVM = new();
@@ -38,7 +38,9 @@ namespace SemestralniPraceDB2.ViewModels
         public static readonly StatisticsSalesViewModel statisticsSalesVM = new();
         public static readonly EmployeeGalleryViewModel employeeGalleryVM = new();
 
-        private static readonly BaseViewModel defaultVM = messageVM;
+        private static readonly BaseViewModel defaultVM = emptyVM;
+
+        public static readonly TopMenuViewModel topMenuVM = new();
 
         [ObservableProperty]
         public BaseViewModel selectedViewModel = userLoginVM;
@@ -46,7 +48,7 @@ namespace SemestralniPraceDB2.ViewModels
         public BaseViewModel? lastSelectedViewModel = null;
 
         [ObservableProperty]
-        private TopMenuViewModel topMenuViewModel = new();
+        private TopMenuViewModel topMenuViewModel = topMenuVM;
 
         [ObservableProperty]
         private DatabaseResult? _databaseResult;
@@ -87,7 +89,8 @@ namespace SemestralniPraceDB2.ViewModels
                 "PasswordChange" => passwordChangeVM,
                 "StatisticsSales" => statisticsSalesVM,
                 "EmployeeGallery" => employeeGalleryVM,
-                _ => messageVM,
+                "default" => emptyVM,
+                _ => emptyVM,
             } ;
 
             //refresh potřebných ViewModelů
@@ -119,9 +122,7 @@ namespace SemestralniPraceDB2.ViewModels
 
         public void Receive(UserLogin message)
         {
-            LoggedAs = $"Přihlášen jako {message.UserName}.";
-            SelectedViewModel = defaultVM;
-            MessageBox.Show("Přihlášení úspěšné.");
+            LoggedAs = $"Přihlášen jako {message.prihlasenyUzivatel.Username}.";
         }
 
 
