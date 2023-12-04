@@ -103,6 +103,11 @@ namespace SemestralniPraceDB2.Models
             Aktualni = Prihlaseny;
         }
 
+        public static void LogOut()
+        {
+            Aktualni = Prihlaseny = null;
+        }
+
         public static bool Delete(Uzivatel uzivatel)
         {
             if (uzivatel == null) return false;
