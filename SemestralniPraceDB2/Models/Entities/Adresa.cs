@@ -51,7 +51,7 @@ namespace SemestralniPraceDB2.Models.Entities
 
         public string DataToText()
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
 
             sb.Append($"{Ulice} ");
             sb.Append($"{Cp} ");

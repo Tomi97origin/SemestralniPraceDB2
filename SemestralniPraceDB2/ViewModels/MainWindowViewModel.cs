@@ -95,6 +95,8 @@ namespace SemestralniPraceDB2.ViewModels
                     break;
                 case "DatabaseExplorer": databaseExplorerVM.Refresh();
                     break;
+                case "CreateEmployee": createEmployeeVM.Refresh();
+                    break;
             }
 
             if (newVM != SelectedViewModel)

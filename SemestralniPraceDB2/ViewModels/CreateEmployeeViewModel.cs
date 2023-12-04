@@ -15,18 +15,14 @@ using System.Windows;
 using System.Drawing;
 using System.Windows.Shapes;
 using System.Windows.Media.Imaging;
+using System.ComponentModel;
 
 namespace SemestralniPraceDB2.ViewModels
 {
     partial class CreateEmployeeViewModel : BaseViewModel
     {
-        //private IMessenger messenger = WeakReferenceMessenger.Default;
-
         [ObservableProperty]
         public Zamestnanec zamestnanec;
-
-        //[ObservableProperty]
-        //public Adresa adresa = new();
 
         [ObservableProperty]
         public ObservableCollection<string> typyUvazku = new() { "Plný úvazek", "Brigádník" };
@@ -70,15 +66,37 @@ namespace SemestralniPraceDB2.ViewModels
             {
                 case "Plný úvazek":
                     VlozPlnyUvazekdoDB();
+                    MessageBox.Show("Zaměstnanec na plný úvazek uložen.");
+                    Refresh();
                     break;
 
                 case "Brigádník":
                     VlozBrigadnikDoDB();
+                    MessageBox.Show("Zaměstnanec brigádník uložen.");
+                    Refresh();
                     break;
                 default:
                     MessageBox.Show("Vyberte typ úvazku.");
                     return;
             }
+        }
+
+        public void Refresh()
+        {
+            Zamestnanec = new();
+            Zamestnanec.Adresa = new();
+            Supermarkety = new(SupermarketService.GetAll());
+            Vedouci = new(PlnyUvazekService.GetAll());
+            Role = new(RoleService.GetAll());
+            Zamestnanec.Nastup = DateTime.Now;
+            VybranyTypUvazku = null;
+            HodinovaSazba = null;
+            Hodiny = null;
+            Plat = null;
+            PlatnostDo = DateTime.Today;
+            ImagePath = string.Empty;
+            ImageToShow = new();
+            ZamestnanecImage = null;
         }
 
         private void VlozBrigadnikDoDB()

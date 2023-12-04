@@ -14,7 +14,7 @@ namespace SemestralniPraceDB2.Models.Entities
         [Browsable(false)]
         public int Id { get; set; }
 
-        [DisplayName("Soubor")]
+        [DisplayName("Název souboru")]
         public string? Soubor { get; set; }
 
         [Browsable(false)]
