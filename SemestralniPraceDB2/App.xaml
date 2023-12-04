@@ -67,5 +67,13 @@
             <views:PasswordChangeView/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type viewModels:StatisticsSalesViewModel}">
+            <views:StatisticsSalesView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModels:EmployeeGalleryViewModel}">
+            <views:EmployeeGalleryView/>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>

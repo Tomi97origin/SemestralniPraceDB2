@@ -138,7 +138,7 @@
             <!-- Obrázek ve stackpanelu pro background-->
             <StackPanel 
                 Margin="0,20,0,0" 
-                Background="White" 
+                Background="AliceBlue" 
                 HorizontalAlignment="Center">
                 <Image
                     Source="{Binding ImageToShow}" 
