@@ -80,6 +80,9 @@
                 <MenuItem Header="Aktivace uživatelů"
                           Command="{Binding UpdateViewCommand}"
                           CommandParameter="UserActivation"/>
+                <MenuItem Header="Emulovat uživatele"
+                          Command="{Binding UpdateViewCommand}"
+                          CommandParameter="UserEmulation"/>
             </MenuItem>
 
             <MenuItem Header="Zboží" >

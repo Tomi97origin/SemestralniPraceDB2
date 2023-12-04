@@ -75,5 +75,9 @@
             <views:EmployeeGalleryView/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type viewModels:UserEmulationViewModel}">
+            <views:UserEmulationView/>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>

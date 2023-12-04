@@ -37,8 +37,9 @@
             Grid.Row="5" 
             Margin="0,0,0,3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto" MinWidth="100"/>
             </Grid.ColumnDefinitions>
 
             
@@ -66,18 +67,21 @@
                         </StackPanel>
                     </Button>
                 </StackPanel>
-
-                
-                <!--<Label  Content="{Binding StatusLabelText}"
-                        VerticalAlignment="Center"
-                        Width="auto"
-                        FontSize="11"
-                        FontStyle="Italic" />-->
             </StackPanel>
+
+            <Button 
+                Command="{Binding StopEmulationCommand}"
+                Name="ButtonStopEmulation"
+                Visibility="Collapsed"
+                Grid.Column="1"
+                Content="  Konec emulace  " 
+                Width="auto"
+                HorizontalAlignment="Right"
+                Margin="5,0,5,0"/>
 
             <StackPanel Orientation="Horizontal"
                         Width="auto"
-                        Grid.Column="1"
+                        Grid.Column="2"
                         HorizontalAlignment="Right">
                 
                 <Label  Content="{Binding LoggedAs}"

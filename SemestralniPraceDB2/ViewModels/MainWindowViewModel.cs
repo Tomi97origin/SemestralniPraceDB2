@@ -18,7 +18,7 @@ using System.Windows;
 namespace SemestralniPraceDB2.ViewModels
 {
     [ObservableRecipient]
-    partial class MainWindowViewModel : BaseViewModel, IRecipient<ViewChanged>, IRecipient<UserLogin>, IRecipient<UserLogout>
+    partial class MainWindowViewModel : BaseViewModel, IRecipient<ViewChanged>, IRecipient<UserLogin>, IRecipient<UserLogout>, IRecipient<UserEmulation>
     {
         //Inicializace ViewModels
         public static readonly MakingOrderForWarehouseViewModel makingOrderForWarehouseVM = new();
@@ -37,6 +37,7 @@ namespace SemestralniPraceDB2.ViewModels
         public static readonly PasswordChangeViewModel passwordChangeVM = new();
         public static readonly StatisticsSalesViewModel statisticsSalesVM = new();
         public static readonly EmployeeGalleryViewModel employeeGalleryVM = new();
+        public static readonly UserEmulationViewModel userEmulationVM = new();
 
         private static readonly BaseViewModel defaultVM = emptyVM;
 
@@ -54,9 +55,6 @@ namespace SemestralniPraceDB2.ViewModels
         private DatabaseResult? _databaseResult;
 
         [ObservableProperty]
-        private string statusLabelText = "Status OK";
-
-        [ObservableProperty]
         private string loggedAs = "Nepřihlášený uživatel";
 
 
@@ -67,6 +65,7 @@ namespace SemestralniPraceDB2.ViewModels
             Messenger.Register<ViewChanged>(this);
             Messenger.Register<UserLogin>(this);
             Messenger.Register<UserLogout>(this);
+            Messenger.Register<UserEmulation>(this);
         }
 
         public void Receive(ViewChanged message)
@@ -89,6 +88,7 @@ namespace SemestralniPraceDB2.ViewModels
                 "PasswordChange" => passwordChangeVM,
                 "StatisticsSales" => statisticsSalesVM,
                 "EmployeeGallery" => employeeGalleryVM,
+                "UserEmulation" => userEmulationVM,
                 "default" => emptyVM,
                 _ => emptyVM,
             } ;
@@ -125,6 +125,20 @@ namespace SemestralniPraceDB2.ViewModels
             LoggedAs = $"Přihlášen jako {message.prihlasenyUzivatel.Username}.";
         }
 
+        public void Receive(UserEmulation message)
+        {
+            LoggedAs = $"EMULUJE SE UŽIVATEL {message.emulovanyUzivatel.Username}.";
+        }
+       
+
+        [RelayCommand]
+        private void StopEmulation()
+        {
+            LoggedAs = $"Přihlášen jako {UzivateleService.Aktualni?.Username}.";
+            SelectedViewModel = defaultVM;
+            Messenger.Send<UserStopEmulation>(new());
+            MessageBox.Show("Konec emulace jiného uživatele.");
+        }
 
         [RelayCommand]
         private void UpdateView(string parameter)
@@ -135,5 +149,6 @@ namespace SemestralniPraceDB2.ViewModels
                 lastSelectedViewModel = null;
             }
         }
+
     }
 }
