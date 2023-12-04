@@ -21,9 +21,15 @@
                 <MenuItem Header="Vytvořit nového zaměstnance"
                           Command="{Binding UpdateViewCommand}"
                           CommandParameter="CreateEmployee"/>
+                <!--<MenuItem Header="Upravit zaměstnance"
+                          Command="{Binding UpdateViewCommand}"
+                          CommandParameter="EditEmployee"/>-->
                 <MenuItem Header="Výpis podřízených zaměstnanců"
                           Command="{Binding UpdateViewCommand}"
                           CommandParameter="Subordinates"/>
+                <MenuItem Header="Výpis profilových obrázků zaměstnanců"
+                          Command="{Binding UpdateViewCommand}"
+                          CommandParameter="EmployeeGallery"/>
             </MenuItem>
 
             <MenuItem Header="Uživatelé" >

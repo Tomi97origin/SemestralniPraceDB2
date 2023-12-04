@@ -36,6 +36,7 @@ namespace SemestralniPraceDB2.ViewModels
         public static readonly UserActivationViewModel userActivationVM = new();
         public static readonly PasswordChangeViewModel passwordChangeVM = new();
         public static readonly StatisticsSalesViewModel statisticsSalesVM = new();
+        public static readonly EmployeeGalleryViewModel employeeGalleryVM = new();
 
         private static readonly BaseViewModel defaultVM = messageVM;
 
@@ -85,6 +86,7 @@ namespace SemestralniPraceDB2.ViewModels
                 "UserActivation" => userActivationVM,
                 "PasswordChange" => passwordChangeVM,
                 "StatisticsSales" => statisticsSalesVM,
+                "EmployeeGallery" => employeeGalleryVM,
                 _ => messageVM,
             } ;
 
