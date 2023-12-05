@@ -18,7 +18,7 @@ partial class DatabaseExplorerViewModel : BaseViewModel
     public DBTable? selectedTable;
 
     [ObservableProperty]
-    ObservableCollection<DBTable> tables;
+    ObservableCollection<DBTable> tables = new();
 
     [ObservableProperty]
     private ObservableCollection<object>? selectedTableData;
@@ -30,22 +30,50 @@ partial class DatabaseExplorerViewModel : BaseViewModel
 
     private ObservableCollection<object>? backupSelectedTableData;
 
+    [ObservableProperty]
+    private IDBEntity? selectedRecord;
+
+    private List<IDBEntity> deletedRecords = new();
+    private List<IDBEntity> editedRecords = new();
+    private List<IDBEntity> newRecords = new();
+
 
     public DatabaseExplorerViewModel()
     {
-        Tables = new();
         Refresh();
     }
 
 
     partial void OnSelectedTableChanged(DBTable? value)
     {
+        if (deletedRecords.Count > 0 || editedRecords.Count > 0)
+        {
+            var Result = MessageBox.Show(
+                "Máte nepotvrzené změny v tabulce, chcete je zahodit?",
+                "Opravdu chcete odejít?",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+            if (Result == MessageBoxResult.No)
+            {
+                return;
+            }
+            if (Result == MessageBoxResult.Yes)
+            {
+                editedRecords = new();
+                deletedRecords = new();
+                newRecords = new();
+            }
+        }
+
+
         RefreshTablesRowCounts();
 
         NaplnTableDataPodleSelectedTable();
         backupSelectedTableData = SelectedTableData;
 
         NaplnTableDataStrings();
+
+
     }
 
     private void NaplnTableDataStrings()
@@ -296,7 +324,7 @@ partial class DatabaseExplorerViewModel : BaseViewModel
         {
             for (int i = 0; i < backupSelectedTableData.Count; i++)
             {
-                if(indexySNalezem.Contains(i))
+                if (indexySNalezem.Contains(i))
                 {
                     SelectedTableData.Add(backupSelectedTableData[i]);
                 }
@@ -315,13 +343,336 @@ partial class DatabaseExplorerViewModel : BaseViewModel
     [RelayCommand]
     private void DeleteRecord()
     {
+        if (SelectedRecord is null)
+        {
+            MessageBox.Show("Nejdříve vyberte záznam.", "Pozor", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+        else if (SelectedRecord is Log)
+        {
+            MessageBox.Show("Nelze smazat log.", "Pozor", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+        else
+        {
+            var rec = SelectedRecord;
+
+            deletedRecords.Add(rec);
+
+            SelectedTableData?.Remove(rec);
+            backupSelectedTableData?.Remove(rec);
+
+            NaplnTableDataStrings();
+        }
+
+    }
+
+    [RelayCommand]
+    private void EditRecord()
+    {
+        MessageBox.Show("zatím neimplementováno");
+    }
+
+    [RelayCommand]
+    private void AddRecord()
+    {
         MessageBox.Show("zatím neimplementováno");
     }
 
     [RelayCommand]
     private void AcceptChanges()
     {
-        MessageBox.Show("zatím neimplementováno");
+        if (newRecords.Count > 0 || editedRecords.Count > 0 || deletedRecords.Count > 0)
+        {
+
+            SendDeletedToDB();
+            SendEditedToDB();
+            SendNewToDB();
+            MessageBox.Show("Změny provedeny.");
+        }
+        else
+        {
+
+            MessageBox.Show("Nejsou žádné změny k uložení.");
+        }
+
+    }
+
+    [RelayCommand]
+    private void RefreshLoadedData()
+    {
+        OnSelectedTableChanged(SelectedTable);
+    }
+
+    [RelayCommand]
+    private void CancelChanges()
+    {
+        if (newRecords.Count > 0 || editedRecords.Count > 0 || deletedRecords.Count > 0)
+        {
+            newRecords = new();
+            editedRecords = new();
+            deletedRecords = new();
+
+            OnSelectedTableChanged(SelectedTable);
+
+            MessageBox.Show("Změny zrušeny.");
+        }
+        else
+        {
+
+            MessageBox.Show("Nejsou žádné změny ke zrušení.");
+        }
+
+    }
+
+    private void SendNewToDB()
+    {
+        foreach (var record in newRecords)
+        {
+            if (record is not null)
+            {
+
+                switch (record)
+                {
+                    case Adresa recordAdresa:
+                        AdresaService.Create(recordAdresa);
+                        break;
+                    case Brigadnik recordBrigadnik:
+                        BrigadnikService.Create(recordBrigadnik);
+                        break;
+                    case Cena recordCena:
+                        CenaService.Create(recordCena);
+                        break;
+                    case Dodavatel recordDodavatel:
+                        DodavatelService.Create(recordDodavatel);
+                        break;
+                    case InventarniPolozka recordInventarniPolozka:
+                        InventarniPolozkaService.Create(new List<InventarniPolozka>() { recordInventarniPolozka });
+                        break;
+                    case Kategorie recordKategorie:
+                        KategorieService.Create(recordKategorie);
+                        break;
+                    case ObjednaneZbozi recordObjednaneZbozi:
+                        ObjednaneZboziService.Create(recordObjednaneZbozi);
+                        break;
+                    case Objednavka recordObjednavka:
+                        ObjednavkaService.Create(recordObjednavka, new List<ObjednaneZbozi>());
+                        break;
+                    case ObrazekZamestnance recordObrazekZamestnance:
+                        ObrazekZamestnanceService.Create(recordObrazekZamestnance);
+                        break;
+                    case Platba recordPlatba:
+                        PlatbaService.Create(recordPlatba);
+                        break;
+                    case PlnyUvazek recordPlnyUvazek:
+                        PlnyUvazekService.Create(recordPlnyUvazek);
+                        break;
+                    case Pokladna recordPokladna:
+                        PokladnaService.Create(recordPokladna);
+                        break;
+                    case ProdaneZbozi recordProdaneZbozi:
+                        ProdaneZboziService.Create(recordProdaneZbozi);
+                        break;
+                    case Role recordRole:
+                        RoleService.Create(recordRole);
+                        break;
+                    case Supermarket recordSupermarket:
+                        SupermarketService.Create(recordSupermarket);
+                        break;
+                    case Uctenka recordUctenka:
+                        UctenkaService.Create(recordUctenka);
+                        break;
+                    case Uzivatel recordUzivatel:
+                        UzivateleService.Registration(recordUzivatel.Username, recordUzivatel.Password);
+                        break;
+                    case Vernostni_karta recordVernostni_karta:
+                        VernostniKartaService.Create(recordVernostni_karta);
+                        break;
+                    case Vydavatel recordVydavatel:
+                        VydavatelService.Create(recordVydavatel);
+                        break;
+                    case Vyrobce recordVyrobce:
+                        VyrobceService.Create(recordVyrobce);
+                        break;
+                    case Zamestnanec recordZamestnanec:
+                        ZamestnanecService.Create(recordZamestnanec);
+                        break;
+                    case Zbozi recordZbozi:
+                        ZboziService.Create(recordZbozi);
+                        break;
+                    default:
+                        throw new NotImplementedException($"Create operation not implemented for type {record.GetType()}");
+                }
+
+            }
+        }
+        newRecords = new();
+    }
+
+    private void SendDeletedToDB()
+    {
+        foreach (var record in deletedRecords)
+        {
+            if (record is not null)
+            {
+
+                switch (record)
+                {
+                    case Adresa recordAdresa:
+                        AdresaService.Delete(recordAdresa);
+                        break;
+                    case Brigadnik recordBrigadnik:
+                        ZamestnanecService.Delete(recordBrigadnik);
+                        break;
+                    case Cena recordCena:
+                        CenaService.Delete(recordCena);
+                        break;
+                    case Dodavatel recordDodavatel:
+                        DodavatelService.Delete(recordDodavatel);
+                        break;
+                    case InventarniPolozka recordInventarniPolozka:
+                        InventarniPolozkaService.Delete(recordInventarniPolozka);
+                        break;
+                    case Kategorie recordKategorie:
+                        KategorieService.Delete(recordKategorie);
+                        break;
+                    case ObjednaneZbozi recordObjednaneZbozi:
+                        ObjednaneZboziService.Delete(recordObjednaneZbozi);
+                        break;
+                    case Objednavka recordObjednavka:
+                        ObjednavkaService.Delete(recordObjednavka);
+                        break;
+                    case ObrazekZamestnance recordObrazekZamestnance:
+                        ObrazekZamestnanceService.Delete(recordObrazekZamestnance);
+                        break;
+                    case Platba recordPlatba:
+                        PlatbaService.Delete(recordPlatba);
+                        break;
+                    case PlnyUvazek recordPlnyUvazek:
+                        ZamestnanecService.Delete(recordPlnyUvazek);
+                        break;
+                    case Pokladna recordPokladna:
+                        PokladnaService.Delete(recordPokladna);
+                        break;
+                    case ProdaneZbozi recordProdaneZbozi:
+                        ProdaneZboziService.Delete(recordProdaneZbozi);
+                        break;
+                    case Role recordRole:
+                        RoleService.Delete(recordRole);
+                        break;
+                    case Supermarket recordSupermarket:
+                        SupermarketService.Delete(recordSupermarket);
+                        break;
+                    case Uctenka recordUctenka:
+                        UctenkaService.Delete(recordUctenka);
+                        break;
+                    case Uzivatel recordUzivatel:
+                        UzivateleService.Delete(recordUzivatel);
+                        break;
+                    case Vernostni_karta recordVernostni_karta:
+                        VernostniKartaService.Delete(recordVernostni_karta);
+                        break;
+                    case Vydavatel recordVydavatel:
+                        VydavatelService.Delete(recordVydavatel);
+                        break;
+                    case Vyrobce recordVyrobce:
+                        VyrobceService.Delete(recordVyrobce);
+                        break;
+                    case Zamestnanec recordZamestnanec:
+                        ZamestnanecService.Delete(recordZamestnanec);
+                        break;
+                    case Zbozi recordZbozi:
+                        ZboziService.Delete(recordZbozi);
+                        break;
+                    default:
+                        throw new NotImplementedException($"Delete operation not implemented for type {record.GetType()}");
+                }
+
+            }
+        }
+        deletedRecords = new();
+    }
+
+    private void SendEditedToDB()
+    {
+        foreach (var record in editedRecords)
+        {
+            if (record != null)
+            {
+                switch (record)
+                {
+                    case Adresa recordAdresa:
+                        AdresaService.Update(recordAdresa);
+                        break;
+                    case Brigadnik recordBrigadnik:
+                        BrigadnikService.Update(recordBrigadnik);
+                        break;
+                    case Cena recordCena:
+                        CenaService.Update(recordCena);
+                        break;
+                    case Dodavatel recordDodavatel:
+                        DodavatelService.Update(recordDodavatel);
+                        break;
+                    case InventarniPolozka recordInventarniPolozka:
+                        InventarniPolozkaService.Update(new List<InventarniPolozka>() { recordInventarniPolozka });
+                        break;
+                    case Kategorie recordKategorie:
+                        KategorieService.Update(recordKategorie);
+                        break;
+                    case ObjednaneZbozi recordObjednaneZbozi:
+                        ObjednaneZboziService.Update(recordObjednaneZbozi);
+                        break;
+                    case Objednavka recordObjednavka:
+                        ObjednavkaService.Update(recordObjednavka);
+                        break;
+                    case ObrazekZamestnance recordObrazekZamestnance:
+                        ObrazekZamestnanceService.Update(recordObrazekZamestnance);
+                        break;
+                    case Platba recordPlatba:
+                        PlatbaService.Update(recordPlatba);
+                        break;
+                    case PlnyUvazek recordPlnyUvazek:
+                        PlnyUvazekService.Update(recordPlnyUvazek);
+                        break;
+                    case Pokladna recordPokladna:
+                        PokladnaService.Update(recordPokladna);
+                        break;
+                    case ProdaneZbozi recordProdaneZbozi:
+                        ProdaneZboziService.Update(recordProdaneZbozi);
+                        break;
+                    case Role recordRole:
+                        RoleService.Update(recordRole);
+                        break;
+                    case Supermarket recordSupermarket:
+                        SupermarketService.Update(recordSupermarket);
+                        break;
+                    case Uctenka recordUctenka:
+                        UctenkaService.Update(recordUctenka);
+                        break;
+                    case Uzivatel recordUzivatel:
+                        UzivateleService.Update(recordUzivatel);
+                        break;
+                    case Vernostni_karta recordVernostni_karta:
+                        VernostniKartaService.Update(recordVernostni_karta);
+                        break;
+                    case Vydavatel recordVydavatel:
+                        VydavatelService.Update(recordVydavatel);
+                        break;
+                    case Vyrobce recordVyrobce:
+                        VyrobceService.Update(recordVyrobce);
+                        break;
+                    case Zamestnanec recordZamestnanec:
+                        ZamestnanecService.Update(recordZamestnanec);
+                        break;
+                    case Zbozi recordZbozi:
+                        ZboziService.Update(recordZbozi);
+                        break;
+                    default:
+                        throw new NotImplementedException($"Update operation not implemented for type {record.GetType()}");
+                }
+            }
+        }
+        editedRecords = new();
     }
 
     internal void Refresh()

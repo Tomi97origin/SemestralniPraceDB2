@@ -45,6 +45,7 @@ namespace SemestralniPraceDB2.ViewModels
         public static readonly TopMenuViewModel topMenuVM = new();
 
         [ObservableProperty]
+        //public BaseViewModel selectedViewModel = databaseExplorerVM;//pracovní
         public BaseViewModel selectedViewModel = userLoginVM;
 
         public BaseViewModel? lastSelectedViewModel = null;
