@@ -233,7 +233,7 @@ namespace SemestralniPraceDB2.ViewModels
             }
             else
             {
-                if (CisloKarty is null || CisloKarty.Length < 13)
+                if (CisloKarty is null || CisloKarty.Length < 16)
                 {
                     MessageBox.Show("Neplatne cislo karty");
                     return;
