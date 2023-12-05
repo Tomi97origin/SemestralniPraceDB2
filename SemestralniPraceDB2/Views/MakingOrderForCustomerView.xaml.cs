@@ -26,5 +26,31 @@ namespace SemestralniPraceDB2.Views
             DataContext = MainWindowViewModel.makingOrderForCustomerVM;
             InitializeComponent();
         }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (labelVraceno is null) {  return; }
+            labelVraceno.Visibility = Visibility.Hidden;
+            textBoxVraceno.Visibility = Visibility.Hidden;
+            labelCisloKarty.Visibility = Visibility.Hidden;
+            textBoxCisloKarty.Visibility = Visibility.Hidden;
+            labelDebit.Visibility = Visibility.Hidden;
+            checkBoxDebit.Visibility = Visibility.Hidden;
+            comboBoxVydavatele.Visibility = Visibility.Hidden;
+            switch (comboBoxTypPlatby.SelectedItem)
+            {
+                case "Hotovost":
+                    labelVraceno.Visibility = Visibility.Visible;
+                    textBoxVraceno.Visibility = Visibility.Visible;
+                    break;
+                case "Karta":
+                    labelCisloKarty.Visibility = Visibility.Visible;
+                    textBoxCisloKarty.Visibility = Visibility.Visible;
+                    labelDebit.Visibility = Visibility.Visible;
+                    checkBoxDebit.Visibility = Visibility.Visible;
+                    comboBoxVydavatele.Visibility = Visibility.Visible;
+                    break;
+            }
+        }
     }
 }

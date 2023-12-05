@@ -58,14 +58,12 @@ namespace SemestralniPraceDB2.ViewModels
         public ObservableCollection<InventarniPolozkaSCenou> seznamZboziSCenou;
 
         [ObservableProperty]
-        //[NotifyPropertyChangedFor(nameof(SeznamZboziSCenou))]
         public InventarniPolozkaSCenou? vybraneZboziSCenou;
 
         [ObservableProperty]
         public ObservableCollection<VybraneZbozi> seznamVybranehoZbozi = new();
 
         [ObservableProperty]
-        //[NotifyPropertyChangedFor(nameof(SeznamVybranehoZbozi))]
         public VybraneZbozi? vybraneVybraneZbozi;
 
         [ObservableProperty]
@@ -81,9 +79,25 @@ namespace SemestralniPraceDB2.ViewModels
         public Vernostni_karta? vybranaVerKarta;
 
         [ObservableProperty]
-        private int someOtheMember;
+        public ObservableCollection<string> typPlatby = new() { "Hotovost", "Karta" };
 
+        [ObservableProperty]
+        public string vybranyTypPlatby;
 
+        [ObservableProperty]
+        public double? vraceno;
+
+        [ObservableProperty]
+        public string? cisloKarty;
+
+        [ObservableProperty]
+        public bool debit;
+
+        [ObservableProperty]
+        public ObservableCollection<Vydavatel> seznamVydavatelu;
+
+        [ObservableProperty]
+        public Vydavatel? vybranyVydavatel;
 
         public MakingOrderForCustomerViewModel()
         {
@@ -92,12 +106,21 @@ namespace SemestralniPraceDB2.ViewModels
             SeznamZboziSCenou = new();
             SeznamVerKaret = new(VernostniKartaService.GetAll());
             SeznamVerKaret.Insert(0, new Vernostni_karta() { Jmeno = string.Empty, Cislo_Karty = string.Empty});
+            VybranaVerKarta = SeznamVerKaret.First();
+            SeznamVydavatelu = new(VydavatelService.GetAll());
+            VybranyVydavatel = SeznamVydavatelu.First();
             VybranySupermarket = SeznamSupermarketu.First();
+            VybranyTypPlatby = TypPlatby.First();
         }
 
         partial void OnVybranySupermarketChanged(Supermarket? value)
         {
             RefreshSupermarketChange();
+        }
+
+        void RefreshTotalPrice()
+        {
+            CenaCelkem = SeznamVybranehoZbozi.Select(x => x.Cena).Sum();
         }
 
         private void RefreshSupermarketChange()
@@ -116,6 +139,7 @@ namespace SemestralniPraceDB2.ViewModels
                 SeznamZboziSCenou.Add(v);
             }
             SeznamVybranehoZbozi.Clear();
+            RefreshTotalPrice();
         }
 
         [RelayCommand]
@@ -151,6 +175,7 @@ namespace SemestralniPraceDB2.ViewModels
                     SeznamVybranehoZbozi.Add(polozkaKPridani);
                 }
                 VybraneZboziSCenou.Mnozstvi--;
+                RefreshTotalPrice();
             }
         }
 
@@ -171,6 +196,7 @@ namespace SemestralniPraceDB2.ViewModels
                 {
                     SeznamVybranehoZbozi.Remove(VybraneVybraneZbozi);
                 }
+                RefreshTotalPrice();
             }
             else
             {
@@ -182,41 +208,82 @@ namespace SemestralniPraceDB2.ViewModels
        [RelayCommand]
         public void PotvrditNakup()
         {
+            Platba platba = new();
+            platba.Hotovost = VybranyTypPlatby.Equals(TypPlatby[0]);
+            if (!string.IsNullOrEmpty(VybranaVerKarta.Cislo_Karty))
+            {
+                platba.Vernostni_Karta = VybranaVerKarta;
+            }
             if (SeznamVybranehoZbozi.Count < 1)
             {
-                MessageBox.Show("Nelze vytvořit prázdnou objednávku.");
+                MessageBox.Show("Nelze vytvořit prázdny nakup.");
+                return;
             }
-            /*else if (VybranyDodavatel is null)
+            else if (platba.Hotovost)
             {
-                MessageBox.Show("Vyberte dodavatele zboží.");
-            }*/
-            else if (VybranySupermarket is null)
-            {
-                MessageBox.Show("Vyberte cílový supermarket.");
+                if (Vraceno is null)
+                {
+                    MessageBox.Show("Neplatna hodnota vraceni");
+                    return;
+                }
+                platba.Vraceno = (double)Vraceno;
             }
             else
             {
-                List<ProdaneZbozi> polozky = new();
-                /*List<ObjednaneZbozi> seznamIdObjednanehoZbozi = new();
-                CenaCelkem = 0;
-
-                foreach (var item in SeznamVybranehoZbozi)
+                if (CisloKarty is null || CisloKarty.Length < 13)
                 {
-                    CenaCelkem += item.Cena;
-                    ObjednaneZbozi objednaneZbozi = new(item.Mnozstvi, item.Cena, new Zbozi() { Id = item.ID });
-                    seznamIdObjednanehoZbozi.Add(objednaneZbozi);
+                    MessageBox.Show("Neplatne cislo karty");
+                    return;
                 }
-                Objednavka novaObjednavka = new(
-                    0,
-                    DateTime.Now,
-                    DateTime.Now.AddDays(30),
-                    CenaCelkem,
-                    VybranySupermarket,
-                    VybranyDodavatel);
-                .Create(novaObjednavka, seznamIdObjednanehoZbozi);*/
-                //UctenkaService.Create()
+                platba.Debit = (short?)(Debit ? 1 : 0);
+                platba.Vydavatel = VybranyVydavatel;
+                platba.CisloKarty = CisloKarty;
             }
+            
+            Uctenka uctenka = new Uctenka() {
+                Id = 0,
+                CelkovaCena = CenaCelkem,
+                Pokladna = VybranaPokladna,
+                Vytvoreno = DateTime.Now,
+                Platba = platba
+            };
+
+            List<ProdaneZbozi> polozky = (from zbozi in seznamVybranehoZbozi
+                                          select new ProdaneZbozi
+                                          {
+                                              Cena = zbozi.Cena,
+                                              Mnozstvi = zbozi.Mnozstvi,
+                                              Zbozi = new() { Id = zbozi.ID },
+                                              Uctenka = uctenka
+                                          }).ToList();
+
+            List<InventarniPolozkaSCenou> inventarZmeny = (from zbozi in seznamZboziSCenou
+                                                          from vybraneZbozi in seznamVybranehoZbozi
+                                                          where zbozi.IdInventPolozky == vybraneZbozi.IdInvent
+                                                          select new InventarniPolozkaSCenou
+                                                          {
+                                                              IdInventPolozky = zbozi.IdInventPolozky,
+                                                              Mnozstvi = vybraneZbozi.Mnozstvi
+                                                          }).ToList();
+
+            var result = UctenkaService.Create(uctenka, polozky,inventarZmeny);
+            if (!result)
+            {
+                MessageBox.Show("Zbozi vyprodano");
+                return;
+            }
+            Refresh();
         }
 
+        private void Refresh()
+        {
+            Vraceno = 0;
+            VybranyTypPlatby = TypPlatby.First();
+            CisloKarty = string.Empty;
+            Debit = false;
+            VybranyVydavatel = SeznamVydavatelu.First();
+            VybranaVerKarta = SeznamVerKaret.First();
+            RefreshSupermarketChange();
+        }
     }
 }

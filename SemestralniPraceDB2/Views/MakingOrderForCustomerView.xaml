@@ -166,7 +166,7 @@
                     <DataGridTextColumn IsReadOnly="True" Header="Název" Binding="{Binding Nazev}" />
                     <DataGridTextColumn IsReadOnly="True" Header="Čárový kód" Binding="{Binding CarovyKod}" />
                     <DataGridTextColumn IsReadOnly="True" Header="Cena/ks" Binding="{Binding CenaKs}" />
-                    <DataGridTextColumn Header="Množství" Binding="{Binding Mnozstvi, Mode=TwoWay}" />
+                    <DataGridTextColumn IsReadOnly="True" Header="Množství" Binding="{Binding Mnozstvi}" />
                     <DataGridTextColumn IsReadOnly="True" Header="Cena" Binding="{Binding Cena}" />
                 </DataGrid.Columns>
             </DataGrid>
@@ -178,44 +178,89 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
                 <Label 
                     Grid.Column="0"
-                    Content="Vernostni Karta:" 
+                    Content="Typ Platby:" 
                     Width="auto" 
-                    HorizontalContentAlignment="Right" 
+                    HorizontalContentAlignment="Left" 
                     VerticalAlignment="Center"/>
 
                 <ComboBox  
                     Grid.Column="1"
+                        VerticalAlignment="Center" 
+                        Width="80"
+                        ItemsSource="{Binding TypPlatby}"
+                        SelectedItem="{Binding VybranyTypPlatby}"
+                        Margin="0"
+                        HorizontalAlignment="Left" SelectionChanged="ComboBox_SelectionChanged" Name="comboBoxTypPlatby">
+                </ComboBox>
+                
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+
+                    <Label
+        Margin="5,0,0,5"
+        Content="Cena celkem:"
+        VerticalAlignment="Center"/>
+                    <Label
+        Content="{Binding CenaCelkem}"
+        VerticalAlignment="Center"/>
+                    <Label
+        Content=" Kč"
+        VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <Label 
+                    Grid.Column="3"
+                    Content="Vernostni Karta:" 
+                    Width="auto" 
+                    HorizontalContentAlignment="Left" 
+                    VerticalAlignment="Center"/>
+
+                <ComboBox  
+                    Grid.Column="4"
                     VerticalAlignment="Center"
+                    Width="140"
                     ItemsSource="{Binding SeznamVerKaret}"
                     SelectedItem="{Binding VybranaVerKarta}"
                     Margin="0" HorizontalAlignment="Stretch"/>
 
-                <!--<StackPanel Grid.Column="2" Orientation="Horizontal">
-
-                    <Label
-                        Margin="30,0,0,0"
-                        Content="Cena celkem:"
-                        VerticalAlignment="Center"/>
-                    <Label
-                        Content="{Binding CenaCelkem}"
-                        VerticalAlignment="Center"/>
-                    <Label
-                        Content=" Kč"
-                        VerticalAlignment="Center"/>
-                </StackPanel>-->
 
             </Grid>
-            <Button Content=" Potvrdit Nakup "
-                    Grid.Row="3"
+            <Grid Grid.Row="3"
+    VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Vraceno:" VerticalAlignment="Center" Grid.Column="0" Margin="3" Name="labelVraceno" Visibility="Visible"/>
+                <TextBox Text="{Binding Vraceno}" Grid.Column="1" Width="100" Margin="3" Name="textBoxVraceno" Visibility="Visible"/>
+
+                <Label Content="Cislo Karty:" VerticalAlignment="Center" Grid.Column="0" Margin="3" Name="labelCisloKarty" Visibility="Hidden"/>
+                <TextBox Text="{Binding CisloKarty}" Grid.Column="1" Width="150" Margin="3" Name="textBoxCisloKarty" Visibility="Hidden" />
+                <Label Content="Debit:" VerticalAlignment="Center" Grid.Column="2" Margin="3" Name="labelDebit" Visibility="Hidden"/>
+                <CheckBox Name="checkBoxDebit" IsChecked="{Binding Debit}" Grid.Column="3" VerticalAlignment="Center" Margin="3" Visibility="Hidden"/>
+                <ComboBox  
+                    Grid.Column="4"
+                    VerticalAlignment="Center"
+                    Width="140"
+                    ItemsSource="{Binding SeznamVydavatelu}"
+                    SelectedItem="{Binding VybranyVydavatel}"
+                    Margin="5" HorizontalAlignment="Stretch" Name="comboBoxVydavatele" Visibility="Hidden"/>
+                <Button Content=" Potvrdit Nakup "
+                    Grid.Column="5"
                     Width="auto"
                     Height="30"
                     Command="{Binding PotvrditNakupCommand}" 
                     Margin="0,5,0,0"
                     HorizontalAlignment="Right"/>
+            </Grid>
         </Grid>
     </Grid>
 

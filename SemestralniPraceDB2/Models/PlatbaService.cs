@@ -31,7 +31,7 @@ namespace SemestralniPraceDB2.Models
             List<OracleParameter> prm = new List<OracleParameter>();
 
             prm.Add(new OracleParameter("p_id_platby", OracleDbType.Int32, System.Data.ParameterDirection.InputOutput));
-            prm[0].Value = platba.Id;
+            prm[0].Value = platba.Id <= 0 ? null : platba.Id;
 
             prm.Add(new OracleParameter("p_vraceno", OracleDbType.Double, System.Data.ParameterDirection.Input));
             prm[1].Value = platba.Vraceno;
