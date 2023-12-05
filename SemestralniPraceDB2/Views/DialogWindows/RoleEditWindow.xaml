@@ -1,0 +1,40 @@
+﻿<Window x:Class="SemestralniPraceDB2.Views.DialogWindows.RoleEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SemestralniPraceDB2.Views.DialogWindows"
+        mc:Ignorable="d"
+        Title="RoleEditWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <!-- Další RowDefinitions pro další vlastnosti, pokud jsou potřeba -->
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
+            <TextBlock Width="100" Text="Název:" VerticalAlignment="Center" />
+            <TextBox Width="200" Text="{Binding Role.Nazev, Mode=TwoWay}" />
+        </StackPanel>
+
+        <!-- Další StackPanel s TextBlock a TextBox pro další vlastnost -->
+
+        <!-- Prázdný řádek -->
+        <Grid Grid.Row="2" />
+
+        <!-- Tlačítka na dalším řádku s Margin -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Ok" Width="75" Command="{Binding OkCommand}" Margin="0,5,5,5" />
+            <Button Content="Zrušit" Width="75" Command="{Binding CancelCommand}" Margin="0,5,5,5" />
+        </StackPanel>
+
+    </Grid>
+
+
+
+
+
+
+</Window>

@@ -1,0 +1,86 @@
+﻿<Window x:Class="SemestralniPraceDB2.Views.DialogWindows.InventarniPolozkaEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SemestralniPraceDB2.Views.DialogWindows"
+        mc:Ignorable="d"
+        Title="InventarniPolozkaEditWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Sklad -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
+            <TextBlock Width="150" Text="Sklad:" VerticalAlignment="Center" />
+            <TextBox Width="200" Text="{Binding Tovar.Sklad, Mode=TwoWay}" />
+        </StackPanel>
+
+        <!-- Množství -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
+            <TextBlock Width="150" Text="Množství:" VerticalAlignment="Center" />
+            <TextBox Width="200" Text="{Binding Tovar.Mnozstvi, Mode=TwoWay}" />
+        </StackPanel>
+
+        <!-- Označení pozice -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="5">
+            <TextBlock Width="150" Text="Označení pozice:" VerticalAlignment="Center" />
+            <TextBox Width="200" Text="{Binding Tovar.OznaceniPozice, Mode=TwoWay}" />
+        </StackPanel>
+
+        <!-- Naskladněno -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5">
+            <TextBlock Width="150" Text="Naskladněno:" VerticalAlignment="Center" />
+            <DatePicker Width="200" SelectedDate="{Binding Tovar.Naskladneno, Mode=TwoWay}" />
+        </StackPanel>
+
+        <!-- Supermarket (ComboBox) -->
+        <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="5">
+            <TextBlock Width="150" Text="Supermarket:" VerticalAlignment="Center" />
+            <ComboBox Width="200"
+                  ItemsSource="{Binding ListOfSupermarkets}"
+                  SelectedItem="{Binding Tovar.Supermarket, Mode=TwoWay}"
+                  Margin="0,0,0,10">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                        <Run Text="{Binding Nazev}" />
+                        </TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <!-- Zboží (ComboBox) -->
+        <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="5">
+            <TextBlock Width="150" Text="Zboží:" VerticalAlignment="Center" />
+            <ComboBox Width="200"
+                  ItemsSource="{Binding ListOfZbozi}"
+                  SelectedItem="{Binding Tovar.Zbozi, Mode=TwoWay}"
+                  Margin="0,0,0,10">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                        <Run Text="{Binding Nazev}" />
+                        </TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <!-- Tlačítka Ok a Zrušit s výškou Auto -->
+        <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Ok" Width="75" Command="{Binding OkCommand}" Margin="0,5,5,5" />
+            <Button Content="Zrušit" Width="75" Command="{Binding CancelCommand}" Margin="0,5,5,5" />
+        </StackPanel>
+    </Grid>
+
+</Window>
