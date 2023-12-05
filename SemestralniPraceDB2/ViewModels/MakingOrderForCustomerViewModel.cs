@@ -34,7 +34,7 @@ namespace SemestralniPraceDB2.ViewModels
             public int mnozstvi;
             public double Cena => CenaKs * Mnozstvi;
 
-            public VybraneZbozi(int iD,int idInvent, string nazev, string carovyKod, double cenaKs, int mnozstvi)
+            public VybraneZbozi(int iD, int idInvent, string nazev, string carovyKod, double cenaKs, int mnozstvi)
             {
                 ID = iD;
                 IdInvent = idInvent;
@@ -76,7 +76,7 @@ namespace SemestralniPraceDB2.ViewModels
         public ObservableCollection<Vernostni_karta> seznamVerKaret;
 
         [ObservableProperty]
-        public Vernostni_karta? vybranaVerKarta;
+        public Vernostni_karta vybranaVerKarta;
 
         [ObservableProperty]
         public ObservableCollection<string> typPlatby = new() { "Hotovost", "Karta" };
@@ -105,7 +105,7 @@ namespace SemestralniPraceDB2.ViewModels
             SeznamPokladen = new();
             SeznamZboziSCenou = new();
             SeznamVerKaret = new(VernostniKartaService.GetAll());
-            SeznamVerKaret.Insert(0, new Vernostni_karta() { Jmeno = string.Empty, Cislo_Karty = string.Empty});
+            SeznamVerKaret.Insert(0, new Vernostni_karta() { Jmeno = string.Empty, Cislo_Karty = string.Empty });
             VybranaVerKarta = SeznamVerKaret.First();
             SeznamVydavatelu = new(VydavatelService.GetAll());
             VybranyVydavatel = SeznamVydavatelu.First();
@@ -163,12 +163,10 @@ namespace SemestralniPraceDB2.ViewModels
                     VybraneZboziSCenou.Cena,
                     1);
 
-                if (SeznamVybranehoZbozi.Any(vybrane => vybrane.ID == polozkaKPridani.ID) )
+                if (SeznamVybranehoZbozi.Any(vybrane => vybrane.ID == polozkaKPridani.ID))
                 {
-                    
-                        var i = SeznamVybranehoZbozi.ToList().FindIndex(vybrane => vybrane.ID == polozkaKPridani.ID);
-                        SeznamVybranehoZbozi[i].Mnozstvi++;
-                        
+                    var i = SeznamVybranehoZbozi.ToList().FindIndex(vybrane => vybrane.ID == polozkaKPridani.ID);
+                    SeznamVybranehoZbozi[i].Mnozstvi++;
                 }
                 else
                 {
@@ -205,7 +203,7 @@ namespace SemestralniPraceDB2.ViewModels
         }
 
 
-       [RelayCommand]
+        [RelayCommand]
         public void PotvrditNakup()
         {
             Platba platba = new();
@@ -239,8 +237,9 @@ namespace SemestralniPraceDB2.ViewModels
                 platba.Vydavatel = VybranyVydavatel;
                 platba.CisloKarty = CisloKarty;
             }
-            
-            Uctenka uctenka = new Uctenka() {
+
+            Uctenka uctenka = new Uctenka()
+            {
                 Id = 0,
                 CelkovaCena = CenaCelkem,
                 Pokladna = VybranaPokladna,
@@ -248,7 +247,7 @@ namespace SemestralniPraceDB2.ViewModels
                 Platba = platba
             };
 
-            List<ProdaneZbozi> polozky = (from zbozi in seznamVybranehoZbozi
+            List<ProdaneZbozi> polozky = (from zbozi in SeznamVybranehoZbozi
                                           select new ProdaneZbozi
                                           {
                                               Cena = zbozi.Cena,
@@ -257,16 +256,16 @@ namespace SemestralniPraceDB2.ViewModels
                                               Uctenka = uctenka
                                           }).ToList();
 
-            List<InventarniPolozkaSCenou> inventarZmeny = (from zbozi in seznamZboziSCenou
-                                                          from vybraneZbozi in seznamVybranehoZbozi
-                                                          where zbozi.IdInventPolozky == vybraneZbozi.IdInvent
-                                                          select new InventarniPolozkaSCenou
-                                                          {
-                                                              IdInventPolozky = zbozi.IdInventPolozky,
-                                                              Mnozstvi = vybraneZbozi.Mnozstvi
-                                                          }).ToList();
+            List<InventarniPolozkaSCenou> inventarZmeny = (from zbozi in SeznamZboziSCenou
+                                                           from vybraneZbozi in SeznamVybranehoZbozi
+                                                           where zbozi.IdInventPolozky == vybraneZbozi.IdInvent
+                                                           select new InventarniPolozkaSCenou
+                                                           {
+                                                               IdInventPolozky = zbozi.IdInventPolozky,
+                                                               Mnozstvi = vybraneZbozi.Mnozstvi
+                                                           }).ToList();
 
-            var result = UctenkaService.Create(uctenka, polozky,inventarZmeny);
+            var result = UctenkaService.Create(uctenka, polozky, inventarZmeny);
             if (!result)
             {
                 MessageBox.Show("Zbozi vyprodano");
