@@ -136,6 +136,7 @@ namespace SemestralniPraceDB2.ViewModels
         [RelayCommand]
         private void StopEmulation()
         {
+            UzivateleService.StopEmulating();
             LoggedAs = $"Přihlášen jako {UzivateleService.Aktualni?.Username}.";
             SelectedViewModel = defaultVM;
             Messenger.Send<UserStopEmulation>(new());

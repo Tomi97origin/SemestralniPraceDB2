@@ -76,12 +76,6 @@ partial class TopMenuViewModel : BaseViewModel, IRecipient<UserLogin>, IRecipien
     }
 
     [RelayCommand]
-    private void StopEmulation()
-    {
-        UzivateleService.StopEmulating();
-    }
-
-    [RelayCommand]
     private void OdlozeniSplatnosti()
     {
         new ChooseContractorWindow().ShowDialog();
