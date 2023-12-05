@@ -212,6 +212,11 @@ namespace SemestralniPraceDB2.ViewModels
             {
                 platba.Vernostni_Karta = VybranaVerKarta;
             }
+            if(VybranaPokladna is null)
+            {
+                MessageBox.Show("Vyberte pokladnu.");
+                return;
+            }
             if (SeznamVybranehoZbozi.Count < 1)
             {
                 MessageBox.Show("Nelze vytvořit prázdny nakup.");

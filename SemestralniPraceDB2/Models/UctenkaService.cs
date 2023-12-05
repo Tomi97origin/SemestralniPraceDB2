@@ -103,6 +103,7 @@ namespace SemestralniPraceDB2.Models
         }
         public static bool Create(Uctenka uctenka, List<ProdaneZbozi> polozky, List<InventarniPolozkaSCenou> vybrane)
         {
+            uctenka.CelkovaCena = 0; // Dopocita trigger v DB
             return TransactionProcedureCall(uctenka, polozky, vybrane);
         }
 

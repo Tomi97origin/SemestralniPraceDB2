@@ -14,6 +14,7 @@ namespace SemestralniPraceDB2.Models
         public static bool Create(Objednavka objednavka,List<ObjednaneZbozi> polozky)
         {
             objednavka.Id = 0;
+            objednavka.CelkovaCena = 0; // Dopocita trigger v DB
             return TransactionProcedureCall(objednavka, polozky);
         }
         public static void PrepareProcedureCall(Objednavka objednavka, out string procedureName, out List<OracleParameter> prm)
