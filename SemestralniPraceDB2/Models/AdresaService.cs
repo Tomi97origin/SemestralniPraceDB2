@@ -41,7 +41,7 @@ namespace SemestralniPraceDB2.Models
             prm.Add(new OracleParameter("p_stat", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
             prm[4].Value = adresa.Stat;
             prm.Add(new OracleParameter("p_psc", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
-            prm[4].Value = adresa.Psc;
+            prm[5].Value = adresa.Psc;
             return prm;
         }
 
