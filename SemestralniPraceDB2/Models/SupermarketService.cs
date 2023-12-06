@@ -84,9 +84,29 @@ namespace SemestralniPraceDB2.Models
         }
         public static bool Delete(Supermarket supermarket)
         {
-            PrepareDeleteCall(supermarket, out string sql, out List<OracleParameter> prm);
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
-            return result == 1;
+            using (OracleConnection connection = DatabaseConnector.GetConnection())
+            {
+                connection.Open();
+                using (OracleTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        PrepareDeleteCall(supermarket, out string sql, out List<OracleParameter> prm);
+                        var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
+                        AdresaService.PrepareDeleteCall(supermarket.Adresa, out sql, out prm);
+                        result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
+                        transaction.Commit();
+                        Console.WriteLine("Transaction committed successfully");
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        Console.WriteLine("Transaction rolled back due to an error: " + ex.Message);
+                        return false;
+                    }
+                }
+            }
         }
 
         public static void PrepareDeleteCall(Supermarket supermarket, out string sql, out List<OracleParameter> prm)
