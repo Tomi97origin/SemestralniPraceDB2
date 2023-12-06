@@ -25,8 +25,6 @@ namespace SemestralniPraceDB2.Models
 
         private static bool ProcedureCallTransactional(Supermarket supermarket)
         {
-            
-            
             using (OracleConnection connection = DatabaseConnector.GetConnection())
             {
                 connection.Open();

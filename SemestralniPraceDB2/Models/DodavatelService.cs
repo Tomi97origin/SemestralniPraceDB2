@@ -13,10 +13,8 @@ namespace SemestralniPraceDB2.Models
     {
         public static bool Create(Dodavatel dodavatel)
         {
-            PrepareProcedureCall(dodavatel, out string procedureName,out List < OracleParameter > prm);
-            prm[0].Value = null;
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
-            return result.Result > 0;
+            dodavatel.Id = 0;
+            return CallProcedureTransactional(dodavatel);
         }
 
         public static void PrepareProcedureCall(Dodavatel dodavatel, out string procedureName, out List<OracleParameter> prm)
@@ -25,11 +23,38 @@ namespace SemestralniPraceDB2.Models
             prm = MapDodavatelIntoParams(dodavatel);
         }
 
+        private static bool CallProcedureTransactional(Dodavatel dodavatel)
+        {
+            using (OracleConnection connection = DatabaseConnector.GetConnection())
+            {
+                connection.Open();
+                using (OracleTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        string prom = "";
+                        List<OracleParameter> param = new();
+                        AdresaService.PrepareProcedureCall(dodavatel.Adresa, out prom, out param);
+                        dodavatel.Adresa.Id = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection).Result;
+                        PrepareProcedureCall(dodavatel, out string procedureName, out List<OracleParameter> prm);
+                        var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(procedureName, prm, connection);
+                        transaction.Commit();
+                        Console.WriteLine("Transaction committed successfully");
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        Console.WriteLine("Transaction rolled back due to an error: " + ex.Message);
+                        return false;
+                    }
+                }
+            }
+        }
+
         public static bool Update(Dodavatel dodavatel)
         {
-            PrepareProcedureCall(dodavatel, out string procedureName, out List<OracleParameter> prm);
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
-            return result > 0;
+            return CallProcedureTransactional(dodavatel);
         }
         public static bool Delete(Dodavatel dodavatel)
         {
