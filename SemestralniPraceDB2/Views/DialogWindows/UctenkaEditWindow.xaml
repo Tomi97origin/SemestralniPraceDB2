@@ -36,13 +36,6 @@
                   ItemsSource="{Binding ListOfPokladny}"
                   SelectedItem="{Binding Uctenka.Pokladna, Mode=TwoWay}"
                   Margin="0,0,0,10">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                        <Run Text="{Binding Cislo}" />
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
 
@@ -53,13 +46,6 @@
                   ItemsSource="{Binding ListOfPlatby}"
                   SelectedItem="{Binding Uctenka.Platba, Mode=TwoWay}"
                   Margin="0,0,0,10">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                        <Run Text="{Binding Id}" />
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
 

@@ -23,12 +23,6 @@
             <DatePicker Width="200" SelectedDate="{Binding Cena.PlatnostOd, Mode=TwoWay}" />
         </StackPanel>
 
-        <!-- Platnost do -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
-            <TextBlock Width="100" Text="Platnost do:" VerticalAlignment="Center" />
-            <DatePicker Width="200" SelectedDate="{Binding Cena.PlatnostDo, Mode=TwoWay}" />
-        </StackPanel>
-
         <!-- Částka -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="5">
             <TextBlock Width="100" Text="Částka:" VerticalAlignment="Center" />
@@ -41,14 +35,8 @@
             <ComboBox Width="200"
                   ItemsSource="{Binding ListOfZbozi}"
                   SelectedItem="{Binding Cena.Zbozi, Mode=TwoWay}"
-                  Margin="0,0,0,10">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                        <Run Text="{Binding Nazev}" />
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
+                  Margin="0,0,0,10"
+                      IsEnabled="False">
             </ComboBox>
         </StackPanel>
 

@@ -43,11 +43,11 @@ namespace SemestralniPraceDB2.Models.Entities
         {
             if (Hotovost)
             {
-                return "Hotovost";
+                return $"Hotovost, vráceno {Vraceno}";
             }
             else if (CisloKarty is not null)
             {
-                return $"Kartou {ReplaceAllExceptLastFour(CisloKarty, '#')}";
+                return $"Kartou {CisloKartyCensored}";
             }
             else return "Kartou";
         }

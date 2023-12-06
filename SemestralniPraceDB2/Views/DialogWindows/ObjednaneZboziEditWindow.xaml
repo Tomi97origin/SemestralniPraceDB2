@@ -36,13 +36,6 @@
                   ItemsSource="{Binding ListOfObjednavky}"
                   SelectedItem="{Binding ObjednaneZbozi.Objednavka, Mode=TwoWay}"
                   Margin="0,0,0,10">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                        <Run Text="{Binding Nazev}" />
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
 
@@ -53,13 +46,6 @@
                   ItemsSource="{Binding ListOfZbozi}"
                   SelectedItem="{Binding ObjednaneZbozi.Zbozi, Mode=TwoWay}"
                   Margin="0,0,0,10">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                        <Run Text="{Binding Nazev}" />
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
 

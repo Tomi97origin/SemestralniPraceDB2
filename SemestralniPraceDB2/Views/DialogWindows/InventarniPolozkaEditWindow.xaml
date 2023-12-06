@@ -22,25 +22,25 @@
         <!-- Sklad -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
             <TextBlock Width="150" Text="Sklad:" VerticalAlignment="Center" />
-            <TextBox Width="200" Text="{Binding Tovar.Sklad, Mode=TwoWay}" />
+            <CheckBox IsChecked="{Binding InventarniPolozka.Sklad, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Množství -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
             <TextBlock Width="150" Text="Množství:" VerticalAlignment="Center" />
-            <TextBox Width="200" Text="{Binding Tovar.Mnozstvi, Mode=TwoWay}" />
+            <TextBox Width="200" Text="{Binding InventarniPolozka.Mnozstvi, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Označení pozice -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="5">
             <TextBlock Width="150" Text="Označení pozice:" VerticalAlignment="Center" />
-            <TextBox Width="200" Text="{Binding Tovar.OznaceniPozice, Mode=TwoWay}" />
+            <TextBox Width="200" Text="{Binding InventarniPolozka.OznaceniPozice, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Naskladněno -->
         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5">
             <TextBlock Width="150" Text="Naskladněno:" VerticalAlignment="Center" />
-            <DatePicker Width="200" SelectedDate="{Binding Tovar.Naskladneno, Mode=TwoWay}" />
+            <DatePicker Width="200" SelectedDate="{Binding InventarniPolozka.Naskladneno, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Supermarket (ComboBox) -->
@@ -48,15 +48,8 @@
             <TextBlock Width="150" Text="Supermarket:" VerticalAlignment="Center" />
             <ComboBox Width="200"
                   ItemsSource="{Binding ListOfSupermarkets}"
-                  SelectedItem="{Binding Tovar.Supermarket, Mode=TwoWay}"
+                  SelectedItem="{Binding InventarniPolozka.Supermarket, Mode=TwoWay}"
                   Margin="0,0,0,10">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                        <Run Text="{Binding Nazev}" />
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
 
@@ -65,15 +58,8 @@
             <TextBlock Width="150" Text="Zboží:" VerticalAlignment="Center" />
             <ComboBox Width="200"
                   ItemsSource="{Binding ListOfZbozi}"
-                  SelectedItem="{Binding Tovar.Zbozi, Mode=TwoWay}"
+                  SelectedItem="{Binding InventarniPolozka.Zbozi, Mode=TwoWay}"
                   Margin="0,0,0,10">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                        <Run Text="{Binding Nazev}" />
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
 

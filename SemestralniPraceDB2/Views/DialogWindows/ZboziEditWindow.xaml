@@ -39,13 +39,13 @@
         <!-- Kategorie -->
         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5">
             <TextBlock Width="150" Text="Kategorie:" VerticalAlignment="Center" />
-            <ComboBox Width="200" ItemsSource="{Binding SeznamKategorii}" SelectedItem="{Binding Zbozi.Kategorie}" DisplayMemberPath="Nazev" />
+            <ComboBox Width="200" ItemsSource="{Binding ListOfKategorie}" SelectedItem="{Binding Zbozi.Kategorie}" />
         </StackPanel>
 
         <!-- Vyrobce -->
         <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="5">
             <TextBlock Width="150" Text="Výrobce:" VerticalAlignment="Center" />
-            <ComboBox Width="200" ItemsSource="{Binding SeznamVyrobcu}" SelectedItem="{Binding Zbozi.Vyrobce}" DisplayMemberPath="Nazev" />
+            <ComboBox Width="200" ItemsSource="{Binding ListOfVyrobci}" SelectedItem="{Binding Zbozi.Vyrobce}" />
         </StackPanel>
 
         <!-- Tlačítka Ok a Zrušit s výškou Auto -->

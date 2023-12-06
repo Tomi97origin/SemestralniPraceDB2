@@ -32,48 +32,37 @@
         <!-- Jméno -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
             <TextBlock Width="100" Text="Jméno:" VerticalAlignment="Center" />
-            <TextBox Width="200" Text="{Binding Zamestnanec.Jmeno, Mode=TwoWay}" />
+            <TextBox Width="200" Text="{Binding PlnyUvazek.Jmeno, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Příjmení -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
             <TextBlock Width="100" Text="Příjmení:" VerticalAlignment="Center" />
-            <TextBox Width="200" Text="{Binding Zamestnanec.Prijmeni, Mode=TwoWay}" />
+            <TextBox Width="200" Text="{Binding PlnyUvazek.Prijmeni, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Osobní číslo -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="5">
             <TextBlock Width="100" Text="Osobní číslo:" VerticalAlignment="Center" />
-            <TextBox Width="200" Text="{Binding Zamestnanec.OsobniCislo, Mode=TwoWay}" />
+            <TextBox Width="200" Text="{Binding PlnyUvazek.OsobniCislo, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Telefonní číslo -->
         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5">
             <TextBlock Width="100" Text="Telefonní číslo:" VerticalAlignment="Center" />
-            <TextBox Width="200" Text="{Binding Zamestnanec.TelCislo, Mode=TwoWay}" />
+            <TextBox Width="200" Text="{Binding PlnyUvazek.TelCislo, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Nástup -->
         <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="5">
             <TextBlock Width="100" Text="Nástup:" VerticalAlignment="Center" />
-            <DatePicker Width="200" SelectedDate="{Binding Zamestnanec.Nastup, Mode=TwoWay}" />
+            <DatePicker Width="200" SelectedDate="{Binding PlnyUvazek.Nastup, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Typ úvazku -->
         <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="5">
             <TextBlock Width="100" Text="Typ úvazku:" VerticalAlignment="Center" />
-            <ComboBox Width="200"
-                  ItemsSource="{Binding ListOfUvazky}"
-                  SelectedItem="{Binding Zamestnanec.TypUvazku, Mode=TwoWay}"
-                  Margin="0,0,0,10">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                        <Run Text="{Binding TypUvazkuText}" />
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+            <TextBox Width="200" Text="Plný úvazek" IsReadOnly="True" IsEnabled="False"/>
         </StackPanel>
 
         <!-- Vedoucí (ComboBox) -->
@@ -81,15 +70,8 @@
             <TextBlock Width="100" Text="Vedoucí:" VerticalAlignment="Center" />
             <ComboBox Width="200"
                   ItemsSource="{Binding ListOfVedouci}"
-                  SelectedItem="{Binding Zamestnanec.Vedouci, Mode=TwoWay}"
+                  SelectedItem="{Binding PlnyUvazek.Vedouci, Mode=TwoWay}"
                   Margin="0,0,0,10">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                        <Run Text="{Binding JmenoPrijmeni}" />
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
 
@@ -98,15 +80,8 @@
             <TextBlock Width="100" Text="Supermarket:" VerticalAlignment="Center" />
             <ComboBox Width="200"
                   ItemsSource="{Binding ListOfSupermarkets}"
-                  SelectedItem="{Binding Zamestnanec.Supermarket, Mode=TwoWay}"
+                  SelectedItem="{Binding PlnyUvazek.Supermarket, Mode=TwoWay}"
                   Margin="0,0,0,10">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                        <Run Text="{Binding Nazev}" />
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
 
@@ -146,7 +121,7 @@
             <TextBlock Width="100" Text="Role:" VerticalAlignment="Center" />
             <ComboBox Width="200"
                   ItemsSource="{Binding ListOfRoles}"
-                  SelectedItem="{Binding Zamestnanec.Role, Mode=TwoWay}"
+                  SelectedItem="{Binding PlnyUvazek.Role, Mode=TwoWay}"
                   Margin="0,0,0,10">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>

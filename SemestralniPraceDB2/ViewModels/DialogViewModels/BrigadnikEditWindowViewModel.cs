@@ -14,22 +14,22 @@ namespace SemestralniPraceDB2.ViewModels.DialogViewModels
         public Brigadnik? brigadnik;
 
         [ObservableProperty]
-        private ObservableCollection<short> listOfUvazky = new() { 0, 1 };
-
-        [ObservableProperty]
         private ObservableCollection<PlnyUvazek> listOfVedouci = new(PlnyUvazekService.GetAll());
 
         [ObservableProperty]
-        private ObservableCollection<Supermarket> listOfSupermarkets = new(SupermarketService.GetAll());
+        private ObservableCollection<Supermarket> listOfSupermarkety = new(SupermarketService.GetAll());
 
         [ObservableProperty]
         private ObservableCollection<Role> listOfRoles = new(RoleService.GetAll());
 
         public BrigadnikEditWindowViewModel()
         {
-            Brigadnik = new Brigadnik();
-            Brigadnik.Adresa = new();
-            Brigadnik.Nastup = DateTime.Today;
+            Brigadnik = new()
+            {
+                Adresa = new(),
+                Nastup = DateTime.Today,
+                TypUvazku = 0
+            };
         }
 
         public BrigadnikEditWindowViewModel(Brigadnik? brigadnik)

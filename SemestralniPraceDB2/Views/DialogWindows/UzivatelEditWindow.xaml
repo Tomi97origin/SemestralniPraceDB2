@@ -18,13 +18,13 @@
         <!-- Uživatelské jméno -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
             <TextBlock Width="150" Text="Uživatelské jméno:" VerticalAlignment="Center" />
-            <TextBox Width="200" Text="{Binding Username, Mode=TwoWay}" />
+            <TextBox Width="200" Text="{Binding Uzivatel.Username, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Heslo -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
             <TextBlock Width="150" Text="Heslo:" VerticalAlignment="Center" />
-            <TextBox Width="200" Text="{Binding Password, Mode=TwoWay}" />
+            <TextBox Width="200" Text="{Binding Uzivatel.Password, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Tlačítka Ok a Zrušit s výškou Auto -->

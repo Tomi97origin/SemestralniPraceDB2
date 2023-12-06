@@ -19,19 +19,19 @@
         <!-- Jméno -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
             <TextBlock Width="150" Text="Jméno:" VerticalAlignment="Center" />
-            <TextBox Width="200" Text="{Binding Vernostni_karta.Jmeno, Mode=TwoWay}" />
+            <TextBox Width="200" Text="{Binding VernostniKarta.Jmeno, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Založení -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
             <TextBlock Width="150" Text="Založení:" VerticalAlignment="Center" />
-            <DatePicker Width="200" SelectedDate="{Binding Vernostni_karta.Zalozeni, Mode=TwoWay}" />
+            <DatePicker Width="200" SelectedDate="{Binding VernostniKarta.Zalozeni, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Číslo karty -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="5">
             <TextBlock Width="150" Text="Číslo karty:" VerticalAlignment="Center" />
-            <TextBox Width="200" Text="{Binding Vernostni_karta.Cislo_Karty, Mode=TwoWay}" />
+            <TextBox Width="200" Text="{Binding VernostniKarta.Cislo_Karty, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Tlačítka Ok a Zrušit s výškou Auto -->

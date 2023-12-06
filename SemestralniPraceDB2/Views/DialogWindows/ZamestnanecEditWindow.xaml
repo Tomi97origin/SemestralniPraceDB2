@@ -62,15 +62,8 @@
             <TextBlock Width="100" Text="Typ úvazku:" VerticalAlignment="Center" />
             <ComboBox Width="200"
               ItemsSource="{Binding ListOfUvazky}"
-              SelectedItem="{Binding Zamestnanec.TypUvazku, Mode=TwoWay}"
+              SelectedItem="{Binding SelectedTypUvazku, Mode=TwoWay}"
               Margin="0,0,0,10">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                    <Run Text="{Binding TypUvazkuText}" />
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
 
@@ -81,13 +74,6 @@
               ItemsSource="{Binding ListOfVedouci}"
               SelectedItem="{Binding Zamestnanec.Vedouci, Mode=TwoWay}"
               Margin="0,0,0,10">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                    <Run Text="{Binding JmenoPrijmeni}" />
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
 
@@ -98,13 +84,6 @@
               ItemsSource="{Binding ListOfSupermarkets}"
               SelectedItem="{Binding Zamestnanec.Supermarket, Mode=TwoWay}"
               Margin="0,0,0,10">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                    <Run Text="{Binding Nazev}" />
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
 
@@ -112,31 +91,31 @@
         <!-- Ulice -->
         <StackPanel Grid.Row="8" Orientation="Horizontal" Margin="5">
             <TextBlock Width="100" Text="Ulice:" VerticalAlignment="Center" />
-            <TextBox Width="200" Text="{Binding PlnyUvazek.Adresa.Ulice, Mode=TwoWay}" />
+            <TextBox Width="200" Text="{Binding Zamestnanec.Adresa.Ulice, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- ČP -->
         <StackPanel Grid.Row="9" Orientation="Horizontal" Margin="5">
             <TextBlock Width="100" Text="ČP:" VerticalAlignment="Center" />
-            <TextBox Width="200" Text="{Binding PlnyUvazek.Adresa.Cp, Mode=TwoWay}" />
+            <TextBox Width="200" Text="{Binding Zamestnanec.Adresa.Cp, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Město -->
         <StackPanel Grid.Row="10" Orientation="Horizontal" Margin="5">
             <TextBlock Width="100" Text="Město:" VerticalAlignment="Center" />
-            <TextBox Width="200" Text="{Binding PlnyUvazek.Adresa.Mesto, Mode=TwoWay}" />
+            <TextBox Width="200" Text="{Binding Zamestnanec.Adresa.Mesto, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Stát -->
         <StackPanel Grid.Row="11" Orientation="Horizontal" Margin="5">
             <TextBlock Width="100" Text="Stát:" VerticalAlignment="Center" />
-            <TextBox Width="200" Text="{Binding PlnyUvazek.Adresa.Stat, Mode=TwoWay}" />
+            <TextBox Width="200" Text="{Binding Zamestnanec.Adresa.Stat, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- PSČ -->
         <StackPanel Grid.Row="12" Orientation="Horizontal" Margin="5">
             <TextBlock Width="100" Text="PSČ:" VerticalAlignment="Center" />
-            <TextBox Width="200" Text="{Binding PlnyUvazek.Adresa.Psc, Mode=TwoWay}" />
+            <TextBox Width="200" Text="{Binding Zamestnanec.Adresa.Psc, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Role (ComboBox) -->

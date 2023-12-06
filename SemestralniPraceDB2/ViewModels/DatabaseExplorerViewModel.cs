@@ -383,12 +383,16 @@ partial class DatabaseExplorerViewModel : BaseViewModel
             MessageBox.Show("Nelze editovat log.", "Pozor", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
+        else if (SelectedRecord is Uzivatel)
+        {
+            MessageBox.Show("Nelze editovat uživatele.", "Pozor", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
         else
         {
             HandleEditUserRequset();
         }
     }
-
 
     [RelayCommand]
     private void AddRecord()
@@ -492,247 +496,224 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                 }
                 break;
 
-            /*
-        case Cena:
-            var cenaDialog = new CenaEditWindow();
-            var cenaDialogVM = new CenaEditWindowViewModel();
-            cenaDialogVM.Cena = SelectedRecord as Cena;
-            cenaDialog.DataContext = cenaDialogVM;
-            cenaDialog.ShowDialog();
-            if (cenaDialogVM.Cena is not null)
-            {
-                editedRecords.Add(cenaDialogVM.Cena);
-            }
-            break;
+            case Cena:
+                var cenaDialog = new CenaEditWindow();
+                var cenaDialogVM = new CenaEditWindowViewModel(SelectedRecord as Cena);
+                cenaDialog.DataContext = cenaDialogVM;
+                cenaDialog.ShowDialog();
+                if (cenaDialogVM.Cena is not null)
+                {
+                    editedRecords.Add(cenaDialogVM.Cena);
+                }
+                break;
 
-        case Dodavatel:
-            var dodavatelDialog = new DodavatelEditWindow();
-            var dodavatelDialogVM = new DodavatelEditWindowViewModel();
-            dodavatelDialogVM.Dodavatel = SelectedRecord as Dodavatel;
-            dodavatelDialog.DataContext = dodavatelDialogVM;
-            dodavatelDialog.ShowDialog();
-            if (dodavatelDialogVM.Dodavatel is not null)
-            {
-                editedRecords.Add(dodavatelDialogVM.Dodavatel);
-            }
-            break;
+            case Dodavatel:
+                var dodavatelDialog = new DodavatelEditWindow();
+                var dodavatelDialogVM = new DodavatelEditWindowViewModel(SelectedRecord as Dodavatel);
+                dodavatelDialog.DataContext = dodavatelDialogVM;
+                dodavatelDialog.ShowDialog();
+                if (dodavatelDialogVM.Dodavatel is not null)
+                {
+                    editedRecords.Add(dodavatelDialogVM.Dodavatel);
+                }
+                break;
 
-        case InventarniPolozka:
-            var inventarniPolozkaDialog = new InventarniPolozkaEditWindow();
-            var inventarniPolozkaDialogVM = new InventarniPolozkaEditWindowViewModel();
-            inventarniPolozkaDialogVM.InventarniPolozka = SelectedRecord as InventarniPolozka;
-            inventarniPolozkaDialog.DataContext = inventarniPolozkaDialogVM;
-            inventarniPolozkaDialog.ShowDialog();
-            if (inventarniPolozkaDialogVM.InventarniPolozka is not null)
-            {
-                editedRecords.Add(inventarniPolozkaDialogVM.InventarniPolozka);
-            }
-            break;
+            case InventarniPolozka:
+                var inventarniPolozkaDialog = new InventarniPolozkaEditWindow();
+                var inventarniPolozkaDialogVM = new InventarniPolozkaEditWindowViewModel(SelectedRecord as InventarniPolozka);
+                inventarniPolozkaDialog.DataContext = inventarniPolozkaDialogVM;
+                inventarniPolozkaDialog.ShowDialog();
+                if (inventarniPolozkaDialogVM.InventarniPolozka is not null)
+                {
+                    editedRecords.Add(inventarniPolozkaDialogVM.InventarniPolozka);
+                }
+                break;
 
-        case Kategorie:
-            var kategorieDialog = new KategorieEditWindow();
-            var kategorieDialogVM = new KategorieEditWindowViewModel();
-            kategorieDialogVM.Kategorie = SelectedRecord as Kategorie;
-            kategorieDialog.DataContext = kategorieDialogVM;
-            kategorieDialog.ShowDialog();
-            if (kategorieDialogVM.Kategorie is not null)
-            {
-                editedRecords.Add(kategorieDialogVM.Kategorie);
-            }
-            break;
+            case Kategorie:
+                var kategorieDialog = new KategorieEditWindow();
+                var kategorieDialogVM = new KategorieEditWindowViewModel();
+                kategorieDialogVM.Kategorie = SelectedRecord as Kategorie;
+                kategorieDialog.DataContext = kategorieDialogVM;
+                kategorieDialog.ShowDialog();
+                if (kategorieDialogVM.Kategorie is not null)
+                {
+                    editedRecords.Add(kategorieDialogVM.Kategorie);
+                }
+                break;
 
-        case ObjednaneZbozi:
-            var objednaneZboziDialog = new ObjednaneZboziEditWindow();
-            var objednaneZboziDialogVM = new ObjednaneZboziEditWindowViewModel();
-            objednaneZboziDialogVM.ObjednaneZbozi = SelectedRecord as ObjednaneZbozi;
-            objednaneZboziDialog.DataContext = objednaneZboziDialogVM;
-            objednaneZboziDialog.ShowDialog();
-            if (objednaneZboziDialogVM.ObjednaneZbozi is not null)
-            {
-                editedRecords.Add(objednaneZboziDialogVM.ObjednaneZbozi);
-            }
-            break;
+            case ObjednaneZbozi:
+                var objednaneZboziDialog = new ObjednaneZboziEditWindow();
+                var objednaneZboziDialogVM = new ObjednaneZboziEditWindowViewModel();
+                objednaneZboziDialogVM.ObjednaneZbozi = SelectedRecord as ObjednaneZbozi;
+                objednaneZboziDialog.DataContext = objednaneZboziDialogVM;
+                objednaneZboziDialog.ShowDialog();
+                if (objednaneZboziDialogVM.ObjednaneZbozi is not null)
+                {
+                    editedRecords.Add(objednaneZboziDialogVM.ObjednaneZbozi);
+                }
+                break;
 
-        case Objednavka:
-            var objednavkaDialog = new ObjednavkaEditWindow();
-            var objednavkaDialogVM = new ObjednavkaEditWindowViewModel();
-            objednavkaDialogVM.Objednavka = SelectedRecord as Objednavka;
-            objednavkaDialog.DataContext = objednavkaDialogVM;
-            objednavkaDialog.ShowDialog();
-            if (objednavkaDialogVM.Objednavka is not null)
-            {
-                editedRecords.Add(objednavkaDialogVM.Objednavka);
-            }
-            break;
+            case Objednavka:
+                var objednavkaDialog = new ObjednavkaEditWindow();
+                var objednavkaDialogVM = new ObjednavkaEditWindowViewModel(SelectedRecord as Objednavka);
+                objednavkaDialog.DataContext = objednavkaDialogVM;
+                objednavkaDialog.ShowDialog();
+                if (objednavkaDialogVM.Objednavka is not null)
+                {
+                    editedRecords.Add(objednavkaDialogVM.Objednavka);
+                }
+                break;
 
-        case ObrazekZamestnance:
-            var obrazekZamestnanceDialog = new ObrazekZamestnanceEditWindow();
-            var obrazekZamestnanceDialogVM = new ObrazekZamestnanceEditWindowViewModel();
-            obrazekZamestnanceDialogVM.ObrazekZamestnance = SelectedRecord as ObrazekZamestnance;
-            obrazekZamestnanceDialog.DataContext = obrazekZamestnanceDialogVM;
-            obrazekZamestnanceDialog.ShowDialog();
-            if (obrazekZamestnanceDialogVM.ObrazekZamestnance is not null)
-            {
-                editedRecords.Add(obrazekZamestnanceDialogVM.ObrazekZamestnance);
-            }
-            break;
+            case ObrazekZamestnance:
+                var obrazekZamestnanceDialog = new ObrazekZamestnanceEditWindow();
+                var obrazekZamestnanceDialogVM = new ObrazekZamestnanceEditWindowViewModel(SelectedRecord as ObrazekZamestnance);
+                obrazekZamestnanceDialog.DataContext = obrazekZamestnanceDialogVM;
+                obrazekZamestnanceDialog.ShowDialog();
+                if (obrazekZamestnanceDialogVM.ObrazekZamestnance is not null)
+                {
+                    editedRecords.Add(obrazekZamestnanceDialogVM.ObrazekZamestnance);
+                }
+                break;
 
-        case Platba:
-            var platbaDialog = new PlatbaEditWindow();
-            var platbaDialogVM = new PlatbaEditWindowViewModel();
-            platbaDialogVM.Platba = SelectedRecord as Platba;
-            platbaDialog.DataContext = platbaDialogVM;
-            platbaDialog.ShowDialog();
-            if (platbaDialogVM.Platba is not null)
-            {
-                editedRecords.Add(platbaDialogVM.Platba);
-            }
-            break;
+            case Platba:
+                var platbaDialog = new PlatbaEditWindow();
+                var platbaDialogVM = new PlatbaEditWindowViewModel();
+                platbaDialogVM.Platba = SelectedRecord as Platba;
+                platbaDialog.DataContext = platbaDialogVM;
+                platbaDialog.ShowDialog();
+                if (platbaDialogVM.Platba is not null)
+                {
+                    editedRecords.Add(platbaDialogVM.Platba);
+                }
+                break;
 
-        case PlnyUvazek:
-            var plnyUvazekDialog = new PlnyUvazekEditWindow();
-            var plnyUvazekDialogVM = new PlnyUvazekEditWindowViewModel();
-            plnyUvazekDialogVM.PlnyUvazek = SelectedRecord as PlnyUvazek;
-            plnyUvazekDialog.DataContext = plnyUvazekDialogVM;
-            plnyUvazekDialog.ShowDialog();
-            if (plnyUvazekDialogVM.PlnyUvazek is not null)
-            {
-                editedRecords.Add(plnyUvazekDialogVM.PlnyUvazek);
-            }
-            break;
+            case PlnyUvazek:
+                var plnyUvazekDialog = new PlnyUvazekEditWindow();
+                var plnyUvazekDialogVM = new PlnyUvazekEditWindowViewModel(SelectedRecord as PlnyUvazek);
+                plnyUvazekDialog.DataContext = plnyUvazekDialogVM;
+                plnyUvazekDialog.ShowDialog();
+                if (plnyUvazekDialogVM.PlnyUvazek is not null)
+                {
+                    editedRecords.Add(plnyUvazekDialogVM.PlnyUvazek);
+                }
+                break;
 
-        case Pokladna:
-            var pokladnaDialog = new PokladnaEditWindow();
-            var pokladnaDialogVM = new PokladnaEditWindowViewModel();
-            pokladnaDialogVM.Pokladna = SelectedRecord as Pokladna;
-            pokladnaDialog.DataContext = pokladnaDialogVM;
-            pokladnaDialog.ShowDialog();
-            if (pokladnaDialogVM.Pokladna is not null)
-            {
-                editedRecords.Add(pokladnaDialogVM.Pokladna);
-            }
-            break;
+            case Pokladna:
+                var pokladnaDialog = new PokladnaEditWindow();
+                var pokladnaDialogVM = new PokladnaEditWindowViewModel();
+                pokladnaDialogVM.Pokladna = SelectedRecord as Pokladna;
+                pokladnaDialog.DataContext = pokladnaDialogVM;
+                pokladnaDialog.ShowDialog();
+                if (pokladnaDialogVM.Pokladna is not null)
+                {
+                    editedRecords.Add(pokladnaDialogVM.Pokladna);
+                }
+                break;
 
-        case ProdaneZbozi:
-            var prodaneZboziDialog = new ProdaneZboziEditWindow();
-            var prodaneZboziDialogVM = new ProdaneZboziEditWindowViewModel();
-            prodaneZboziDialogVM.ProdaneZbozi = SelectedRecord as ProdaneZbozi;
-            prodaneZboziDialog.DataContext = prodaneZboziDialogVM;
-            prodaneZboziDialog.ShowDialog();
-            if (prodaneZboziDialogVM.ProdaneZbozi is not null)
-            {
-                editedRecords.Add(prodaneZboziDialogVM.ProdaneZbozi);
-            }
-            break;
+            case ProdaneZbozi:
+                var prodaneZboziDialog = new ProdaneZboziEditWindow();
+                var prodaneZboziDialogVM = new ProdaneZboziEditWindowViewModel();
+                prodaneZboziDialogVM.ProdaneZbozi = SelectedRecord as ProdaneZbozi;
+                prodaneZboziDialog.DataContext = prodaneZboziDialogVM;
+                prodaneZboziDialog.ShowDialog();
+                if (prodaneZboziDialogVM.ProdaneZbozi is not null)
+                {
+                    editedRecords.Add(prodaneZboziDialogVM.ProdaneZbozi);
+                }
+                break;
 
-        case Role:
-            var roleDialog = new RoleEditWindow();
-            var roleDialogVM = new RoleEditWindowViewModel();
-            roleDialogVM.Role = SelectedRecord as Role;
-            roleDialog.DataContext = roleDialogVM;
-            roleDialog.ShowDialog();
-            if (roleDialogVM.Role is not null)
-            {
-                editedRecords.Add(roleDialogVM.Role);
-            }
-            break;
+            case Role:
+                var roleDialog = new RoleEditWindow();
+                var roleDialogVM = new RoleEditWindowViewModel();
+                roleDialogVM.Role = SelectedRecord as Role;
+                roleDialog.DataContext = roleDialogVM;
+                roleDialog.ShowDialog();
+                if (roleDialogVM.Role is not null)
+                {
+                    editedRecords.Add(roleDialogVM.Role);
+                }
+                break;
 
-        case Supermarket:
-            var supermarketDialog = new SupermarketEditWindow();
-            var supermarketDialogVM = new SupermarketEditWindowViewModel();
-            supermarketDialogVM.Supermarket = SelectedRecord as Supermarket;
-            supermarketDialog.DataContext = supermarketDialogVM;
-            supermarketDialog.ShowDialog();
-            if (supermarketDialogVM.Supermarket is not null)
-            {
-                editedRecords.Add(supermarketDialogVM.Supermarket);
-            }
-            break;
+            case Supermarket:
+                var supermarketDialog = new SupermarketEditWindow();
+                var supermarketDialogVM = new SupermarketEditWindowViewModel(SelectedRecord as Supermarket);
+                supermarketDialog.DataContext = supermarketDialogVM;
+                supermarketDialog.ShowDialog();
+                if (supermarketDialogVM.Supermarket is not null)
+                {
+                    editedRecords.Add(supermarketDialogVM.Supermarket);
+                }
+                break;
 
-        case Uctenka:
-            var uctenkaDialog = new UctenkaEditWindow();
-            var uctenkaDialogVM = new UctenkaEditWindowViewModel();
-            uctenkaDialogVM.Uctenka = SelectedRecord as Uctenka;
-            uctenkaDialog.DataContext = uctenkaDialogVM;
-            uctenkaDialog.ShowDialog();
-            if (uctenkaDialogVM.Uctenka is not null)
-            {
-                editedRecords.Add(uctenkaDialogVM.Uctenka);
-            }
-            break;
+            case Uctenka:
+                var uctenkaDialog = new UctenkaEditWindow();
+                var uctenkaDialogVM = new UctenkaEditWindowViewModel(SelectedRecord as Uctenka);
+                uctenkaDialog.DataContext = uctenkaDialogVM;
+                uctenkaDialog.ShowDialog();
+                if (uctenkaDialogVM.Uctenka is not null)
+                {
+                    editedRecords.Add(uctenkaDialogVM.Uctenka);
+                }
+                break;
 
-        case Uzivatel:
-            var uzivatelDialog = new UzivatelEditWindow();
-            var uzivatelDialogVM = new UzivatelEditWindowViewModel();
-            uzivatelDialogVM.Uzivatel = SelectedRecord as Uzivatel;
-            uzivatelDialog.DataContext = uzivatelDialogVM;
-            uzivatelDialog.ShowDialog();
-            if (uzivatelDialogVM.Uzivatel is not null)
-            {
-                editedRecords.Add(uzivatelDialogVM.Uzivatel);
-            }
-            break;
+            case Vernostni_karta:
+                var vernostniKartaDialog = new VernostniKartaEditWindow();
+                var vernostniKartaDialogVM = new VernostniKartaEditWindowViewModel(SelectedRecord as Vernostni_karta);
+                vernostniKartaDialog.DataContext = vernostniKartaDialogVM;
+                vernostniKartaDialog.ShowDialog();
+                if (vernostniKartaDialogVM.VernostniKarta is not null)
+                {
+                    editedRecords.Add(vernostniKartaDialogVM.VernostniKarta);
+                }
+                break;
 
-        case Vernostni_karta:
-            var vernostniKartaDialog = new VernostniKartaEditWindow();
-            var vernostniKartaDialogVM = new VernostniKartaEditWindowViewModel();
-            vernostniKartaDialogVM.VernostniKarta = SelectedRecord as Vernostni_karta;
-            vernostniKartaDialog.DataContext = vernostniKartaDialogVM;
-            vernostniKartaDialog.ShowDialog();
-            if (vernostniKartaDialogVM.VernostniKarta is not null)
-            {
-                editedRecords.Add(vernostniKartaDialogVM.VernostniKarta);
-            }
-            break;
+            case Vydavatel:
+                var vydavatelDialog = new VydavatelEditWindow();
+                var vydavatelDialogVM = new VydavatelEditWindowViewModel();
+                vydavatelDialogVM.Vydavatel = SelectedRecord as Vydavatel;
+                vydavatelDialog.DataContext = vydavatelDialogVM;
+                vydavatelDialog.ShowDialog();
+                if (vydavatelDialogVM.Vydavatel is not null)
+                {
+                    editedRecords.Add(vydavatelDialogVM.Vydavatel);
+                }
+                break;
 
-        case Vydavatel:
-            var vydavatelDialog = new VydavatelEditWindow();
-            var vydavatelDialogVM = new VydavatelEditWindowViewModel();
-            vydavatelDialogVM.Vydavatel = SelectedRecord as Vydavatel;
-            vydavatelDialog.DataContext = vydavatelDialogVM;
-            vydavatelDialog.ShowDialog();
-            if (vydavatelDialogVM.Vydavatel is not null)
-            {
-                editedRecords.Add(vydavatelDialogVM.Vydavatel);
-            }
-            break;
+            case Vyrobce:
+                var vyrobceDialog = new VyrobceEditWindow();
+                var vyrobceDialogVM = new VyrobceEditWindowViewModel();
+                vyrobceDialogVM.Vyrobce = SelectedRecord as Vyrobce;
+                vyrobceDialog.DataContext = vyrobceDialogVM;
+                vyrobceDialog.ShowDialog();
+                if (vyrobceDialogVM.Vyrobce is not null)
+                {
+                    editedRecords.Add(vyrobceDialogVM.Vyrobce);
+                }
+                break;
 
-        case Vyrobce:
-            var vyrobceDialog = new VyrobceEditWindow();
-            var vyrobceDialogVM = new VyrobceEditWindowViewModel();
-            vyrobceDialogVM.Vyrobce = SelectedRecord as Vyrobce;
-            vyrobceDialog.DataContext = vyrobceDialogVM;
-            vyrobceDialog.ShowDialog();
-            if (vyrobceDialogVM.Vyrobce is not null)
-            {
-                editedRecords.Add(vyrobceDialogVM.Vyrobce);
-            }
-            break;
+            case Zamestnanec:
+                var zamestnanecDialog = new ZamestnanecEditWindow();
+                var zamestnanecDialogVM = new ZamestnanecEditWindowViewModel(SelectedRecord as Zamestnanec);
+                zamestnanecDialog.DataContext = zamestnanecDialogVM;
+                zamestnanecDialog.ShowDialog();
+                if (zamestnanecDialogVM.Zamestnanec is not null)
+                {
+                    editedRecords.Add(zamestnanecDialogVM.Zamestnanec);
+                }
+                break;
 
-        case Zamestnanec:
-            var zamestnanecDialog = new ZamestnanecEditWindow();
-            var zamestnanecDialogVM = new ZamestnanecEditWindowViewModel();
-            zamestnanecDialogVM.Zamestnanec = SelectedRecord as Zamestnanec;
-            zamestnanecDialog.DataContext = zamestnanecDialogVM;
-            zamestnanecDialog.ShowDialog();
-            if (zamestnanecDialogVM.Zamestnanec is not null)
-            {
-                editedRecords.Add(zamestnanecDialogVM.Zamestnanec);
-            }
-            break;
+            case Zbozi:
+                var zboziDialog = new ZboziEditWindow();
+                var zboziDialogVM = new ZboziEditWindowViewModel();
+                zboziDialogVM.Zbozi = SelectedRecord as Zbozi;
+                zboziDialog.DataContext = zboziDialogVM;
+                zboziDialog.ShowDialog();
+                if (zboziDialogVM.Zbozi is not null)
+                {
+                    editedRecords.Add(zboziDialogVM.Zbozi);
+                }
+                break;
 
-        case Zbozi:
-            var zboziDialog = new ZboziEditWindow();
-            var zboziDialogVM = new ZboziEditWindowViewModel();
-            zboziDialogVM.Zbozi = SelectedRecord as Zbozi;
-            zboziDialog.DataContext = zboziDialogVM;
-            zboziDialog.ShowDialog();
-            if (zboziDialogVM.Zbozi is not null)
-            {
-                editedRecords.Add(zboziDialogVM.Zbozi);
-            }
-            break;
-            */
             default:
                 throw new ApplicationException("No edit method for this table.");
         }
@@ -755,7 +736,7 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                 adresaDialog.ShowDialog();
                 if (adresaDialogVM.Adresa is not null)
                 {
-                    editedRecords.Add(adresaDialogVM.Adresa);
+                    newRecords.Add(adresaDialogVM.Adresa);
                     SelectedTableData?.Add(adresaDialogVM.Adresa);
                 }
                 break;
@@ -767,252 +748,250 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                 brigadnikDialog.ShowDialog();
                 if (brigadnikDialogVM.Brigadnik is not null)
                 {
-                    editedRecords.Add(brigadnikDialogVM.Brigadnik);
+                    newRecords.Add(brigadnikDialogVM.Brigadnik);
                     SelectedTableData?.Add(brigadnikDialogVM.Brigadnik);
                 }
                 break;
 
-            /*
-        case "CENY":
-            var cenaDialog = new CenaEditWindow();
-            var cenaDialogVM = new CenaEditWindowViewModel();
-            cenaDialog.DataContext = cenaDialogVM;
-            cenaDialog.ShowDialog();
-            if (cenaDialogVM.Cena is not null)
-            {
-                editedRecords.Add(cenaDialogVM.Cena);
+            case "CENY":
+                var cenaDialog = new CenaEditWindow();
+                var cenaDialogVM = new CenaEditWindowViewModel();
+                cenaDialog.DataContext = cenaDialogVM;
+                cenaDialog.ShowDialog();
+                if (cenaDialogVM.Cena is not null)
+                {
+                    newRecords.Add(cenaDialogVM.Cena);
                     SelectedTableData?.Add(cenaDialogVM.Cena);
-            }
-            break;
+                }
+                break;
 
-        case "DODAVATELE":
-            var dodavatelDialog = new DodavatelEditWindow();
-            var dodavatelDialogVM = new DodavatelEditWindowViewModel();
-            dodavatelDialog.DataContext = dodavatelDialogVM;
-            dodavatelDialog.ShowDialog();
-            if (dodavatelDialogVM.Dodavatel is not null)
-            {
-                editedRecords.Add(dodavatelDialogVM.Dodavatel);
+            case "DODAVATELE":
+                var dodavatelDialog = new DodavatelEditWindow();
+                var dodavatelDialogVM = new DodavatelEditWindowViewModel();
+                dodavatelDialog.DataContext = dodavatelDialogVM;
+                dodavatelDialog.ShowDialog();
+                if (dodavatelDialogVM.Dodavatel is not null)
+                {
+                    newRecords.Add(dodavatelDialogVM.Dodavatel);
                     SelectedTableData?.Add(dodavatelDialogVM.Dodavatel);
-            }
-            break;
+                }
+                break;
 
-        case "INVENTARNI_POLOZKY":
-            var inventarniPolozkaDialog = new InventarniPolozkaEditWindow();
-            var inventarniPolozkaDialogVM = new InventarniPolozkaEditWindowViewModel();
-            inventarniPolozkaDialog.DataContext = inventarniPolozkaDialogVM;
-            inventarniPolozkaDialog.ShowDialog();
-            if (inventarniPolozkaDialogVM.InventarniPolozka is not null)
-            {
-                editedRecords.Add(inventarniPolozkaDialogVM.InventarniPolozka);
+            case "INVENTARNI_POLOZKY":
+                var inventarniPolozkaDialog = new InventarniPolozkaEditWindow();
+                var inventarniPolozkaDialogVM = new InventarniPolozkaEditWindowViewModel();
+                inventarniPolozkaDialog.DataContext = inventarniPolozkaDialogVM;
+                inventarniPolozkaDialog.ShowDialog();
+                if (inventarniPolozkaDialogVM.InventarniPolozka is not null)
+                {
+                    newRecords.Add(inventarniPolozkaDialogVM.InventarniPolozka);
                     SelectedTableData?.Add(inventarniPolozkaDialogVM.InventarniPolozka);
-            }
-            break;
+                }
+                break;
 
-        case "KATEGORIE":
-            var kategorieDialog = new KategorieEditWindow();
-            var kategorieDialogVM = new KategorieEditWindowViewModel();
-            kategorieDialog.DataContext = kategorieDialogVM;
-            kategorieDialog.ShowDialog();
-            if (kategorieDialogVM.Kategorie is not null)
-            {
-                editedRecords.Add(kategorieDialogVM.Kategorie);
+            case "KATEGORIE":
+                var kategorieDialog = new KategorieEditWindow();
+                var kategorieDialogVM = new KategorieEditWindowViewModel();
+                kategorieDialog.DataContext = kategorieDialogVM;
+                kategorieDialog.ShowDialog();
+                if (kategorieDialogVM.Kategorie is not null)
+                {
+                    newRecords.Add(kategorieDialogVM.Kategorie);
                     SelectedTableData?.Add(kategorieDialogVM.Kategorie);
-            }
-            break;
+                }
+                break;
 
-        case "OBJEDNANE_ZBOZO":
-            var objednaneZboziDialog = new ObjednaneZboziEditWindow();
-            var objednaneZboziDialogVM = new ObjednaneZboziEditWindowViewModel();
-            objednaneZboziDialog.DataContext = objednaneZboziDialogVM;
-            objednaneZboziDialog.ShowDialog();
-            if (objednaneZboziDialogVM.ObjednaneZbozi is not null)
-            {
-                editedRecords.Add(objednaneZboziDialogVM.ObjednaneZbozi);
+            case "OBJEDNANE_ZBOZI":
+                var objednaneZboziDialog = new ObjednaneZboziEditWindow();
+                var objednaneZboziDialogVM = new ObjednaneZboziEditWindowViewModel();
+                objednaneZboziDialog.DataContext = objednaneZboziDialogVM;
+                objednaneZboziDialog.ShowDialog();
+                if (objednaneZboziDialogVM.ObjednaneZbozi is not null)
+                {
+                    newRecords.Add(objednaneZboziDialogVM.ObjednaneZbozi);
                     SelectedTableData?.Add(objednaneZboziDialogVM.ObjednaneZbozi);
-            }
-            break;
+                }
+                break;
 
-        case "OBJEDNAVKY":
-            var objednavkaDialog = new ObjednavkaEditWindow();
-            var objednavkaDialogVM = new ObjednavkaEditWindowViewModel();
-            objednavkaDialog.DataContext = objednavkaDialogVM;
-            objednavkaDialog.ShowDialog();
-            if (objednavkaDialogVM.Objednavka is not null)
-            {
-                editedRecords.Add(objednavkaDialogVM.Objednavka);
+            case "OBJEDNAVKY":
+                var objednavkaDialog = new ObjednavkaEditWindow();
+                var objednavkaDialogVM = new ObjednavkaEditWindowViewModel();
+                objednavkaDialog.DataContext = objednavkaDialogVM;
+                objednavkaDialog.ShowDialog();
+                if (objednavkaDialogVM.Objednavka is not null)
+                {
+                    newRecords.Add(objednavkaDialogVM.Objednavka);
                     SelectedTableData?.Add(objednavkaDialogVM.Objednavka);
-            }
-            break;
+                }
+                break;
 
-        case "OBRAZKYZAMESTNANCU":
-            var obrazekZamestnanceDialog = new ObrazekZamestnanceEditWindow();
-            var obrazekZamestnanceDialogVM = new ObrazekZamestnanceEditWindowViewModel();
-            obrazekZamestnanceDialog.DataContext = obrazekZamestnanceDialogVM;
-            obrazekZamestnanceDialog.ShowDialog();
-            if (obrazekZamestnanceDialogVM.ObrazekZamestnance is not null)
-            {
-                editedRecords.Add(obrazekZamestnanceDialogVM.ObrazekZamestnance);
+            case "OBRAZKYZAMESTNANCU":
+                var obrazekZamestnanceDialog = new ObrazekZamestnanceEditWindow();
+                var obrazekZamestnanceDialogVM = new ObrazekZamestnanceEditWindowViewModel();
+                obrazekZamestnanceDialog.DataContext = obrazekZamestnanceDialogVM;
+                obrazekZamestnanceDialog.ShowDialog();
+                if (obrazekZamestnanceDialogVM.ObrazekZamestnance is not null)
+                {
+                    newRecords.Add(obrazekZamestnanceDialogVM.ObrazekZamestnance);
                     SelectedTableData?.Add(obrazekZamestnanceDialogVM.ObrazekZamestnance);
-            }
-            break;
+                }
+                break;
 
-        case "PLATBY":
-            var platbaDialog = new PlatbaEditWindow();
-            var platbaDialogVM = new PlatbaEditWindowViewModel();
-            platbaDialog.DataContext = platbaDialogVM;
-            platbaDialog.ShowDialog();
-            if (platbaDialogVM.Platba is not null)
-            {
-                editedRecords.Add(platbaDialogVM.Platba);
+            case "PLATBY":
+                var platbaDialog = new PlatbaEditWindow();
+                var platbaDialogVM = new PlatbaEditWindowViewModel();
+                platbaDialog.DataContext = platbaDialogVM;
+                platbaDialog.ShowDialog();
+                if (platbaDialogVM.Platba is not null)
+                {
+                    newRecords.Add(platbaDialogVM.Platba);
                     SelectedTableData?.Add(platbaDialogVM.Platba);
-            }
-            break;
+                }
+                break;
 
-        case "PLNE_UVAZKY":
-            var plnyUvazekDialog = new PlnyUvazekEditWindow();
-            var plnyUvazekDialogVM = new PlnyUvazekEditWindowViewModel();
-            plnyUvazekDialog.DataContext = plnyUvazekDialogVM;
-            plnyUvazekDialog.ShowDialog();
-            if (plnyUvazekDialogVM.PlnyUvazek is not null)
-            {
-                editedRecords.Add(plnyUvazekDialogVM.PlnyUvazek);
+            case "PLNE_UVAZKY":
+                var plnyUvazekDialog = new PlnyUvazekEditWindow();
+                var plnyUvazekDialogVM = new PlnyUvazekEditWindowViewModel();
+                plnyUvazekDialog.DataContext = plnyUvazekDialogVM;
+                plnyUvazekDialog.ShowDialog();
+                if (plnyUvazekDialogVM.PlnyUvazek is not null)
+                {
+                    newRecords.Add(plnyUvazekDialogVM.PlnyUvazek);
                     SelectedTableData?.Add(plnyUvazekDialogVM.PlnyUvazek);
-            }
-            break;
+                }
+                break;
 
-        case "POKLADNY":
-            var pokladnaDialog = new PokladnaEditWindow();
-            var pokladnaDialogVM = new PokladnaEditWindowViewModel();
-            pokladnaDialog.DataContext = pokladnaDialogVM;
-            pokladnaDialog.ShowDialog();
-            if (pokladnaDialogVM.Pokladna is not null)
-            {
-                editedRecords.Add(pokladnaDialogVM.Pokladna);
+            case "POKLADNY":
+                var pokladnaDialog = new PokladnaEditWindow();
+                var pokladnaDialogVM = new PokladnaEditWindowViewModel();
+                pokladnaDialog.DataContext = pokladnaDialogVM;
+                pokladnaDialog.ShowDialog();
+                if (pokladnaDialogVM.Pokladna is not null)
+                {
+                    newRecords.Add(pokladnaDialogVM.Pokladna);
                     SelectedTableData?.Add(pokladnaDialogVM.Pokladna);
-            }
-            break;
+                }
+                break;
 
-        case "PRODANE_ZBOZI":
-            var prodaneZboziDialog = new ProdaneZboziEditWindow();
-            var prodaneZboziDialogVM = new ProdaneZboziEditWindowViewModel();
-            prodaneZboziDialog.DataContext = prodaneZboziDialogVM;
-            prodaneZboziDialog.ShowDialog();
-            if (prodaneZboziDialogVM.ProdaneZbozi is not null)
-            {
-                editedRecords.Add(prodaneZboziDialogVM.ProdaneZbozi);
+            case "PRODANE_ZBOZI":
+                var prodaneZboziDialog = new ProdaneZboziEditWindow();
+                var prodaneZboziDialogVM = new ProdaneZboziEditWindowViewModel();
+                prodaneZboziDialog.DataContext = prodaneZboziDialogVM;
+                prodaneZboziDialog.ShowDialog();
+                if (prodaneZboziDialogVM.ProdaneZbozi is not null)
+                {
+                    newRecords.Add(prodaneZboziDialogVM.ProdaneZbozi);
                     SelectedTableData?.Add(prodaneZboziDialogVM.ProdaneZbozi);
-            }
-            break;
+                }
+                break;
 
-        case "ROLE":
-            var roleDialog = new RoleEditWindow();
-            var roleDialogVM = new RoleEditWindowViewModel();
-            roleDialog.DataContext = roleDialogVM;
-            roleDialog.ShowDialog();
-            if (roleDialogVM.Role is not null)
-            {
-                editedRecords.Add(roleDialogVM.Role);
+            case "ROLE":
+                var roleDialog = new RoleEditWindow();
+                var roleDialogVM = new RoleEditWindowViewModel();
+                roleDialog.DataContext = roleDialogVM;
+                roleDialog.ShowDialog();
+                if (roleDialogVM.Role is not null)
+                {
+                    newRecords.Add(roleDialogVM.Role);
                     SelectedTableData?.Add(roleDialogVM.Role);
-            }
-            break;
+                }
+                break;
 
-        case "SUPERMARKETY":
-            var supermarketDialog = new SupermarketEditWindow();
-            var supermarketDialogVM = new SupermarketEditWindowViewModel();
-            supermarketDialog.DataContext = supermarketDialogVM;
-            supermarketDialog.ShowDialog();
-            if (supermarketDialogVM.Supermarket is not null)
-            {
-                editedRecords.Add(supermarketDialogVM.Supermarket);
+            case "SUPERMARKETY":
+                var supermarketDialog = new SupermarketEditWindow();
+                var supermarketDialogVM = new SupermarketEditWindowViewModel();
+                supermarketDialog.DataContext = supermarketDialogVM;
+                supermarketDialog.ShowDialog();
+                if (supermarketDialogVM.Supermarket is not null)
+                {
+                    newRecords.Add(supermarketDialogVM.Supermarket);
                     SelectedTableData?.Add(supermarketDialogVM.Supermarket);
-            }
-            break;
+                }
+                break;
 
-        case "UCTENKY":
-            var uctenkaDialog = new UctenkaEditWindow();
-            var uctenkaDialogVM = new UctenkaEditWindowViewModel();
-            uctenkaDialog.DataContext = uctenkaDialogVM;
-            uctenkaDialog.ShowDialog();
-            if (uctenkaDialogVM.Uctenka is not null)
-            {
-                editedRecords.Add(uctenkaDialogVM.Uctenka);
+            case "UCTENKY":
+                var uctenkaDialog = new UctenkaEditWindow();
+                var uctenkaDialogVM = new UctenkaEditWindowViewModel();
+                uctenkaDialog.DataContext = uctenkaDialogVM;
+                uctenkaDialog.ShowDialog();
+                if (uctenkaDialogVM.Uctenka is not null)
+                {
+                    newRecords.Add(uctenkaDialogVM.Uctenka);
                     SelectedTableData?.Add(uctenkaDialogVM.Uctenka);
-            }
-            break;
+                }
+                break;
 
-        case "UZIVATELE":
-            var uzivatelDialog = new UzivatelEditWindow();
-            var uzivatelDialogVM = new UzivatelEditWindowViewModel();
-            uzivatelDialog.DataContext = uzivatelDialogVM;
-            uzivatelDialog.ShowDialog();
-            if (uzivatelDialogVM.Uzivatel is not null)
-            {
-                editedRecords.Add(uzivatelDialogVM.Uzivatel);
+            case "UZIVATELE":
+                var uzivatelDialog = new UzivatelEditWindow();
+                var uzivatelDialogVM = new UzivatelEditWindowViewModel();
+                uzivatelDialog.DataContext = uzivatelDialogVM;
+                uzivatelDialog.ShowDialog();
+                if (uzivatelDialogVM.Uzivatel is not null)
+                {
+                    newRecords.Add(uzivatelDialogVM.Uzivatel);
                     SelectedTableData?.Add(uzivatelDialogVM.Uzivatel);
-            }
-            break;
+                }
+                break;
 
-        case "VERNOSTNI_KARTY":
-            var vernostniKartaDialog = new VernostniKartaEditWindow();
-            var vernostniKartaDialogVM = new VernostniKartaEditWindowViewModel();
-            vernostniKartaDialog.DataContext = vernostniKartaDialogVM;
-            vernostniKartaDialog.ShowDialog();
-            if (vernostniKartaDialogVM.VernostniKarta is not null)
-            {
-                editedRecords.Add(vernostniKartaDialogVM.VernostniKarta);
+            case "VERNOSTNI_KARTY":
+                var vernostniKartaDialog = new VernostniKartaEditWindow();
+                var vernostniKartaDialogVM = new VernostniKartaEditWindowViewModel();
+                vernostniKartaDialog.DataContext = vernostniKartaDialogVM;
+                vernostniKartaDialog.ShowDialog();
+                if (vernostniKartaDialogVM.VernostniKarta is not null)
+                {
+                    newRecords.Add(vernostniKartaDialogVM.VernostniKarta);
                     SelectedTableData?.Add(vernostniKartaDialogVM.VernostniKarta);
-            }
-            break;
+                }
+                break;
 
-        case "VYDAVATELE":
-            var vydavatelDialog = new VydavatelEditWindow();
-            var vydavatelDialogVM = new VydavatelEditWindowViewModel();
-            vydavatelDialog.DataContext = vydavatelDialogVM;
-            vydavatelDialog.ShowDialog();
-            if (vydavatelDialogVM.Vydavatel is not null)
-            {
-                editedRecords.Add(vydavatelDialogVM.Vydavatel);
+            case "VYDAVATELE":
+                var vydavatelDialog = new VydavatelEditWindow();
+                var vydavatelDialogVM = new VydavatelEditWindowViewModel();
+                vydavatelDialog.DataContext = vydavatelDialogVM;
+                vydavatelDialog.ShowDialog();
+                if (vydavatelDialogVM.Vydavatel is not null)
+                {
+                    newRecords.Add(vydavatelDialogVM.Vydavatel);
                     SelectedTableData?.Add(vydavatelDialogVM.Vydavatel);
-            }
-            break;
+                }
+                break;
 
-        case "VYROBCI":
-            var vyrobceDialog = new VyrobceEditWindow();
-            var vyrobceDialogVM = new VyrobceEditWindowViewModel();
-            vyrobceDialog.DataContext = vyrobceDialogVM;
-            vyrobceDialog.ShowDialog();
-            if (vyrobceDialogVM.Vyrobce is not null)
-            {
-                editedRecords.Add(vyrobceDialogVM.Vyrobce);
+            case "VYROBCI":
+                var vyrobceDialog = new VyrobceEditWindow();
+                var vyrobceDialogVM = new VyrobceEditWindowViewModel();
+                vyrobceDialog.DataContext = vyrobceDialogVM;
+                vyrobceDialog.ShowDialog();
+                if (vyrobceDialogVM.Vyrobce is not null)
+                {
+                    newRecords.Add(vyrobceDialogVM.Vyrobce);
                     SelectedTableData?.Add(vyrobceDialogVM.Vyrobce);
-            }
-            break;
+                }
+                break;
 
-        case "ZAMESTNANCI":
-            var zamestnanecDialog = new ZamestnanecEditWindow();
-            var zamestnanecDialogVM = new ZamestnanecEditWindowViewModel();
-            zamestnanecDialog.DataContext = zamestnanecDialogVM;
-            zamestnanecDialog.ShowDialog();
-            if (zamestnanecDialogVM.Zamestnanec is not null)
-            {
-                editedRecords.Add(zamestnanecDialogVM.Zamestnanec);
+            case "ZAMESTNANCI":
+                var zamestnanecDialog = new ZamestnanecEditWindow();
+                var zamestnanecDialogVM = new ZamestnanecEditWindowViewModel();
+                zamestnanecDialog.DataContext = zamestnanecDialogVM;
+                zamestnanecDialog.ShowDialog();
+                if (zamestnanecDialogVM.Zamestnanec is not null)
+                {
+                    newRecords.Add(zamestnanecDialogVM.Zamestnanec);
                     SelectedTableData?.Add(zamestnanecDialogVM.Zamestnanec);
-            }
-            break;
+                }
+                break;
 
-        case "ZBOZI":
-            var zboziDialog = new ZboziEditWindow();
-            var zboziDialogVM = new ZboziEditWindowViewModel();
-            zboziDialog.DataContext = zboziDialogVM;
-            zboziDialog.ShowDialog();
-            if (zboziDialogVM.Zbozi is not null)
-            {
-                editedRecords.Add(zboziDialogVM.Zbozi);
+            case "ZBOZI":
+                var zboziDialog = new ZboziEditWindow();
+                var zboziDialogVM = new ZboziEditWindowViewModel();
+                zboziDialog.DataContext = zboziDialogVM;
+                zboziDialog.ShowDialog();
+                if (zboziDialogVM.Zbozi is not null)
+                {
+                    newRecords.Add(zboziDialogVM.Zbozi);
                     SelectedTableData?.Add(zboziDialogVM.Zbozi);
-            }
-            break;
-            */
+                }
+                break;
             default:
                 throw new ApplicationException("No add method for this table.");
         }
@@ -1031,7 +1010,7 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                         AdresaService.Create(recordAdresa);
                         break;
                     case Brigadnik recordBrigadnik:
-                        BrigadnikService.Create(recordBrigadnik);
+                        ZamestnanecService.Create(recordBrigadnik);
                         break;
                     case Cena recordCena:
                         CenaService.Create(recordCena);
@@ -1058,7 +1037,7 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                         PlatbaService.Create(recordPlatba);
                         break;
                     case PlnyUvazek recordPlnyUvazek:
-                        PlnyUvazekService.Create(recordPlnyUvazek);
+                        ZamestnanecService.Create(recordPlnyUvazek);
                         break;
                     case Pokladna recordPokladna:
                         PokladnaService.Create(recordPokladna);
@@ -1198,7 +1177,7 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                         AdresaService.Update(recordAdresa);
                         break;
                     case Brigadnik recordBrigadnik:
-                        BrigadnikService.Update(recordBrigadnik);
+                        ZamestnanecService.Update(recordBrigadnik);
                         break;
                     case Cena recordCena:
                         CenaService.Update(recordCena);
@@ -1225,7 +1204,7 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                         PlatbaService.Update(recordPlatba);
                         break;
                     case PlnyUvazek recordPlnyUvazek:
-                        PlnyUvazekService.Update(recordPlnyUvazek);
+                        ZamestnanecService.Update(recordPlnyUvazek);
                         break;
                     case Pokladna recordPokladna:
                         PokladnaService.Update(recordPokladna);
@@ -1241,9 +1220,6 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                         break;
                     case Uctenka recordUctenka:
                         UctenkaService.Update(recordUctenka);
-                        break;
-                    case Uzivatel recordUzivatel:
-                        UzivateleService.Update(recordUzivatel);
                         break;
                     case Vernostni_karta recordVernostni_karta:
                         VernostniKartaService.Update(recordVernostni_karta);

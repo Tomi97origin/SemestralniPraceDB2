@@ -26,13 +26,13 @@
         <!-- Otevřeno -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
             <TextBlock Width="150" Text="Otevřeno:" VerticalAlignment="Center" />
-            <CheckBox IsChecked="{Binding Pokladna.OtevrenoText, Mode=TwoWay}" />
+            <CheckBox IsChecked="{Binding Pokladna.Otevreno, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Automatická -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="5">
             <TextBlock Width="150" Text="Automatická:" VerticalAlignment="Center" />
-            <CheckBox IsChecked="{Binding Pokladna.AutomatickaText, Mode=TwoWay}" />
+            <CheckBox IsChecked="{Binding Pokladna.Automaticka, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Supermarket (ComboBox) -->
@@ -42,13 +42,6 @@
                   ItemsSource="{Binding ListOfSupermarkety}"
                   SelectedItem="{Binding Pokladna.Supermarket, Mode=TwoWay}"
                   Margin="0,0,0,10">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                        <Run Text="{Binding Nazev}" />
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
 

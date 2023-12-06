@@ -41,7 +41,7 @@
         <!-- Způsob platby -->
         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5">
             <TextBlock Width="150" Text="Způsob platby:" VerticalAlignment="Center" />
-            <CheckBox IsChecked="{Binding Platba.Hotovost, Mode=TwoWay}" />
+            <CheckBox IsChecked="{Binding Platba.Debit, Mode=TwoWay}" />
         </StackPanel>
 
         <!-- Vydavatel (ComboBox) -->
@@ -51,13 +51,6 @@
                   ItemsSource="{Binding ListOfVydavatele}"
                   SelectedItem="{Binding Platba.Vydavatel, Mode=TwoWay}"
                   Margin="0,0,0,10">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                        <Run Text="{Binding Nazev}" />
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
 
@@ -68,13 +61,6 @@
                   ItemsSource="{Binding ListOfVernostniKarty}"
                   SelectedItem="{Binding Platba.Vernostni_Karta, Mode=TwoWay}"
                   Margin="0,0,0,10">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                        <Run Text="{Binding Nazev}" />
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
 

@@ -63,11 +63,7 @@
         <!-- Typ úvazku -->
         <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="5">
             <TextBlock Width="100" Text="Typ úvazku:" VerticalAlignment="Center" />
-            <ComboBox Width="200"
-                  ItemsSource="{Binding ListOfUvazky}"
-                  SelectedItem="{Binding Brigadnik.TypUvazku, Mode=TwoWay}"
-                  Margin="0,0,0,10">
-            </ComboBox>
+            <TextBox Width="200" Text="Brigádník" IsReadOnly="True" IsEnabled="False"/>
         </StackPanel>
 
         <!-- Vedoucí (ComboBox) -->
@@ -84,7 +80,7 @@
         <StackPanel Grid.Row="7" Orientation="Horizontal" Margin="5">
             <TextBlock Width="100" Text="Supermarket:" VerticalAlignment="Center" />
             <ComboBox Width="200"
-                  ItemsSource="{Binding ListOfSupermarkets}"
+                  ItemsSource="{Binding ListOfSupermarkety}"
                   SelectedItem="{Binding Brigadnik.Supermarket, Mode=TwoWay}"
                   Margin="0,0,0,10">
             </ComboBox>

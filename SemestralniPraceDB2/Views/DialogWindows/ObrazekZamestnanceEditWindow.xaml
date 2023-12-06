@@ -18,7 +18,7 @@
         <!-- Název souboru -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
             <TextBlock Width="150" Text="Název souboru:" VerticalAlignment="Center" />
-            <TextBox Width="200" Text="{Binding ObrazekZamestnance.Soubor, Mode=TwoWay}" />
+            <TextBox Width="200" Text="{Binding ImagePathToShow, Mode=TwoWay}" IsReadOnly="True" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal"
