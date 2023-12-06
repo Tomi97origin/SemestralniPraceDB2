@@ -61,7 +61,7 @@ namespace SemestralniPraceDB2.Models
             prm[9].Value = brigadnik.Adresa.Id;
 
             prm.Add(new OracleParameter("p_id_role", OracleDbType.Int32, System.Data.ParameterDirection.Input));
-            prm[10].Value = brigadnik.Role.Id;
+            prm[10].Value = brigadnik.Role is null ? null : brigadnik.Role.Id;
 
             prm.Add(new OracleParameter("p_id_obrazku", OracleDbType.Int32, System.Data.ParameterDirection.Input));
             prm[11].Value = brigadnik.ObrazekZamestnance is null ? null : brigadnik.ObrazekZamestnance.Id;
