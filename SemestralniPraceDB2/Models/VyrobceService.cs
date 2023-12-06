@@ -21,7 +21,7 @@ namespace SemestralniPraceDB2.Models
 
         public static void PrepareProcedureCall(Vyrobce vyrobce, out string procedureName, out List<OracleParameter> prm)
         {
-            procedureName = "pvyrobce";
+            procedureName = "pvyrobci";
             prm = MapVyrobceIntoParams(vyrobce);
         }
 
