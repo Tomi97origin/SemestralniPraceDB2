@@ -13,16 +13,46 @@ namespace SemestralniPraceDB2.Models
     {
         public static bool Create(Supermarket supermarket)
         {
-            PrepareProcedureCall(supermarket, out string procedureName, out List<OracleParameter> prm);
-            prm[0].Value = null;
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
-            return result.Result > 0;
+            supermarket.Id = 0;
+            return ProcedureCallTransactional(supermarket);
         }
 
         public static void PrepareProcedureCall(Supermarket supermarket, out string procedureName, out List<OracleParameter> prm)
         {
             procedureName = "psupermarkety";
             prm = MapSupermarketIntoParams(supermarket);
+        }
+
+        private static bool ProcedureCallTransactional(Supermarket supermarket)
+        {
+            
+            
+            using (OracleConnection connection = DatabaseConnector.GetConnection())
+            {
+                connection.Open();
+                using (OracleTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        string prom = "";
+                        List<OracleParameter> param = new();
+                        AdresaService.PrepareProcedureCall(supermarket.Adresa,out prom,out param);
+                        supermarket.Adresa.Id = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection).Result;
+                        PrepareProcedureCall(supermarket, out string procedureName, out List<OracleParameter> prm);
+                        var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(procedureName, prm,connection);
+                        transaction.Commit();
+                        Console.WriteLine("Transaction committed successfully");
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        Console.WriteLine("Transaction rolled back due to an error: " + ex.Message);
+                        return false;
+                    }
+                }
+            }
+            
         }
 
         private static List<OracleParameter> MapSupermarketIntoParams(Supermarket supermarket)
@@ -52,9 +82,7 @@ namespace SemestralniPraceDB2.Models
 
         public static bool Update(Supermarket supermarket)
         {
-            PrepareProcedureCall(supermarket, out string procedureName, out List<OracleParameter> prm);
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm);
-            return result.Result > 0;
+            return ProcedureCallTransactional(supermarket);
         }
         public static bool Delete(Supermarket supermarket)
         {
