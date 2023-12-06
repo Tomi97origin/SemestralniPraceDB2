@@ -111,7 +111,7 @@ namespace SemestralniPraceDB2.Models
         {
             string sql = "SELECT p.* FROM PLATBY p JOIN vernostni_karty v ON p.id_vernostni_karty = v.id_vernostni_karty WHERE v.cislo_karty =   :cislo_karty";
             List<OracleParameter> prm = new();
-            prm.Add(new OracleParameter(":cislo_karty", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm.Add(new OracleParameter(":cislo_karty", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
             prm[0].Value = cisloVernostniKarty;
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToPlatba).Result;
             return result;
