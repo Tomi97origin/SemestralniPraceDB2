@@ -13,7 +13,7 @@ namespace SemestralniPraceDB2.ViewModels.DialogViewModels
     partial class AdresaEditWindowViewModel : BaseViewModel
     {
         [ObservableProperty]
-        public Adresa? adresa;
+        public Adresa? adresa = new();
 
         [RelayCommand]
         private void Ok(Window window)
