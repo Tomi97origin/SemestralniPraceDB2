@@ -2,10 +2,13 @@
 using CommunityToolkit.Mvvm.Input;
 using SemestralniPraceDB2.Models;
 using SemestralniPraceDB2.Models.Entities;
+using SemestralniPraceDB2.ViewModels.DialogViewModels;
+using SemestralniPraceDB2.Views.DialogWindows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
 
@@ -370,13 +373,40 @@ partial class DatabaseExplorerViewModel : BaseViewModel
     [RelayCommand]
     private void EditRecord()
     {
-        MessageBox.Show("zatím neimplementováno");
+        if (SelectedRecord is null)
+        {
+            MessageBox.Show("Nejdříve vyberte záznam.", "Pozor", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+        else if (SelectedRecord is Log)
+        {
+            MessageBox.Show("Nelze editovat log.", "Pozor", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+        else
+        {
+            HandleEditUserRequset();
+        }
     }
+
 
     [RelayCommand]
     private void AddRecord()
     {
-        MessageBox.Show("zatím neimplementováno");
+        if (SelectedTable is null)
+        {
+            MessageBox.Show("Nejdříve vyberte tabulku.", "Pozor", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+        else if (SelectedTable.TableName.ToUpper() == "LOGY")
+        {
+            MessageBox.Show("Nelze přidávat logy.", "Pozor", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+        else
+        {
+            HandleAddUserRequset();
+        }
     }
 
     [RelayCommand]
@@ -392,7 +422,6 @@ partial class DatabaseExplorerViewModel : BaseViewModel
         }
         else
         {
-
             MessageBox.Show("Nejsou žádné změny k uložení.");
         }
 
@@ -423,6 +452,541 @@ partial class DatabaseExplorerViewModel : BaseViewModel
             MessageBox.Show("Nejsou žádné změny ke zrušení.");
         }
 
+    }
+
+    
+    /* Funcke podle vybraného recordu zavolá příslušné modální okno. Po potvrzení okna
+     * se upravená třída načte do pole změn, které se později můžou aplikovat.
+     */
+    private void HandleEditUserRequset()
+    {
+        switch (SelectedRecord)
+        {
+            case Adresa:
+                var adresaDialog = new AdresaEditWindow();
+                var adresaDialogVM = new AdresaEditWindowViewModel();
+                adresaDialogVM.Adresa = SelectedRecord as Adresa;
+                adresaDialog.DataContext = adresaDialogVM;
+                adresaDialog.ShowDialog();
+                if (adresaDialogVM.Adresa is not null)
+                {
+                    editedRecords.Add(adresaDialogVM.Adresa);
+                }
+                break;
+                /*
+            case Brigadnik:
+                var brigadnikDialog = new BrigadnikEditWindow();
+                var brigadnikDialogVM = new BrigadnikEditWindowViewModel();
+                brigadnikDialogVM.Brigadnik = SelectedRecord as Brigadnik;
+                brigadnikDialog.DataContext = brigadnikDialogVM;
+                brigadnikDialog.ShowDialog();
+                if (brigadnikDialogVM.Brigadnik is not null)
+                {
+                    editedRecords.Add(brigadnikDialogVM.Brigadnik);
+                }
+                break;
+
+            case Cena:
+                var cenaDialog = new CenaEditWindow();
+                var cenaDialogVM = new CenaEditWindowViewModel();
+                cenaDialogVM.Cena = SelectedRecord as Cena;
+                cenaDialog.DataContext = cenaDialogVM;
+                cenaDialog.ShowDialog();
+                if (cenaDialogVM.Cena is not null)
+                {
+                    editedRecords.Add(cenaDialogVM.Cena);
+                }
+                break;
+
+            case Dodavatel:
+                var dodavatelDialog = new DodavatelEditWindow();
+                var dodavatelDialogVM = new DodavatelEditWindowViewModel();
+                dodavatelDialogVM.Dodavatel = SelectedRecord as Dodavatel;
+                dodavatelDialog.DataContext = dodavatelDialogVM;
+                dodavatelDialog.ShowDialog();
+                if (dodavatelDialogVM.Dodavatel is not null)
+                {
+                    editedRecords.Add(dodavatelDialogVM.Dodavatel);
+                }
+                break;
+
+            case InventarniPolozka:
+                var inventarniPolozkaDialog = new InventarniPolozkaEditWindow();
+                var inventarniPolozkaDialogVM = new InventarniPolozkaEditWindowViewModel();
+                inventarniPolozkaDialogVM.InventarniPolozka = SelectedRecord as InventarniPolozka;
+                inventarniPolozkaDialog.DataContext = inventarniPolozkaDialogVM;
+                inventarniPolozkaDialog.ShowDialog();
+                if (inventarniPolozkaDialogVM.InventarniPolozka is not null)
+                {
+                    editedRecords.Add(inventarniPolozkaDialogVM.InventarniPolozka);
+                }
+                break;
+
+            case Kategorie:
+                var kategorieDialog = new KategorieEditWindow();
+                var kategorieDialogVM = new KategorieEditWindowViewModel();
+                kategorieDialogVM.Kategorie = SelectedRecord as Kategorie;
+                kategorieDialog.DataContext = kategorieDialogVM;
+                kategorieDialog.ShowDialog();
+                if (kategorieDialogVM.Kategorie is not null)
+                {
+                    editedRecords.Add(kategorieDialogVM.Kategorie);
+                }
+                break;
+
+            case ObjednaneZbozi:
+                var objednaneZboziDialog = new ObjednaneZboziEditWindow();
+                var objednaneZboziDialogVM = new ObjednaneZboziEditWindowViewModel();
+                objednaneZboziDialogVM.ObjednaneZbozi = SelectedRecord as ObjednaneZbozi;
+                objednaneZboziDialog.DataContext = objednaneZboziDialogVM;
+                objednaneZboziDialog.ShowDialog();
+                if (objednaneZboziDialogVM.ObjednaneZbozi is not null)
+                {
+                    editedRecords.Add(objednaneZboziDialogVM.ObjednaneZbozi);
+                }
+                break;
+
+            case Objednavka:
+                var objednavkaDialog = new ObjednavkaEditWindow();
+                var objednavkaDialogVM = new ObjednavkaEditWindowViewModel();
+                objednavkaDialogVM.Objednavka = SelectedRecord as Objednavka;
+                objednavkaDialog.DataContext = objednavkaDialogVM;
+                objednavkaDialog.ShowDialog();
+                if (objednavkaDialogVM.Objednavka is not null)
+                {
+                    editedRecords.Add(objednavkaDialogVM.Objednavka);
+                }
+                break;
+
+            case ObrazekZamestnance:
+                var obrazekZamestnanceDialog = new ObrazekZamestnanceEditWindow();
+                var obrazekZamestnanceDialogVM = new ObrazekZamestnanceEditWindowViewModel();
+                obrazekZamestnanceDialogVM.ObrazekZamestnance = SelectedRecord as ObrazekZamestnance;
+                obrazekZamestnanceDialog.DataContext = obrazekZamestnanceDialogVM;
+                obrazekZamestnanceDialog.ShowDialog();
+                if (obrazekZamestnanceDialogVM.ObrazekZamestnance is not null)
+                {
+                    editedRecords.Add(obrazekZamestnanceDialogVM.ObrazekZamestnance);
+                }
+                break;
+
+            case Platba:
+                var platbaDialog = new PlatbaEditWindow();
+                var platbaDialogVM = new PlatbaEditWindowViewModel();
+                platbaDialogVM.Platba = SelectedRecord as Platba;
+                platbaDialog.DataContext = platbaDialogVM;
+                platbaDialog.ShowDialog();
+                if (platbaDialogVM.Platba is not null)
+                {
+                    editedRecords.Add(platbaDialogVM.Platba);
+                }
+                break;
+
+            case PlnyUvazek:
+                var plnyUvazekDialog = new PlnyUvazekEditWindow();
+                var plnyUvazekDialogVM = new PlnyUvazekEditWindowViewModel();
+                plnyUvazekDialogVM.PlnyUvazek = SelectedRecord as PlnyUvazek;
+                plnyUvazekDialog.DataContext = plnyUvazekDialogVM;
+                plnyUvazekDialog.ShowDialog();
+                if (plnyUvazekDialogVM.PlnyUvazek is not null)
+                {
+                    editedRecords.Add(plnyUvazekDialogVM.PlnyUvazek);
+                }
+                break;
+
+            case Pokladna:
+                var pokladnaDialog = new PokladnaEditWindow();
+                var pokladnaDialogVM = new PokladnaEditWindowViewModel();
+                pokladnaDialogVM.Pokladna = SelectedRecord as Pokladna;
+                pokladnaDialog.DataContext = pokladnaDialogVM;
+                pokladnaDialog.ShowDialog();
+                if (pokladnaDialogVM.Pokladna is not null)
+                {
+                    editedRecords.Add(pokladnaDialogVM.Pokladna);
+                }
+                break;
+
+            case ProdaneZbozi:
+                var prodaneZboziDialog = new ProdaneZboziEditWindow();
+                var prodaneZboziDialogVM = new ProdaneZboziEditWindowViewModel();
+                prodaneZboziDialogVM.ProdaneZbozi = SelectedRecord as ProdaneZbozi;
+                prodaneZboziDialog.DataContext = prodaneZboziDialogVM;
+                prodaneZboziDialog.ShowDialog();
+                if (prodaneZboziDialogVM.ProdaneZbozi is not null)
+                {
+                    editedRecords.Add(prodaneZboziDialogVM.ProdaneZbozi);
+                }
+                break;
+
+            case Role:
+                var roleDialog = new RoleEditWindow();
+                var roleDialogVM = new RoleEditWindowViewModel();
+                roleDialogVM.Role = SelectedRecord as Role;
+                roleDialog.DataContext = roleDialogVM;
+                roleDialog.ShowDialog();
+                if (roleDialogVM.Role is not null)
+                {
+                    editedRecords.Add(roleDialogVM.Role);
+                }
+                break;
+
+            case Supermarket:
+                var supermarketDialog = new SupermarketEditWindow();
+                var supermarketDialogVM = new SupermarketEditWindowViewModel();
+                supermarketDialogVM.Supermarket = SelectedRecord as Supermarket;
+                supermarketDialog.DataContext = supermarketDialogVM;
+                supermarketDialog.ShowDialog();
+                if (supermarketDialogVM.Supermarket is not null)
+                {
+                    editedRecords.Add(supermarketDialogVM.Supermarket);
+                }
+                break;
+
+            case Uctenka:
+                var uctenkaDialog = new UctenkaEditWindow();
+                var uctenkaDialogVM = new UctenkaEditWindowViewModel();
+                uctenkaDialogVM.Uctenka = SelectedRecord as Uctenka;
+                uctenkaDialog.DataContext = uctenkaDialogVM;
+                uctenkaDialog.ShowDialog();
+                if (uctenkaDialogVM.Uctenka is not null)
+                {
+                    editedRecords.Add(uctenkaDialogVM.Uctenka);
+                }
+                break;
+
+            case Uzivatel:
+                var uzivatelDialog = new UzivatelEditWindow();
+                var uzivatelDialogVM = new UzivatelEditWindowViewModel();
+                uzivatelDialogVM.Uzivatel = SelectedRecord as Uzivatel;
+                uzivatelDialog.DataContext = uzivatelDialogVM;
+                uzivatelDialog.ShowDialog();
+                if (uzivatelDialogVM.Uzivatel is not null)
+                {
+                    editedRecords.Add(uzivatelDialogVM.Uzivatel);
+                }
+                break;
+
+            case Vernostni_karta:
+                var vernostniKartaDialog = new VernostniKartaEditWindow();
+                var vernostniKartaDialogVM = new VernostniKartaEditWindowViewModel();
+                vernostniKartaDialogVM.VernostniKarta = SelectedRecord as Vernostni_karta;
+                vernostniKartaDialog.DataContext = vernostniKartaDialogVM;
+                vernostniKartaDialog.ShowDialog();
+                if (vernostniKartaDialogVM.VernostniKarta is not null)
+                {
+                    editedRecords.Add(vernostniKartaDialogVM.VernostniKarta);
+                }
+                break;
+
+            case Vydavatel:
+                var vydavatelDialog = new VydavatelEditWindow();
+                var vydavatelDialogVM = new VydavatelEditWindowViewModel();
+                vydavatelDialogVM.Vydavatel = SelectedRecord as Vydavatel;
+                vydavatelDialog.DataContext = vydavatelDialogVM;
+                vydavatelDialog.ShowDialog();
+                if (vydavatelDialogVM.Vydavatel is not null)
+                {
+                    editedRecords.Add(vydavatelDialogVM.Vydavatel);
+                }
+                break;
+
+            case Vyrobce:
+                var vyrobceDialog = new VyrobceEditWindow();
+                var vyrobceDialogVM = new VyrobceEditWindowViewModel();
+                vyrobceDialogVM.Vyrobce = SelectedRecord as Vyrobce;
+                vyrobceDialog.DataContext = vyrobceDialogVM;
+                vyrobceDialog.ShowDialog();
+                if (vyrobceDialogVM.Vyrobce is not null)
+                {
+                    editedRecords.Add(vyrobceDialogVM.Vyrobce);
+                }
+                break;
+
+            case Zamestnanec:
+                var zamestnanecDialog = new ZamestnanecEditWindow();
+                var zamestnanecDialogVM = new ZamestnanecEditWindowViewModel();
+                zamestnanecDialogVM.Zamestnanec = SelectedRecord as Zamestnanec;
+                zamestnanecDialog.DataContext = zamestnanecDialogVM;
+                zamestnanecDialog.ShowDialog();
+                if (zamestnanecDialogVM.Zamestnanec is not null)
+                {
+                    editedRecords.Add(zamestnanecDialogVM.Zamestnanec);
+                }
+                break;
+
+            case Zbozi:
+                var zboziDialog = new ZboziEditWindow();
+                var zboziDialogVM = new ZboziEditWindowViewModel();
+                zboziDialogVM.Zbozi = SelectedRecord as Zbozi;
+                zboziDialog.DataContext = zboziDialogVM;
+                zboziDialog.ShowDialog();
+                if (zboziDialogVM.Zbozi is not null)
+                {
+                    editedRecords.Add(zboziDialogVM.Zbozi);
+                }
+                break;
+                */
+            default:
+                throw new ApplicationException("No edit method for this table.");
+        }
+
+
+    }
+
+
+
+    /* Funcke podle vybraného recordu zavolá příslušné modální okno. Po potvrzení okna
+     * se nová třída načte do pole změn, které se později můžou aplikovat.
+     */
+    private void HandleAddUserRequset()
+    {
+        switch (SelectedTable?.TableName.ToUpper())
+        {
+            case "ADRESA":
+                var adresaDialog = new AdresaEditWindow();
+                var adresaDialogVM = new AdresaEditWindowViewModel();
+                adresaDialog.DataContext = adresaDialogVM;
+                adresaDialog.ShowDialog();
+                if (adresaDialogVM.Adresa is not null)
+                {
+                    editedRecords.Add(adresaDialogVM.Adresa);
+                }
+                break;
+                /*
+            case "BRIGADNICI":
+                var brigadnikDialog = new BrigadnikEditWindow();
+                var brigadnikDialogVM = new BrigadnikEditWindowViewModel();
+                brigadnikDialog.DataContext = brigadnikDialogVM;
+                brigadnikDialog.ShowDialog();
+                if (brigadnikDialogVM.Brigadnik is not null)
+                {
+                    editedRecords.Add(brigadnikDialogVM.Brigadnik);
+                }
+                break;
+
+            case "CENY":
+                var cenaDialog = new CenaEditWindow();
+                var cenaDialogVM = new CenaEditWindowViewModel();
+                cenaDialog.DataContext = cenaDialogVM;
+                cenaDialog.ShowDialog();
+                if (cenaDialogVM.Cena is not null)
+                {
+                    editedRecords.Add(cenaDialogVM.Cena);
+                }
+                break;
+
+            case "DODAVATELE":
+                var dodavatelDialog = new DodavatelEditWindow();
+                var dodavatelDialogVM = new DodavatelEditWindowViewModel();
+                dodavatelDialog.DataContext = dodavatelDialogVM;
+                dodavatelDialog.ShowDialog();
+                if (dodavatelDialogVM.Dodavatel is not null)
+                {
+                    editedRecords.Add(dodavatelDialogVM.Dodavatel);
+                }
+                break;
+
+            case "INVENTARNI_POLOZKY":
+                var inventarniPolozkaDialog = new InventarniPolozkaEditWindow();
+                var inventarniPolozkaDialogVM = new InventarniPolozkaEditWindowViewModel();
+                inventarniPolozkaDialog.DataContext = inventarniPolozkaDialogVM;
+                inventarniPolozkaDialog.ShowDialog();
+                if (inventarniPolozkaDialogVM.InventarniPolozka is not null)
+                {
+                    editedRecords.Add(inventarniPolozkaDialogVM.InventarniPolozka);
+                }
+                break;
+
+            case "KATEGORIE":
+                var kategorieDialog = new KategorieEditWindow();
+                var kategorieDialogVM = new KategorieEditWindowViewModel();
+                kategorieDialog.DataContext = kategorieDialogVM;
+                kategorieDialog.ShowDialog();
+                if (kategorieDialogVM.Kategorie is not null)
+                {
+                    editedRecords.Add(kategorieDialogVM.Kategorie);
+                }
+                break;
+
+            case "OBJEDNANE_ZBOZO":
+                var objednaneZboziDialog = new ObjednaneZboziEditWindow();
+                var objednaneZboziDialogVM = new ObjednaneZboziEditWindowViewModel();
+                objednaneZboziDialog.DataContext = objednaneZboziDialogVM;
+                objednaneZboziDialog.ShowDialog();
+                if (objednaneZboziDialogVM.ObjednaneZbozi is not null)
+                {
+                    editedRecords.Add(objednaneZboziDialogVM.ObjednaneZbozi);
+                }
+                break;
+
+            case "OBJEDNAVKY":
+                var objednavkaDialog = new ObjednavkaEditWindow();
+                var objednavkaDialogVM = new ObjednavkaEditWindowViewModel();
+                objednavkaDialog.DataContext = objednavkaDialogVM;
+                objednavkaDialog.ShowDialog();
+                if (objednavkaDialogVM.Objednavka is not null)
+                {
+                    editedRecords.Add(objednavkaDialogVM.Objednavka);
+                }
+                break;
+
+            case "OBRAZKYZAMESTNANCU":
+                var obrazekZamestnanceDialog = new ObrazekZamestnanceEditWindow();
+                var obrazekZamestnanceDialogVM = new ObrazekZamestnanceEditWindowViewModel();
+                obrazekZamestnanceDialog.DataContext = obrazekZamestnanceDialogVM;
+                obrazekZamestnanceDialog.ShowDialog();
+                if (obrazekZamestnanceDialogVM.ObrazekZamestnance is not null)
+                {
+                    editedRecords.Add(obrazekZamestnanceDialogVM.ObrazekZamestnance);
+                }
+                break;
+
+            case "PLATBY":
+                var platbaDialog = new PlatbaEditWindow();
+                var platbaDialogVM = new PlatbaEditWindowViewModel();
+                platbaDialog.DataContext = platbaDialogVM;
+                platbaDialog.ShowDialog();
+                if (platbaDialogVM.Platba is not null)
+                {
+                    editedRecords.Add(platbaDialogVM.Platba);
+                }
+                break;
+
+            case "PLNE_UVAZKY":
+                var plnyUvazekDialog = new PlnyUvazekEditWindow();
+                var plnyUvazekDialogVM = new PlnyUvazekEditWindowViewModel();
+                plnyUvazekDialog.DataContext = plnyUvazekDialogVM;
+                plnyUvazekDialog.ShowDialog();
+                if (plnyUvazekDialogVM.PlnyUvazek is not null)
+                {
+                    editedRecords.Add(plnyUvazekDialogVM.PlnyUvazek);
+                }
+                break;
+
+            case "POKLADNY":
+                var pokladnaDialog = new PokladnaEditWindow();
+                var pokladnaDialogVM = new PokladnaEditWindowViewModel();
+                pokladnaDialog.DataContext = pokladnaDialogVM;
+                pokladnaDialog.ShowDialog();
+                if (pokladnaDialogVM.Pokladna is not null)
+                {
+                    editedRecords.Add(pokladnaDialogVM.Pokladna);
+                }
+                break;
+
+            case "PRODANE_ZBOZI":
+                var prodaneZboziDialog = new ProdaneZboziEditWindow();
+                var prodaneZboziDialogVM = new ProdaneZboziEditWindowViewModel();
+                prodaneZboziDialog.DataContext = prodaneZboziDialogVM;
+                prodaneZboziDialog.ShowDialog();
+                if (prodaneZboziDialogVM.ProdaneZbozi is not null)
+                {
+                    editedRecords.Add(prodaneZboziDialogVM.ProdaneZbozi);
+                }
+                break;
+
+            case "ROLE":
+                var roleDialog = new RoleEditWindow();
+                var roleDialogVM = new RoleEditWindowViewModel();
+                roleDialog.DataContext = roleDialogVM;
+                roleDialog.ShowDialog();
+                if (roleDialogVM.Role is not null)
+                {
+                    editedRecords.Add(roleDialogVM.Role);
+                }
+                break;
+
+            case "SUPERMARKETY":
+                var supermarketDialog = new SupermarketEditWindow();
+                var supermarketDialogVM = new SupermarketEditWindowViewModel();
+                supermarketDialog.DataContext = supermarketDialogVM;
+                supermarketDialog.ShowDialog();
+                if (supermarketDialogVM.Supermarket is not null)
+                {
+                    editedRecords.Add(supermarketDialogVM.Supermarket);
+                }
+                break;
+
+            case "UCTENKY":
+                var uctenkaDialog = new UctenkaEditWindow();
+                var uctenkaDialogVM = new UctenkaEditWindowViewModel();
+                uctenkaDialog.DataContext = uctenkaDialogVM;
+                uctenkaDialog.ShowDialog();
+                if (uctenkaDialogVM.Uctenka is not null)
+                {
+                    editedRecords.Add(uctenkaDialogVM.Uctenka);
+                }
+                break;
+
+            case "UZIVATELE":
+                var uzivatelDialog = new UzivatelEditWindow();
+                var uzivatelDialogVM = new UzivatelEditWindowViewModel();
+                uzivatelDialog.DataContext = uzivatelDialogVM;
+                uzivatelDialog.ShowDialog();
+                if (uzivatelDialogVM.Uzivatel is not null)
+                {
+                    editedRecords.Add(uzivatelDialogVM.Uzivatel);
+                }
+                break;
+
+            case "VERNOSTNI_KARTY":
+                var vernostniKartaDialog = new VernostniKartaEditWindow();
+                var vernostniKartaDialogVM = new VernostniKartaEditWindowViewModel();
+                vernostniKartaDialog.DataContext = vernostniKartaDialogVM;
+                vernostniKartaDialog.ShowDialog();
+                if (vernostniKartaDialogVM.VernostniKarta is not null)
+                {
+                    editedRecords.Add(vernostniKartaDialogVM.VernostniKarta);
+                }
+                break;
+
+            case "VYDAVATELE":
+                var vydavatelDialog = new VydavatelEditWindow();
+                var vydavatelDialogVM = new VydavatelEditWindowViewModel();
+                vydavatelDialog.DataContext = vydavatelDialogVM;
+                vydavatelDialog.ShowDialog();
+                if (vydavatelDialogVM.Vydavatel is not null)
+                {
+                    editedRecords.Add(vydavatelDialogVM.Vydavatel);
+                }
+                break;
+
+            case "VYROBCI":
+                var vyrobceDialog = new VyrobceEditWindow();
+                var vyrobceDialogVM = new VyrobceEditWindowViewModel();
+                vyrobceDialog.DataContext = vyrobceDialogVM;
+                vyrobceDialog.ShowDialog();
+                if (vyrobceDialogVM.Vyrobce is not null)
+                {
+                    editedRecords.Add(vyrobceDialogVM.Vyrobce);
+                }
+                break;
+
+            case "ZAMESTNANCI":
+                var zamestnanecDialog = new ZamestnanecEditWindow();
+                var zamestnanecDialogVM = new ZamestnanecEditWindowViewModel();
+                zamestnanecDialog.DataContext = zamestnanecDialogVM;
+                zamestnanecDialog.ShowDialog();
+                if (zamestnanecDialogVM.Zamestnanec is not null)
+                {
+                    editedRecords.Add(zamestnanecDialogVM.Zamestnanec);
+                }
+                break;
+
+            case "ZBOZI":
+                var zboziDialog = new ZboziEditWindow();
+                var zboziDialogVM = new ZboziEditWindowViewModel();
+                zboziDialog.DataContext = zboziDialogVM;
+                zboziDialog.ShowDialog();
+                if (zboziDialogVM.Zbozi is not null)
+                {
+                    editedRecords.Add(zboziDialogVM.Zbozi);
+                }
+                break;
+                */
+            default:
+                throw new ApplicationException("No add method for this table.");
+        }
     }
 
     private void SendNewToDB()
