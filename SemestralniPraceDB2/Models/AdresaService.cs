@@ -91,11 +91,11 @@ namespace SemestralniPraceDB2.Models
             return new Adresa()
             {
                 Id = result.GetInt32("id_adresy"),
-                Ulice = result.GetString("ulice"),
+                Ulice = result.IsDBNull("ulice") ? null : result.GetString("ulice"),
                 Cp = result.IsDBNull("cp") ? (int?)null : result.GetInt32("cp"),
-                Mesto = result.GetString("mesto"),
-                Stat = result.GetString("stat"),
-                Psc = result.GetString("psc")
+                Mesto = result.IsDBNull("mesto") ? null : result.GetString("mesto"),
+                Stat = result.IsDBNull("stat") ? null : result.GetString("stat"),
+                Psc = result.IsDBNull("psc") ? null : result.GetString("psc")
             };
         }
 
