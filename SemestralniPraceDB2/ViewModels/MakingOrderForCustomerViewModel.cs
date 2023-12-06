@@ -52,7 +52,7 @@ namespace SemestralniPraceDB2.ViewModels
         public ObservableCollection<Pokladna> seznamPokladen;
 
         [ObservableProperty]
-        public Pokladna vybranaPokladna;
+        public Pokladna? vybranaPokladna;
 
         [ObservableProperty]
         public ObservableCollection<InventarniPolozkaSCenou> seznamZboziSCenou;
@@ -126,14 +126,14 @@ namespace SemestralniPraceDB2.ViewModels
         private void RefreshSupermarketChange()
         {
             SeznamPokladen.Clear();
-            var pokladny = (PokladnaService.GetFromSupermarket(vybranySupermarket));
+            var pokladny = (PokladnaService.GetFromSupermarket(VybranySupermarket));
             foreach (var i in pokladny) SeznamPokladen.Add(i);
             if (SeznamPokladen.Count > 0)
             {
                 VybranaPokladna = SeznamPokladen.First();
             }
             SeznamZboziSCenou.Clear();
-            var seznam = InventarniPolozkaService.GetAllZboziWithCurentPriceFromInventory(vybranySupermarket);
+            var seznam = InventarniPolozkaService.GetAllZboziWithCurentPriceFromInventory(VybranySupermarket);
             foreach (var v in seznam)
             {
                 SeznamZboziSCenou.Add(v);
