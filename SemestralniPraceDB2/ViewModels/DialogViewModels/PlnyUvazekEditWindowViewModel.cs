@@ -22,6 +22,9 @@ namespace SemestralniPraceDB2.ViewModels.DialogViewModels
         [ObservableProperty]
         private ObservableCollection<Role> listOfRoles = new(RoleService.GetAll());
 
+        [ObservableProperty]
+        private ObservableCollection<ObrazekZamestnance> listOfObrazky = new(ObrazekZamestnanceService.GetAll());
+
         public PlnyUvazekEditWindowViewModel()
         {
             PlnyUvazek = new PlnyUvazek

@@ -129,7 +129,7 @@
             </ComboBox>
         </StackPanel>
 
-        <!-- Role (ComboBox) -->
+        <!-- Obrazky (ComboBox) -->
         <StackPanel Grid.Row="14" Orientation="Horizontal" Margin="5">
             <TextBlock Width="100" Text="Obrázek:" VerticalAlignment="Center" />
             <ComboBox Width="200"
