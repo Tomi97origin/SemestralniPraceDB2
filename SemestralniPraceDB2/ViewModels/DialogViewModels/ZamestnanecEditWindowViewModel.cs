@@ -14,7 +14,7 @@ namespace SemestralniPraceDB2.ViewModels.DialogViewModels
         public Zamestnanec? zamestnanec;
 
         [ObservableProperty]
-        private ObservableCollection<string> listOfUvazky = new() {"Plný úvazek" ,"Brigádník" };
+        private ObservableCollection<string> listOfUvazky = new() { "Plný úvazek", "Brigádník" };
 
         [ObservableProperty]
         private ObservableCollection<PlnyUvazek> listOfVedouci = new(PlnyUvazekService.GetAll());
@@ -24,6 +24,9 @@ namespace SemestralniPraceDB2.ViewModels.DialogViewModels
 
         [ObservableProperty]
         private ObservableCollection<Role> listOfRoles = new(RoleService.GetAll());
+
+        [ObservableProperty]
+        private ObservableCollection<ObrazekZamestnance> listOfObrazky = new(ObrazekZamestnanceService.GetAll());
 
         [ObservableProperty]
         private string? selectedTypUvazku;
@@ -41,7 +44,7 @@ namespace SemestralniPraceDB2.ViewModels.DialogViewModels
         {
             if (SelectedTypUvazku is not null && Zamestnanec is not null)
             {
-                switch(SelectedTypUvazku)
+                switch (SelectedTypUvazku)
                 {
                     case "Plný úvazek":
                         Zamestnanec.TypUvazku = 1;
@@ -57,7 +60,18 @@ namespace SemestralniPraceDB2.ViewModels.DialogViewModels
 
         public ZamestnanecEditWindowViewModel(Zamestnanec? zamestnanec)
         {
-            Zamestnanec = zamestnanec;
+            if (zamestnanec?.TypUvazkuText == "Plný úvazek")
+            {
+                Zamestnanec = PlnyUvazekService.Get(new PlnyUvazek { Id = zamestnanec.Id });
+                if (Zamestnanec is not null)
+                {
+                    if (Zamestnanec.Adresa is not null) Zamestnanec.Adresa = AdresaService.Get(Zamestnanec.Adresa);
+                }
+            }
+            else if (zamestnanec?.TypUvazkuText == "Brigádník")
+            {
+                Zamestnanec = BrigadnikService.Get(new Brigadnik { Id = zamestnanec.Id });
+            }
         }
 
         [RelayCommand]
