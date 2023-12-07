@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -465,6 +466,7 @@ partial class DatabaseExplorerViewModel : BaseViewModel
 
     }
 
+    ObrazekZamestnance? puvodni;
 
     /* Funcke podle vybraného recordu zavolá příslušné modální okno. Po potvrzení okna
      * se upravená třída načte do pole změn, které se později můžou aplikovat.
@@ -486,12 +488,20 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                 break;
 
             case Brigadnik:
+                puvodni = (SelectedRecord as Brigadnik).ObrazekZamestnance;
                 var brigadnikDialog = new BrigadnikEditWindow();
                 var brigadnikDialogVM = new BrigadnikEditWindowViewModel(SelectedRecord as Brigadnik);
                 brigadnikDialog.DataContext = brigadnikDialogVM;
                 brigadnikDialog.ShowDialog();
                 if (brigadnikDialogVM.Brigadnik is not null)
                 {
+                    if(brigadnikDialogVM.Brigadnik.ObrazekZamestnance is not null)
+                    {
+                        if(puvodni != brigadnikDialogVM.Brigadnik.ObrazekZamestnance)
+                        {
+                            brigadnikDialogVM.Brigadnik.ObrazekZamestnance.Id = 0;
+                        }
+                    }
                     editedRecords.Add(brigadnikDialogVM.Brigadnik);
                 }
                 break;
@@ -588,12 +598,20 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                 break;
 
             case PlnyUvazek:
+                puvodni = (SelectedRecord as PlnyUvazek).ObrazekZamestnance;
                 var plnyUvazekDialog = new PlnyUvazekEditWindow();
                 var plnyUvazekDialogVM = new PlnyUvazekEditWindowViewModel(SelectedRecord as PlnyUvazek);
                 plnyUvazekDialog.DataContext = plnyUvazekDialogVM;
                 plnyUvazekDialog.ShowDialog();
                 if (plnyUvazekDialogVM.PlnyUvazek is not null)
                 {
+                    if (plnyUvazekDialogVM.PlnyUvazek.ObrazekZamestnance is not null)
+                    {
+                        if (puvodni != plnyUvazekDialogVM.PlnyUvazek.ObrazekZamestnance)
+                        {
+                            plnyUvazekDialogVM.PlnyUvazek.ObrazekZamestnance.Id = 0;
+                        }
+                    }
                     editedRecords.Add(plnyUvazekDialogVM.PlnyUvazek);
                 }
                 break;
@@ -692,12 +710,20 @@ partial class DatabaseExplorerViewModel : BaseViewModel
                 break;
 
             case Zamestnanec:
+                puvodni = (SelectedRecord as Zamestnanec).ObrazekZamestnance;
                 var zamestnanecDialog = new ZamestnanecEditWindow();
                 var zamestnanecDialogVM = new ZamestnanecEditWindowViewModel(SelectedRecord as Zamestnanec);
                 zamestnanecDialog.DataContext = zamestnanecDialogVM;
                 zamestnanecDialog.ShowDialog();
                 if (zamestnanecDialogVM.Zamestnanec is not null)
                 {
+                    if (zamestnanecDialogVM.Zamestnanec.ObrazekZamestnance is not null)
+                    {
+                        if (puvodni != zamestnanecDialogVM.Zamestnanec.ObrazekZamestnance)
+                        {
+                            zamestnanecDialogVM.Zamestnanec.ObrazekZamestnance.Id = 0;
+                        }
+                    }
                     editedRecords.Add(zamestnanecDialogVM.Zamestnanec);
                 }
                 break;
