@@ -29,24 +29,25 @@ partial class AddProductPriceViewModel : BaseViewModel
     [RelayCommand]
     public void AddProductPrice()
     {
-        if (NewPriceIsValid())
+        string chybnePole = NewPriceIsValid();
+        if (chybnePole == string.Empty)
         {
             CenaService.Create(NovaCena);
             MessageBox.Show($"Přidána nová cena:\n{NovaCena}.");
         }
         else
         {
-            MessageBox.Show("Cena není vyplněna validně");
+            MessageBox.Show($"Pole {chybnePole} není vyplněno validně");
         }
     }
 
-    private bool NewPriceIsValid()
+    private string NewPriceIsValid()
     {
-        if (NovaCena.Castka <= 0) return false;
-        if (NovaCena.PlatnostOd <= DateTime.Now) return false;
-        if (NovaCena.Zbozi is null) return false;
+        if (NovaCena.Castka <= 0) return "Částka";
+        if (NovaCena.PlatnostOd <= DateTime.Now) return "Platnost od";
+        if (NovaCena.Zbozi is null) return "Zboží";
 
 
-        return true;
+        return string.Empty;
     }
 }
