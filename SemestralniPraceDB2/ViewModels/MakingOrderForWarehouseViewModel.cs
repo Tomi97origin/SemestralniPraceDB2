@@ -197,21 +197,19 @@ namespace SemestralniPraceDB2.ViewModels
 
                 ObjednavkaService.Create(novaObjednavka, seznamIdObjednanehoZbozi);
 
-                StringBuilder str = new();
-                str.AppendLine("Vytvářím novou objednávku.");
-                str.AppendLine($"Od dodavatele {VybranyDodavatel.Nazev}");
-                str.AppendLine($"Pro supermarket {VybranySupermarket.Adresa}");
-                str.AppendLine("Seznam zboží:");
+                Erase();
 
-                foreach (var item in SeznamVybranehoZbozi)
-                {
-                    str.AppendLine($"{item.Nazev}, {item.Mnozstvi} ks.");
-                }
 
-                MessageBox.Show(str.ToString());
+                MessageBox.Show("Objednávka vytvořena.");
             }
         }
 
+        private void Erase()
+        {
+            SeznamVybranehoZbozi = new();
+            VybraneVybraneZbozi = null;
+            VybranySupermarket = null;
 
+        }
     }
 }

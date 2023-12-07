@@ -43,19 +43,6 @@ partial class TopMenuViewModel : BaseViewModel, IRecipient<UserLogin>, IRecipien
     }
 
     [RelayCommand]
-    private void MenuItem(string parameter)
-    {
-        MessageBox.Show("Klikli jste na položku menu.");
-    }
-
-    [RelayCommand]
-    private void ShowContextMenu(string parameter)
-    {
-
-        MessageBox.Show("Klikli jste na položku menu.");
-    }
-
-    [RelayCommand]
     private void LoginLogout() //pozn.: toto by mohla být dvě tlačítka, která by se zobrazovala/skrývala na základě toho zda je někdo přihlášený
     {
         if (!isSomebodyLogged)

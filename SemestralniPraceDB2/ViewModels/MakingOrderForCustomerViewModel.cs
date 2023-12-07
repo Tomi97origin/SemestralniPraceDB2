@@ -219,14 +219,14 @@ namespace SemestralniPraceDB2.ViewModels
             }
             if (SeznamVybranehoZbozi.Count < 1)
             {
-                MessageBox.Show("Nelze vytvořit prázdny nakup.");
+                MessageBox.Show("Nelze vytvořit prázdný nákup.");
                 return;
             }
             else if (platba.Hotovost)
             {
                 if (Vraceno is null)
                 {
-                    MessageBox.Show("Neplatna hodnota vraceni");
+                    MessageBox.Show("Neplatná hodnota Vráceno.");
                     return;
                 }
                 platba.Vraceno = (double)Vraceno;
@@ -235,7 +235,7 @@ namespace SemestralniPraceDB2.ViewModels
             {
                 if (CisloKarty is null || CisloKarty.Length < 16)
                 {
-                    MessageBox.Show("Neplatne cislo karty");
+                    MessageBox.Show("Neplatné Číslo karty.");
                     return;
                 }
                 platba.Debit = (short?)(Debit ? 1 : 0);
@@ -273,7 +273,7 @@ namespace SemestralniPraceDB2.ViewModels
             var result = UctenkaService.Create(uctenka, polozky, inventarZmeny);
             if (!result)
             {
-                MessageBox.Show("Zbozi vyprodano");
+                MessageBox.Show("Zboží vyprodáno.");
                 return;
             }
             Refresh();

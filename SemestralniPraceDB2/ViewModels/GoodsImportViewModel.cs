@@ -119,7 +119,7 @@ namespace SemestralniPraceDB2.ViewModels
 
             if (SelectedOrderItems is null)
             {
-                MessageBox.Show("Nejdřívě načtěte objednávku.");
+                MessageBox.Show("Nejdříve načtěte objednávku.");
                 return;
             }
             if (AccepterEqualsSelectedOrder())
