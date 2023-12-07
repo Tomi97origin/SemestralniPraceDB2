@@ -45,7 +45,7 @@ namespace SemestralniPraceDB2.Models
                     {
                         PreZboziDelete(zbozi, connection);
                         PrepareDeleteCall(zbozi, out string sql, out List<OracleParameter> prm);
-                        var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
+                        var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
                         transaction.Commit();
                         return true;
                     }
@@ -62,6 +62,7 @@ namespace SemestralniPraceDB2.Models
         {
             InventarniPolozkaService.DeleteFromZbozi(zbozi, connection);
             ObjednaneZboziService.DeleteFromZbozi(zbozi, connection);
+            ProdaneZboziService.DeleteFromZbozi(zbozi, connection);
             CenaService.DeleteFromZbozi(zbozi, connection);
         }
 

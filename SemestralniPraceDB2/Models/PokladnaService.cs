@@ -87,7 +87,7 @@ namespace SemestralniPraceDB2.Models
             {
                 UctenkaService.Delete(pokladna, connection);
                 PrepareDeleteCall(pokladna, out string sql, out List<OracleParameter> prm);
-                var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
+                var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
             }
         }
 

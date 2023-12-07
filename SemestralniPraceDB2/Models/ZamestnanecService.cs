@@ -115,28 +115,28 @@ namespace SemestralniPraceDB2.Models
             if (zamestnanec.ObrazekZamestnance is not null)
             {
                 ObrazekZamestnanceService.PrepareDeleteCall(zamestnanec.ObrazekZamestnance, out prom, out param);
-                result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection).Result;
+                result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection,CommandType.Text).Result;
             }
-            if (zamestnanec is Brigadnik)
+            if (zamestnanec is Brigadnik || zamestnanec.TypUvazku == 0)
             {
-                BrigadnikService.PrepareDeleteCall(zamestnanec as Brigadnik, out prom, out param);
+                BrigadnikService.PrepareDeleteCall(new Brigadnik() { Id = zamestnanec.Id}, out prom, out param);
             }
-            else if (zamestnanec is PlnyUvazek)
+            else if (zamestnanec is PlnyUvazek || zamestnanec.TypUvazku == 1)
             {
-                PlnyUvazekService.PrepareDeleteCall(zamestnanec as PlnyUvazek, out prom, out param);
+                PlnyUvazekService.PrepareDeleteCall(new PlnyUvazek() { Id = zamestnanec.Id }, out prom, out param);
             }
-            result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection).Result;
-            PreparePrepareDeleteCall(zamestnanec, out prom, out param);
-            result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection).Result;
+            result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection, CommandType.Text).Result;
+            PrepareDeleteCall(zamestnanec, out prom, out param);
+            result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection, CommandType.Text).Result;
             AdresaService.PrepareDeleteCall(zamestnanec.Adresa, out prom, out param);
-            result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection, System.Data.CommandType.Text).Result;
+            result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection, CommandType.Text).Result;
         }
 
-        private static void PreparePrepareDeleteCall(Zamestnanec zamestnanec, out string sql, out List<OracleParameter> prm)
+        private static void PrepareDeleteCall(Zamestnanec zamestnanec, out string sql, out List<OracleParameter> prm)
         {
-            sql = "DELETE FROM zamestnanci WHERE id_zamestnance = p_id_zamestnance";
+            sql = "DELETE FROM zamestnanci WHERE id_zamestnance = :id_zamestnance";
             prm = new List<OracleParameter>();
-            prm.Add(new OracleParameter("p_id_zamestnance", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm.Add(new OracleParameter(":id_zamestnance", OracleDbType.Int32, System.Data.ParameterDirection.Input));
             prm[0].Value = zamestnanec.Id;
         }
 
