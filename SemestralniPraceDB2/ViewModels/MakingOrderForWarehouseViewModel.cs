@@ -189,7 +189,6 @@ namespace SemestralniPraceDB2.ViewModels
             SeznamDodavatelu = new(DodavatelService.GetAll());
             if (SeznamDodavatelu.Count == 0)
             {
-                MessageBox.Show("Nebyli nalezeni žádní dodavatelé, zkontrolujte připojení k databázi.");
                 VybranyDodavatel = new();
                 SeznamZboziSCenou = new();
             }

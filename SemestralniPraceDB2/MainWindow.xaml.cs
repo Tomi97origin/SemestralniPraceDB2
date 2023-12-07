@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using SemestralniPraceDB2.ViewModels;
+using System;
 using System.Windows;
 
 namespace SemestralniPraceDB2;
@@ -14,7 +15,15 @@ public partial class MainWindow : Window, IRecipient<UserEmulation>, IRecipient<
 {
     public MainWindow()
     {
-        DataContext = new MainWindowViewModel();
+        try
+        {
+            DataContext = new MainWindowViewModel();
+        }
+        catch (Exception)
+        {
+            MessageBox.Show("Aplikaci se nepodařilo spustit - chybí data v databázi. Ověřte připojení k DB.");
+            Environment.Exit(-1);
+        }
 
         Messenger = WeakReferenceMessenger.Default;
         Messenger.Register<UserEmulation>(this);
