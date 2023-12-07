@@ -130,10 +130,7 @@ namespace SemestralniPraceDB2.ViewModels
 
         partial void OnVybranySupermarketChanged(Supermarket? value)
         {
-            if ( value is not null)
-            {
-                RefreshSupermarketChange();
-            }
+            Refresh();
         }
 
         void RefreshTotalPrice()
