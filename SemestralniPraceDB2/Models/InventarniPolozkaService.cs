@@ -196,5 +196,33 @@ namespace SemestralniPraceDB2.Models
             PrepareDeleteCall(polozka, out string sql, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
         }
+
+        internal static void DeleteFromSupermarket(Supermarket supermarket, OracleConnection connection)
+        {
+            PrepareDeleteCall(supermarket, out string sql, out List<OracleParameter> prm);
+            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
+        }
+
+        private static void PrepareDeleteCall(Supermarket supermarket, out string sql, out List<OracleParameter> prm)
+        {
+            sql = "DELETE FROM inventarni_polozky WHERE id_supermarketu = :id_supermarketu";
+            prm = new();
+            prm.Add(new OracleParameter(":id_supermarketu", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = supermarket.Id;
+        }
+
+        internal static void DeleteFromZbozi(Zbozi zbozi, OracleConnection connection)
+        {
+            PrepareDeleteCall(zbozi, out string sql, out List<OracleParameter> prm);
+            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
+        }
+
+        private static void PrepareDeleteCall(Zbozi zbozi, out string sql, out List<OracleParameter> prm)
+        {
+            sql = "DELETE FROM inventarni_polozky WHERE id_zbozi = :id_zbozi";
+            prm = new();
+            prm.Add(new OracleParameter(":id_zbozi", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = zbozi.Id;
+        }
     }
 }

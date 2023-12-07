@@ -36,9 +36,33 @@ namespace SemestralniPraceDB2.Models
 
         public static bool Delete(Zbozi zbozi)
         {
-            PrepareDeleteCall(zbozi, out string sql, out List<OracleParameter> prm);
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
-            return result == 1;
+            using (OracleConnection connection = DatabaseConnector.GetConnection())
+            {
+                connection.Open();
+                using (OracleTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        PreZboziDelete(zbozi, connection);
+                        PrepareDeleteCall(zbozi, out string sql, out List<OracleParameter> prm);
+                        var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        private static void PreZboziDelete(Zbozi zbozi, OracleConnection connection)
+        {
+            InventarniPolozkaService.DeleteFromZbozi(zbozi, connection);
+            ObjednaneZboziService.DeleteFromZbozi(zbozi, connection);
+            CenaService.DeleteFromZbozi(zbozi, connection);
         }
 
         private static void PrepareDeleteCall(Zbozi zbozi, out string sql, out List<OracleParameter> prm)
@@ -112,6 +136,48 @@ namespace SemestralniPraceDB2.Models
             List<OracleParameter> prm = new();
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
             return result == -1;
+        }
+
+        internal static void DeleteFromKategorie(Kategorie kategorie, OracleConnection connection)
+        {
+            List<Zbozi> zbozi = GetFromKategorie(kategorie, connection);
+            foreach(Zbozi obj in zbozi)
+            {
+                PreZboziDelete(obj, connection);
+                PrepareDeleteCall(obj, out string sql, out List<OracleParameter> prm);
+                var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
+            }
+        }
+
+        private static List<Zbozi> GetFromKategorie(Kategorie kategorie, OracleConnection connection)
+        {
+            string sql = "SELECT * FROM zbozi WHERE id_kategorie = :id_kategorie";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_kategorie", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = kategorie.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryForTransactionAsync(sql, prm, connection, MapOracleResultToZbozi).Result;
+            return result;
+        }
+
+        internal static void DeleteFromVyrobce(Vyrobce vyrobce, OracleConnection connection)
+        {
+            List<Zbozi> zbozi = GetFromVyrobce(vyrobce, connection);
+            foreach (Zbozi obj in zbozi)
+            {
+                PreZboziDelete(obj, connection);
+                PrepareDeleteCall(obj, out string sql, out List<OracleParameter> prm);
+                var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
+            }
+        }
+
+        private static List<Zbozi> GetFromVyrobce(Vyrobce vyrobce, OracleConnection connection)
+        {
+            string sql = "SELECT * FROM zbozi WHERE id_vyrobce = :id_vyrobce";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_vyrobce", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = vyrobce.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryForTransactionAsync(sql, prm, connection, MapOracleResultToZbozi).Result;
+            return result;
         }
     }
 }

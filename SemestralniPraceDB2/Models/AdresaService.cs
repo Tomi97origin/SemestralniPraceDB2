@@ -53,9 +53,21 @@ namespace SemestralniPraceDB2.Models
         }
         public static bool Delete(Adresa adresa)
         {
+            if (DeleteUse(adresa)) return true;
             PrepareDeleteCall(adresa, out string sql, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
-            return result == 1;
+            return (result > 0);
+        }
+
+        private static bool DeleteUse(Adresa adresa)
+        {
+            bool deleted;
+            deleted = ZamestnanecService.DeleteFromAdresa(adresa);
+            if (deleted) return true;
+            deleted = DodavatelService.DeleteFromAdresa(adresa);
+            if (deleted) return true;
+            deleted = SupermarketService.DeleteFromAdresa(adresa);
+            return deleted;
         }
 
         public static void PrepareDeleteCall(Adresa adresa, out string sql, out List<OracleParameter> prm)

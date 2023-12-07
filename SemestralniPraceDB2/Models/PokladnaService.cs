@@ -56,9 +56,49 @@ namespace SemestralniPraceDB2.Models
         }
         public static bool Delete(Pokladna pokladna)
         {
-            PrepareDeleteCall(pokladna, out string sql, out List<OracleParameter> prm);
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
-            return result == 1;
+            using (OracleConnection connection = DatabaseConnector.GetConnection())
+            {
+                connection.Open();
+                using (OracleTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        UctenkaService.Delete(pokladna, connection);
+                        PrepareDeleteCall(pokladna, out string sql, out List<OracleParameter> prm);
+                        var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
+                        transaction.Commit();
+                        Console.WriteLine("Transaction committed successfully");
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        Console.WriteLine("Transaction rolled back due to an error: " + ex.Message);
+                        return false;
+                    }
+                }
+            }
+        }
+
+        public static void DeleteFromSupermarket(Supermarket supermarket, OracleConnection connection)
+        {
+            var pokladny = GetFromSupermarket(supermarket, connection);
+            foreach(Pokladna pokladna in pokladny)
+            {
+                UctenkaService.Delete(pokladna, connection);
+                PrepareDeleteCall(pokladna, out string sql, out List<OracleParameter> prm);
+                var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
+            }
+        }
+
+        private static List<Pokladna> GetFromSupermarket(Supermarket supermarket, OracleConnection connection)
+        {
+            string sql = "SELECT * FROM pokladny WHERE id_supermarketu = :id_supermarketu";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_supermarketu", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = supermarket.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryForTransactionAsync(sql, prm,connection, MapOracleResultToPokladna).Result;
+            return result;
         }
 
         public static void PrepareDeleteCall(Pokladna pokladna, out string sql, out List<OracleParameter> prm)
@@ -87,7 +127,8 @@ namespace SemestralniPraceDB2.Models
                 Cislo = reader.GetString("cislo"),
                 Otevreno = reader.GetInt16("otevreno"),
                 Automaticka = reader.GetInt16("automaticka"),
-                Supermarket = new Supermarket {
+                Supermarket = new Supermarket
+                {
                     Id = reader.GetInt32("id_supermarketu")
                 }
             };

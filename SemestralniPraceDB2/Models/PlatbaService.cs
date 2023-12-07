@@ -62,9 +62,37 @@ namespace SemestralniPraceDB2.Models
         }
         public static bool Delete(Platba platba)
         {
+            using (OracleConnection connection = DatabaseConnector.GetConnection())
+            {
+                connection.Open();
+                using (OracleTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        DeleteTransactional(platba, connection);
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        private static void DeleteTransactional(Platba platba, OracleConnection connection)
+        {
+            UctenkaService.Delete(platba, connection);
             PrepareDeleteCall(platba, out string sql, out List<OracleParameter> prm);
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
-            return result == 1;
+            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
+        }
+
+        public static void DeleteFromUctenka(Uctenka uctenka, OracleConnection connection)
+        {
+            PrepareDeleteCall(uctenka.Platba, out string sql, out List<OracleParameter> prm);
+            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
         }
 
         public static void PrepareDeleteCall(Platba platba, out string sql, out List<OracleParameter> prm)
@@ -109,11 +137,30 @@ namespace SemestralniPraceDB2.Models
 
         public static List<Platba> GetPlatbyZakaznika(string cisloVernostniKarty)
         {
-            string sql = "SELECT p.* FROM PLATBY p JOIN vernostni_karty v ON p.id_vernostni_karty = v.id_vernostni_karty WHERE v.cislo_karty =   :cislo_karty";
+            string sql = "SELECT p.* FROM PLATBY p JOIN vernostni_karty v ON p.id_vernostni_karty = v.id_vernostni_karty WHERE v.cislo_karty = :cislo_karty";
             List<OracleParameter> prm = new();
             prm.Add(new OracleParameter(":cislo_karty", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
             prm[0].Value = cisloVernostniKarty;
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToPlatba).Result;
+            return result;
+        }
+
+        internal static void DeleteFromVydavatel(Vydavatel vydavatel, OracleConnection connection)
+        {
+            List<Platba> platby = GetAllFromVydavatel(vydavatel, connection);
+            foreach (Platba platba in platby)
+            {
+                DeleteTransactional(platba, connection);
+            }
+        }
+
+        private static List<Platba> GetAllFromVydavatel(Vydavatel vydavatel, OracleConnection connection)
+        {
+            string sql = "SELECT * FROM platby where id_vydavatele = :id_vydavatele";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_vydavatele", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = vydavatel.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryForTransactionAsync(sql, prm, connection, MapOracleResultToPlatba).Result;
             return result;
         }
     }

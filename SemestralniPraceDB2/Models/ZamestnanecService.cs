@@ -90,27 +90,7 @@ namespace SemestralniPraceDB2.Models
                 {
                     try
                     {
-                        string prom = "";
-                        List<OracleParameter> param = new();
-                        int result;
-                        if (zamestnanec.ObrazekZamestnance is not null)
-                        {
-                            ObrazekZamestnanceService.PrepareDeleteCall(zamestnanec.ObrazekZamestnance, out prom, out param);
-                            result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection).Result;
-                        }
-                        if (zamestnanec is Brigadnik)
-                        {
-                            BrigadnikService.PrepareDeleteCall(zamestnanec as Brigadnik, out prom, out param);
-                        }
-                        else if (zamestnanec is PlnyUvazek)
-                        {
-                            PlnyUvazekService.PrepareDeleteCall(zamestnanec as PlnyUvazek, out prom, out param);
-                        }
-                        result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection).Result;
-                        PreparePrepareDeleteCall(zamestnanec, out prom, out param);
-                        result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection).Result;
-                        AdresaService.PrepareDeleteCall(zamestnanec.Adresa, out prom, out param);
-                        result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection, System.Data.CommandType.Text).Result;
+                        DeleteTransactional(zamestnanec, connection);
                         // Commit the transaction if all commands are successful
                         transaction.Commit();
                         Console.WriteLine("Transaction committed successfully");
@@ -125,6 +105,31 @@ namespace SemestralniPraceDB2.Models
                     }
                 }
             }
+        }
+
+        private static void DeleteTransactional(Zamestnanec zamestnanec, OracleConnection connection)
+        {
+            string prom = "";
+            List<OracleParameter> param = new();
+            int result;
+            if (zamestnanec.ObrazekZamestnance is not null)
+            {
+                ObrazekZamestnanceService.PrepareDeleteCall(zamestnanec.ObrazekZamestnance, out prom, out param);
+                result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection).Result;
+            }
+            if (zamestnanec is Brigadnik)
+            {
+                BrigadnikService.PrepareDeleteCall(zamestnanec as Brigadnik, out prom, out param);
+            }
+            else if (zamestnanec is PlnyUvazek)
+            {
+                PlnyUvazekService.PrepareDeleteCall(zamestnanec as PlnyUvazek, out prom, out param);
+            }
+            result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection).Result;
+            PreparePrepareDeleteCall(zamestnanec, out prom, out param);
+            result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection).Result;
+            AdresaService.PrepareDeleteCall(zamestnanec.Adresa, out prom, out param);
+            result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection, System.Data.CommandType.Text).Result;
         }
 
         private static void PreparePrepareDeleteCall(Zamestnanec zamestnanec, out string sql, out List<OracleParameter> prm)
@@ -205,6 +210,21 @@ namespace SemestralniPraceDB2.Models
                     Id = result.GetInt32("id_obrazku")
                 }
             };
+        }
+
+        internal static bool DeleteFromAdresa(Adresa adresa)
+        {
+            Zamestnanec zamestananec = BrigadnikService.GetFromAdresa(adresa);
+            if (zamestananec != null)
+            {
+                return Delete(zamestananec);
+            }
+            zamestananec = PlnyUvazekService.GetFromAdresa(adresa);
+            if (zamestananec != null)
+            {
+                return Delete(zamestananec);
+            }
+            return false;
         }
     }
 }

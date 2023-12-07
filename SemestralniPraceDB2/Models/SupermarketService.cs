@@ -91,10 +91,11 @@ namespace SemestralniPraceDB2.Models
                 {
                     try
                     {
+                        PreSupermarketDelete(supermarket, connection);
                         PrepareDeleteCall(supermarket, out string sql, out List<OracleParameter> prm);
-                        var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
+                        var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm,connection, CommandType.Text).Result;
                         AdresaService.PrepareDeleteCall(supermarket.Adresa, out sql, out prm);
-                        result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
+                        result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
                         transaction.Commit();
                         Console.WriteLine("Transaction committed successfully");
                         return true;
@@ -107,6 +108,13 @@ namespace SemestralniPraceDB2.Models
                     }
                 }
             }
+        }
+
+        private static void PreSupermarketDelete(Supermarket supermarket, OracleConnection connection)
+        {
+            InventarniPolozkaService.DeleteFromSupermarket(supermarket, connection);
+            ObjednavkaService.DeleteFromSupermarket(supermarket, connection);
+            PokladnaService.DeleteFromSupermarket(supermarket, connection);
         }
 
         public static void PrepareDeleteCall(Supermarket supermarket, out string sql, out List<OracleParameter> prm)
@@ -154,6 +162,26 @@ namespace SemestralniPraceDB2.Models
             List<OracleParameter> prm = new();
             var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToSupermarket).Result;
             return result;
+        }
+
+        internal static bool DeleteFromAdresa(Adresa adresa)
+        {
+            var supermarket = GetFromAdresa(adresa);
+            if (supermarket != null)
+            {
+                return Delete(supermarket);
+            }
+            return false;
+        }
+
+        private static Supermarket? GetFromAdresa(Adresa adresa)
+        {
+            string sql = "Select * FROM supermarkety JOIN adresy USING(id_adresy) WHERE id_adresy = :id_adresy";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = adresa.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToSupermarket).Result;
+            return result.Count == 0 ? null : result[0];
         }
     }
 }

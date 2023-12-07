@@ -108,5 +108,32 @@ namespace SemestralniPraceDB2.Models
             return prm;
         }
 
+        internal static void DeleteFromObjednavka(Objednavka objednavka, OracleConnection connection)
+        {
+            PrepareDeleteCallFromObjednavka(objednavka, out string sql, out List<OracleParameter> prm);
+            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection,CommandType.Text).Result;
+        }
+
+        private static void PrepareDeleteCallFromObjednavka(Objednavka objednavka, out string sql, out List<OracleParameter> prm)
+        {
+            sql = "DELETE FROM objednane_zbozi WHERE id_objednavky = :id_objednavky";
+            prm = new();
+            prm.Add(new OracleParameter(":id_objednavky", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = objednavka.Id;
+        }
+
+        internal static void DeleteFromZbozi(Zbozi zbozi, OracleConnection connection)
+        {
+            PrepareDeleteCallFromZbozi(zbozi, out string sql, out List<OracleParameter> prm);
+            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
+        }
+
+        private static void PrepareDeleteCallFromZbozi(Zbozi zbozi, out string sql, out List<OracleParameter> prm)
+        {
+            sql = "DELETE FROM objednane_zbozi WHERE id_zbozi = :id_zbozi";
+            prm = new();
+            prm.Add(new OracleParameter(":id_zbozi", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = zbozi.Id;
+        }
     }
 }

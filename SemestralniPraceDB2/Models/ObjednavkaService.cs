@@ -30,9 +30,28 @@ namespace SemestralniPraceDB2.Models
         }
         public static bool Delete(Objednavka objednavka)
         {
-            PrepareDeleteCall(objednavka, out string sql, out List<OracleParameter> prm);
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
-            return result == 1;
+            using (OracleConnection connection = DatabaseConnector.GetConnection())
+            {
+                connection.Open();
+                using (OracleTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        ObjednaneZboziService.DeleteFromObjednavka(objednavka, connection);
+                        PrepareDeleteCall(objednavka, out string sql, out List<OracleParameter> prm);
+                        var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm,connection, CommandType.Text).Result;
+                        transaction.Commit();
+                        Console.WriteLine("Transaction committed successfully");
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        Console.WriteLine("Transaction rolled back due to an error: " + ex.Message);
+                        return false;
+                    }
+                }
+            }
         }
 
         public static void PrepareDeleteCall(Objednavka objednavka, out string sql, out List<OracleParameter> prm)
@@ -158,5 +177,65 @@ namespace SemestralniPraceDB2.Models
             return Update(objednavka);
         }
 
+        internal static void DeleteFromSupermarket(Supermarket supermarket, OracleConnection connection)
+        {
+            List<Objednavka> objednavky = GetFromSupermarket(supermarket, connection);
+            DeleteAllZbozi(objednavky, connection);
+            PrepareDeleteCall(supermarket, out string sql, out List<OracleParameter> prm);
+            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
+        }
+
+        private static void DeleteAllZbozi(List<Objednavka> objednavky, OracleConnection connection)
+        {
+            foreach (Objednavka objednavka in objednavky)
+            {
+                ObjednaneZboziService.DeleteFromObjednavka(objednavka, connection);
+            }
+        }
+
+        private static List<Objednavka> GetFromSupermarket(Supermarket supermarket, OracleConnection connection)
+        {
+            string sql = "Select * FROM objednavky WHERE id_supermarketu = :id_supermarket";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_supermarketu", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = supermarket.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryForTransactionAsync(sql, prm,connection, MapOracleResultToObjednavka).Result;
+            return result;
+        }
+
+        private static void PrepareDeleteCall(Supermarket supermarket, out string sql, out List<OracleParameter> prm)
+        {
+            sql = "DELETE FROM objednavky WHERE id_supermarketu = :id_supermarketu";
+            prm = new();
+            prm.Add(new OracleParameter(":id_supermarketu", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = supermarket.Id;
+        }
+
+        internal static void DeleteFromDodavatel(Dodavatel dodavatel, OracleConnection connection)
+        {
+            List<Objednavka> objednavky = GetFromDodavatel(dodavatel, connection);
+            DeleteAllZbozi(objednavky, connection);
+            PrepareDeleteCall(dodavatel, out string sql, out List<OracleParameter> prm);
+            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
+        }
+
+        private static void PrepareDeleteCall(Dodavatel dodavatel, out string sql, out List<OracleParameter> prm)
+        {
+            sql = "DELETE FROM objednavky WHERE id_dodavatele = :id_dodavatele";
+            prm = new();
+            prm.Add(new OracleParameter(":id_dodavatele", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = dodavatel.Id;
+        }
+
+        private static List<Objednavka> GetFromDodavatel(Dodavatel dodavatel, OracleConnection connection)
+        {
+            string sql = "Select * FROM objednavky WHERE id_dodavatele = :id_dodavatele";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_dodavatele", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = dodavatel.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryForTransactionAsync(sql, prm, connection, MapOracleResultToObjednavka).Result;
+            return result;
+        }
     }
+    
 }

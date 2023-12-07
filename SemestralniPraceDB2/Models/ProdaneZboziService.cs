@@ -115,5 +115,32 @@ namespace SemestralniPraceDB2.Models
             return result;
         }
 
+        internal static void Delete(Uctenka uctenka, OracleConnection connection)
+        {
+            PrepareDeleteCallUctenka(uctenka, out string sql, out List<OracleParameter> prm);
+            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm,connection, CommandType.Text).Result;
+        }
+
+        public static void PrepareDeleteCallUctenka(Uctenka uctenka, out string sql, out List<OracleParameter> prm)
+        {
+            sql = "DELETE FROM prodane_zbozi WHERE id_uctenky = :id_uctenky";
+            prm = new();
+            prm.Add(new OracleParameter(":id_uctenky", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = uctenka.Id;
+        }
+
+        internal static void Delete(Zbozi zbozi, OracleConnection connection)
+        {
+            PrepareDeleteCallZbozi(zbozi, out string sql, out List<OracleParameter> prm);
+            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
+        }
+
+        public static void PrepareDeleteCallZbozi(Zbozi zbozi, out string sql, out List<OracleParameter> prm)
+        {
+            sql = "DELETE FROM prodane_zbozi WHERE id_zbozi = :id_zbozi";
+            prm = new();
+            prm.Add(new OracleParameter(":id_zbozi", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = zbozi.Id;
+        }
     }
 }

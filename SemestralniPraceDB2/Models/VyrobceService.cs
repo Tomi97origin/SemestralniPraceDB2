@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace SemestralniPraceDB2.Models
 {
@@ -30,7 +31,7 @@ namespace SemestralniPraceDB2.Models
             List<OracleParameter> prm = new List<OracleParameter>();
 
             prm.Add(new OracleParameter("p_id_vyrobce", OracleDbType.Int32, System.Data.ParameterDirection.InputOutput));
-            prm[0].Value = vyrobce.Id <= 0? null : vyrobce.Id;
+            prm[0].Value = vyrobce.Id <= 0 ? null : vyrobce.Id;
 
             prm.Add(new OracleParameter("p_nazev", OracleDbType.Varchar2, System.Data.ParameterDirection.Input));
             prm[1].Value = vyrobce.Nazev;
@@ -49,9 +50,26 @@ namespace SemestralniPraceDB2.Models
         }
         public static bool Delete(Vyrobce vyrobce)
         {
-            PrepareDeleteCall(vyrobce, out string sql, out List<OracleParameter> prm);
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
-            return result == 1;
+            using (OracleConnection connection = DatabaseConnector.GetConnection())
+            {
+                connection.Open();
+                using (OracleTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        ZboziService.DeleteFromVyrobce(vyrobce, connection);
+                        PrepareDeleteCall(vyrobce, out string sql, out List<OracleParameter> prm);
+                        var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+            }
         }
 
         public static void PrepareDeleteCall(Vyrobce vyrobce, out string sql, out List<OracleParameter> prm)
@@ -78,7 +96,7 @@ namespace SemestralniPraceDB2.Models
             List<OracleParameter> prm = new();
             prm.Add(new OracleParameter(":id_dodavatele", OracleDbType.Int32, System.Data.ParameterDirection.Input));
             prm[0].Value = vyrobce.Id;
-            var result = DatabaseConnector.ExecuteCommandQueryForTransactionAsync(sql, prm, connection,MapOracleResultToVyrobce).Result;
+            var result = DatabaseConnector.ExecuteCommandQueryForTransactionAsync(sql, prm, connection, MapOracleResultToVyrobce).Result;
             return result.Count == 0 ? null : result[0];
         }
 
