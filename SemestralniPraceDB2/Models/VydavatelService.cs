@@ -46,9 +46,28 @@ namespace SemestralniPraceDB2.Models
         }
         public static bool Delete(Vydavatel vydavatel)
         {
-            PrepareDeleteCall(vydavatel, out string sql, out List<OracleParameter> prm);
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
-            return result == 1;
+            using (OracleConnection connection = DatabaseConnector.GetConnection())
+            {
+                connection.Open();
+                using (OracleTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        PlatbaService.DeleteFromVydavatel(vydavatel, connection);
+                        PrepareDeleteCall(vydavatel, out string sql, out List<OracleParameter> prm);
+                        var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
+                        transaction.Commit();
+                        Console.WriteLine("Transaction committed successfully");
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        Console.WriteLine("Transaction rolled back due to an error: " + ex.Message);
+                        return false;
+                    }
+                }
+            }
         }
 
         public static void PrepareDeleteCall(Vydavatel vydavatel, out string sql, out List<OracleParameter> prm)

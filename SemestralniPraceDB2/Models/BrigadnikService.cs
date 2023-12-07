@@ -82,13 +82,6 @@ namespace SemestralniPraceDB2.Models
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
             return result > 0;
         }
-        
-        /*public static bool Delete(Brigadnik brigadnik)
-        {
-            PrepareDeleteCall(brigadnik, out string sql, out List<OracleParameter> prm);
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm).Result;
-            return result > 0;
-        }*/
 
         public static void PrepareDeleteCall(Brigadnik brigadnik, out string sql, out List<OracleParameter> prm)
         {
@@ -153,5 +146,14 @@ namespace SemestralniPraceDB2.Models
 
         }
 
+        internal static Brigadnik? GetFromAdresa(Adresa adresa)
+        {
+            string sql = "SELECT * FROM zamestnanci JOIN brigadnici USING(id_zamestnance) WHERE id_adresy = :id_adresy";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = adresa.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToBrigadnik).Result;
+            return result.Count == 0 ? null : result[0];
+        }
     }
 }

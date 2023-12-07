@@ -65,10 +65,11 @@ namespace SemestralniPraceDB2.Models
                 {
                     try
                     {
+                        ObjednavkaService.DeleteFromDodavatel(dodavatel, connection);
                         PrepareDeleteCall(dodavatel, out string sql, out List<OracleParameter> prm);
-                        var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
+                        var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm,connection, CommandType.Text).Result;
                         AdresaService.PrepareDeleteCall(dodavatel.Adresa, out sql,out prm);
-                        result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
+                        result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm,connection, CommandType.Text).Result;
                         transaction.Commit();
                         Console.WriteLine("Transaction committed successfully");
                         return true;
@@ -135,6 +136,24 @@ namespace SemestralniPraceDB2.Models
             };
         }
 
+        internal static bool DeleteFromAdresa(Adresa adresa)
+        {
+            var dodavatel = GetFromAdresa(adresa);
+            if (dodavatel != null)
+            {
+                return Delete(dodavatel);
+            }
+            return false;
+        }
 
+        private static Dodavatel GetFromAdresa(Adresa adresa)
+        {
+            string sql = "SELECT * FROM dodavatele WHERE id_adresy = :id_adresy";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = adresa.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToDodavatel).Result;
+            return result.Count == 0 ? null : result[0];
+        }
     }
 }

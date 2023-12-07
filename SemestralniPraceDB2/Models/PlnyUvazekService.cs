@@ -13,7 +13,7 @@ namespace SemestralniPraceDB2.Models
 {
     public static class PlnyUvazekService
     {
-        
+
         public static bool Create(PlnyUvazek zamestnanec)
         {
             PrepareProcedureCall(zamestnanec, out string procedureName, out List<OracleParameter> prm);
@@ -28,10 +28,6 @@ namespace SemestralniPraceDB2.Models
             var result = DatabaseConnector.ExecuteCommandNonQueryAsync(procedureName, prm).Result;
             return result > 0;
         }
-
-        /*public bool Delete(PlnyUvazek zamestnanec)
-            throw new NotImplementedException();
-        }*/
 
         public static PlnyUvazek? Get(PlnyUvazek zamestnanec)
         {
@@ -148,6 +144,16 @@ namespace SemestralniPraceDB2.Models
             prm = new List<OracleParameter>();
             prm.Add(new OracleParameter("p_id_zamestnance", OracleDbType.Int32, System.Data.ParameterDirection.Input));
             prm[0].Value = plnyUvazek.Id;
+        }
+
+        internal static PlnyUvazek? GetFromAdresa(Adresa adresa)
+        {
+            string sql = "SELECT * FROM zamestnanci JOIN plne_uvazky USING(id_zamestnance) WHERE id_adresy = :id_adresy";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_adresy", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = adresa.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryAsync(sql, prm, MapOracleResultToPlnyUvazek).Result;
+            return result.Count == 0 ? null : result[0];
         }
     }
 }

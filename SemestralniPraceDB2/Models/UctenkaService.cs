@@ -55,9 +55,29 @@ namespace SemestralniPraceDB2.Models
         }
         public static bool Delete(Uctenka uctenka)
         {
-            PrepareDeleteCall(uctenka, out string sql, out List<OracleParameter> prm);
-            var result = DatabaseConnector.ExecuteCommandNonQueryAsync(sql, prm, CommandType.Text).Result;
-            return result == 1;
+            using (OracleConnection connection = DatabaseConnector.GetConnection())
+            {
+                connection.Open();
+                using (OracleTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        List<Uctenka> uctenky = new();
+                        uctenky.Add(uctenka);
+                        DeleteAllProdaneZbozi(connection, uctenky);
+                        PrepareDeleteCall(uctenka,out string sql, out List<OracleParameter> prm);
+                        var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm,connection, CommandType.Text).Result;
+                        DeleteAllPlatby(uctenky, connection);
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+            }
         }
 
         public static void PrepareDeleteCall(Uctenka uctenka, out string sql, out List<OracleParameter> prm)
@@ -154,6 +174,79 @@ namespace SemestralniPraceDB2.Models
                     }
                 }
             }
+        }
+
+        internal static void Delete(Pokladna pokladna, OracleConnection connection)
+        {
+            List<Uctenka> uctenky = GetAllFromPokladna(pokladna, connection);
+            DeleteAllProdaneZbozi(connection, uctenky);
+            string sql;
+            List<OracleParameter> prm;
+            PrepareDeleteByPokladna(pokladna, out sql, out prm);
+            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection).Result;
+            DeleteAllPlatby(uctenky, connection);
+        }
+
+        private static void DeleteAllPlatby(List<Uctenka> uctenky, OracleConnection connection)
+        {
+            foreach (Uctenka uctenka in uctenky)
+            {
+                PlatbaService.DeleteFromUctenka(uctenka, connection);
+            }
+        }
+
+        internal static void Delete(Platba platba, OracleConnection connection)
+        {
+            List<Uctenka> uctenky = GetAllFromPlatba(platba, connection);
+            DeleteAllProdaneZbozi(connection, uctenky);
+            string sql;
+            List<OracleParameter> prm;
+            PrepareDeleteByPlatba(platba, out sql, out prm);
+            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection).Result;
+        }
+
+        private static void PrepareDeleteByPlatba(Platba platba, out string sql, out List<OracleParameter> prm)
+        {
+            sql = "DELETE FROM uctenky WHERE id_platby = :id_platby";
+            prm = new();
+            prm.Add(new OracleParameter(":id_platby", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = platba.Id;
+        }
+
+        private static List<Uctenka> GetAllFromPlatba(Platba platba, OracleConnection connection)
+        {
+            string sql = "Select * FROM uctenky WHERE id_platby = :id_platby";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_platby", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = platba.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryForTransactionAsync(sql, prm, connection, MapOracleResultToUctenka).Result;
+            return result;
+        }
+
+        private static void DeleteAllProdaneZbozi(OracleConnection connection, List<Uctenka> uctenky)
+        {
+            foreach (Uctenka uctenka in uctenky)
+            {
+                ProdaneZboziService.Delete(uctenka, connection);
+            }
+        }
+
+        private static List<Uctenka> GetAllFromPokladna(Pokladna pokladna, OracleConnection connection)
+        {
+            string sql = "Select * FROM uctenky  WHERE id_pokladny = :id_pokladny";
+            List<OracleParameter> prm = new();
+            prm.Add(new OracleParameter(":id_pokladny", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = pokladna.Id;
+            var result = DatabaseConnector.ExecuteCommandQueryForTransactionAsync(sql, prm, connection, MapOracleResultToUctenka).Result;
+            return result;
+        }
+
+        private static void PrepareDeleteByPokladna(Pokladna pokladna, out string sql, out List<OracleParameter> prm)
+        {
+            sql = "DELETE FROM uctenky WHERE id_pokladny = :id_pokladny";
+            prm = new();
+            prm.Add(new OracleParameter(":id_pokladny", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm[0].Value = pokladna.Id;
         }
     }
 }
