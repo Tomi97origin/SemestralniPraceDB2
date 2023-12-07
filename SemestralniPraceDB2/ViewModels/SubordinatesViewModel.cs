@@ -21,6 +21,12 @@ namespace SemestralniPraceDB2.ViewModels
         [ObservableProperty]
         ObservableCollection<Zamestnanec>? selectedEmployeeSubordinates;
 
+        internal void Refresh()
+        {
+            Employees = new(PlnyUvazekService.GetAll());
+            SelectedEmployeeSubordinates = null;
+        }
+
         partial void OnSelectedEmployeeChanged(Zamestnanec? value)
         {
             if (SelectedEmployee != null)

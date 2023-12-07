@@ -22,8 +22,9 @@ partial class AddProductPriceViewModel : BaseViewModel
 
     public AddProductPriceViewModel()
     {
-        SeznamZbozi = new(ZboziService.GetAll());
+        SeznamZbozi = new();
         NovaCena.PlatnostOd = DateTime.Today;
+        Refresh();
     }
 
     [RelayCommand]
@@ -39,6 +40,11 @@ partial class AddProductPriceViewModel : BaseViewModel
         {
             MessageBox.Show($"Pole {chybnePole} není vyplněno validně");
         }
+    }
+
+    internal void Refresh()
+    {
+        SeznamZbozi = new(ZboziService.GetAll());
     }
 
     private string NewPriceIsValid()

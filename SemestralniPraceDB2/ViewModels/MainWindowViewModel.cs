@@ -107,6 +107,14 @@ namespace SemestralniPraceDB2.ViewModels
                     break;
                 case "CreateEmployee": createEmployeeVM.Refresh();
                     break;
+                case "Subordinates": subordinatesVM.Refresh();
+                    break;
+                case "MakingOrderForWarehouse": makingOrderForWarehouseVM.Refresh();
+                    break;
+                case "AddProduct": addProductVM.Refresh();
+                    break;
+                case "AddProductPrice": addProductPriceVM.Refresh();
+                    break;
             }
 
             if (newVM != SelectedViewModel)

@@ -5,6 +5,7 @@ using SemestralniPraceDB2.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,13 +27,16 @@ namespace SemestralniPraceDB2.ViewModels
 
         public AddProductViewModel()
         {
-            var vsechnyKategorie = KategorieService.GetAll();
+            SeznamKategorii = new();
+            SeznamVyrobcu = new();
 
-            seznamKategorii = new ObservableCollection<Kategorie>(vsechnyKategorie);
+            Refresh();
+        }
 
-            var vsichniVyrobci = VyrobceService.GetAll();
-
-            seznamVyrobcu = new(vsichniVyrobci);
+        public void Refresh()
+        {
+            SeznamKategorii = new ObservableCollection<Kategorie>(KategorieService.GetAll());
+            SeznamVyrobcu = new(VyrobceService.GetAll());
         }
 
         [RelayCommand]

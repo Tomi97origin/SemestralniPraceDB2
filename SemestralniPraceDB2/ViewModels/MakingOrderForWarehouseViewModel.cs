@@ -76,40 +76,12 @@ namespace SemestralniPraceDB2.ViewModels
 
         public MakingOrderForWarehouseViewModel()
         {
-            SeznamDodavatelu = new(DodavatelService.GetAll());
-            if (SeznamDodavatelu.Count == 0)
-            {
-                MessageBox.Show("Nebyli nalezeni žádní dodavatelé, zkontrolujte připojení k databázi.");
-                VybranyDodavatel = new();
-                SeznamZboziSCenou = new();
-            }
-            else
-            {
-                VybranyDodavatel = SeznamDodavatelu.First();
+            SeznamDodavatelu = new();
+            SeznamSupermarketu = new();
+            VybranyDodavatel = new();
+            SeznamZboziSCenou = new();
 
-                //naplnění seznamu zboží s cenou
-                SeznamZboziSCenou = new();
-                var seznam = CenaService.GetAllZboziWithCurentPrice(); //vrací seznam cen s vyplněným zbožím
-                foreach (var v in seznam)
-                {
-                    if (v.Zbozi is not null)
-                    {
-                        var z = new ZboziSCenou(v.Zbozi.Id, v.Zbozi.Nazev, v.Zbozi.Popis, v.Zbozi.Kategorie.Zkratka ?? v.Zbozi.Kategorie.Nazev, v.Zbozi.Vyrobce.Zkratka, v.Zbozi.EAN, v.Castka);
-
-                        SeznamZboziSCenou.Add(z);
-                    }
-                }
-            }
-
-            //načtení seznamu supermarketů a jejich adres
-            SeznamSupermarketu = new(SupermarketService.GetAll());
-            foreach (var s in SeznamSupermarketu)
-            {
-                if (s.Adresa is not null)
-                {
-                    s.Adresa = AdresaService.Get(s.Adresa) ?? new();
-                }
-            }
+            Refresh();
         }
 
 
@@ -210,6 +182,37 @@ namespace SemestralniPraceDB2.ViewModels
             VybraneVybraneZbozi = null;
             VybranySupermarket = null;
 
+        }
+
+        internal void Refresh()
+        {
+            SeznamDodavatelu = new(DodavatelService.GetAll());
+            if (SeznamDodavatelu.Count == 0)
+            {
+                MessageBox.Show("Nebyli nalezeni žádní dodavatelé, zkontrolujte připojení k databázi.");
+                VybranyDodavatel = new();
+                SeznamZboziSCenou = new();
+            }
+            else
+            {
+                VybranyDodavatel = SeznamDodavatelu.First();
+
+                //naplnění seznamu zboží s cenou
+                SeznamZboziSCenou = new();
+                var seznam = CenaService.GetAllZboziWithCurentPrice(); //vrací seznam cen s vyplněným zbožím
+                foreach (var v in seznam)
+                {
+                    if (v.Zbozi is not null)
+                    {
+                        var z = new ZboziSCenou(v.Zbozi.Id, v.Zbozi.Nazev, v.Zbozi.Popis, v.Zbozi.Kategorie.Zkratka ?? v.Zbozi.Kategorie.Nazev, v.Zbozi.Vyrobce.Zkratka, v.Zbozi.EAN, v.Castka);
+
+                        SeznamZboziSCenou.Add(z);
+                    }
+                }
+            }
+
+            //načtení seznamu supermarketů a jejich adres
+            SeznamSupermarketu = new(SupermarketService.GetAll());
         }
     }
 }
