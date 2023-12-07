@@ -112,7 +112,7 @@
                 </Grid.ColumnDefinitions>
                 <Label
                     Grid.Column="0"
-                    Content="Nakup"
+                    Content="Nákup"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Left"
                     Margin="10"
@@ -183,7 +183,7 @@
 
                 <Label 
                     Grid.Column="0"
-                    Content="Typ Platby:" 
+                    Content="Typ platby:" 
                     Width="auto" 
                     HorizontalContentAlignment="Left" 
                     VerticalAlignment="Center"/>
@@ -214,7 +214,7 @@
 
                 <Label 
                     Grid.Column="3"
-                    Content="Vernostni Karta:" 
+                    Content="Věrnostní karta:" 
                     Width="auto" 
                     HorizontalContentAlignment="Left" 
                     VerticalAlignment="Center"/>
@@ -239,7 +239,7 @@
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <Label Content="Vraceno:" VerticalAlignment="Center" Grid.Column="0" Margin="3" Name="labelVraceno" Visibility="Visible"/>
+                <Label Content="Vráceno:" VerticalAlignment="Center" Grid.Column="0" Margin="3" Name="labelVraceno" Visibility="Visible"/>
                 <TextBox Text="{Binding Vraceno}" Grid.Column="1" Width="100" Margin="3" Name="textBoxVraceno" Visibility="Visible"/>
 
                 <Label Content="Cislo Karty:" VerticalAlignment="Center" Grid.Column="0" Margin="3" Name="labelCisloKarty" Visibility="Hidden"/>

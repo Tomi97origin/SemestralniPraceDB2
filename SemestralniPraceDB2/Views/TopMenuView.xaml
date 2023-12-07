@@ -140,7 +140,7 @@
                 CommandParameter="MakingOrderForCustomer">
                 <StackPanel>
                         <Image Source="/Views/Images/receipt.png" />
-                    <TextBlock Text="Zadat nakup&#x0a;zakaznika" />
+                    <TextBlock Text="Zadat nákup&#x0a;zákazníka" />
                 </StackPanel>
             </Button>
 
