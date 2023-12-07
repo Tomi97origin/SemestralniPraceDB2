@@ -45,10 +45,12 @@ namespace SemestralniPraceDB2.Models
                         if (zamestnanec is Brigadnik)
                         {
                             BrigadnikService.PrepareProcedureCall(zamestnanec as Brigadnik, out prom, out param);
-                        }
-                        if (zamestnanec is PlnyUvazek)
+                        } else if (zamestnanec is PlnyUvazek)
                         {
                             PlnyUvazekService.PrepareProcedureCall(zamestnanec as PlnyUvazek, out prom, out param);
+                        } else
+                        {
+                            throw new Exception("Neplatny typ zamestnance");
                         }
                         zamestnanec.Id = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(prom, param, connection).Result;
 
