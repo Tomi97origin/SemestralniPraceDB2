@@ -24,7 +24,7 @@ namespace SemestralniPraceDB2.ViewModels
 
             for (int i = 0; i < dbList.Count; i++)
             {
-                if (dbList[i].Active != SeznamUzivatelu[i].Active)
+                if (dbList[i].Active != SeznamUzivatelu[i].Active || dbList[i].Admin != SeznamUzivatelu[i].Admin)
                 {
                     UzivateleService.Update(SeznamUzivatelu[i]);
                 }
