@@ -124,6 +124,23 @@ namespace SemestralniPraceDB2.ViewModels
             }
             if (AccepterEqualsSelectedOrder())
             {
+
+                //hashmapa všeho zboží 
+                Dictionary<string, Zbozi> zboziDict = new();
+                foreach (var i in SelectedOrderItems)
+                {
+                    zboziDict.Add(i.Zbozi.EAN, i.Zbozi);
+                }
+
+                //vytvoření seznamu inventárních položek
+                List<InventarniPolozka> inventarniPolozky = new();
+
+                foreach(var i in AcceptedItems)
+                {
+                    inventarniPolozky.Add(new(i.Count, SelectedOrder?.Supermarket, zboziDict.GetValueOrDefault(i.EAN)));
+                }
+
+                if (!InventarniPolozkaService.Create(inventarniPolozky)) return;
                 ObjednavkaService.Prijato(new() { Id = loadedOrderId });
                 MessageBox.Show("Objednávka přijatá");
                 Refresh();

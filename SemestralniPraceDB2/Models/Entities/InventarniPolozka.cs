@@ -30,6 +30,21 @@ namespace SemestralniPraceDB2.Models.Entities
         [DisplayName("Zboží")]
         public Zbozi Zbozi { get; set; }
 
+        public InventarniPolozka()
+        {
+        }
+
+        public InventarniPolozka( int mnozstvi, Supermarket supermarket, Zbozi zbozi)
+        {
+            Id = 0;
+            Sklad = 1;
+            Mnozstvi = mnozstvi;
+            OznaceniPozice = string.Empty;
+            Naskladneno = DateTime.Now;
+            Supermarket = supermarket;
+            Zbozi = zbozi;
+        }
+
         public string DataToText()
         {
             StringBuilder sb = new StringBuilder();
