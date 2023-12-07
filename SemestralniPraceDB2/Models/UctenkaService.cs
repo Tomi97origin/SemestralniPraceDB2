@@ -183,7 +183,7 @@ namespace SemestralniPraceDB2.Models
             string sql;
             List<OracleParameter> prm;
             PrepareDeleteByPokladna(pokladna, out sql, out prm);
-            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection).Result;
+            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;
             DeleteAllPlatby(uctenky, connection);
         }
 
@@ -202,7 +202,7 @@ namespace SemestralniPraceDB2.Models
             string sql;
             List<OracleParameter> prm;
             PrepareDeleteByPlatba(platba, out sql, out prm);
-            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection).Result;
+            var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection,CommandType.Text).Result;
         }
 
         private static void PrepareDeleteByPlatba(Platba platba, out string sql, out List<OracleParameter> prm)

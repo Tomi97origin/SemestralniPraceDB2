@@ -129,7 +129,7 @@ namespace SemestralniPraceDB2.Models
             prm[0].Value = uctenka.Id;
         }
 
-        internal static void Delete(Zbozi zbozi, OracleConnection connection)
+        internal static void DeleteFromZbozi(Zbozi zbozi, OracleConnection connection)
         {
             PrepareDeleteCallZbozi(zbozi, out string sql, out List<OracleParameter> prm);
             var result = DatabaseConnector.ExecuteCommandNonQueryForTransactionAsync(sql, prm, connection, CommandType.Text).Result;

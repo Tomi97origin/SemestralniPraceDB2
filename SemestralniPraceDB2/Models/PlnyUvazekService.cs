@@ -140,9 +140,9 @@ namespace SemestralniPraceDB2.Models
 
         internal static void PrepareDeleteCall(PlnyUvazek? plnyUvazek, out string sql, out List<OracleParameter> prm)
         {
-            sql = "DELETE FROM plne_uvazky WHERE id_zamestnance = p_id_zamestnance";
+            sql = "DELETE FROM plne_uvazky WHERE id_zamestnance = :id_zamestnance";
             prm = new List<OracleParameter>();
-            prm.Add(new OracleParameter("p_id_zamestnance", OracleDbType.Int32, System.Data.ParameterDirection.Input));
+            prm.Add(new OracleParameter(":id_zamestnance", OracleDbType.Int32, System.Data.ParameterDirection.Input));
             prm[0].Value = plnyUvazek.Id;
         }
 
