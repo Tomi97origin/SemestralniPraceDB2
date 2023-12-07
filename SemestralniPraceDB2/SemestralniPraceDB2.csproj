@@ -5,6 +5,7 @@
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Views\Images\trolley.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +29,10 @@
     <None Remove="Views\schedule_ico.png" />
     <None Remove="Views\shopping.png" />
     <None Remove="Views\telegram_ico.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Views\Images\trolley.ico" />
   </ItemGroup>
 
   <ItemGroup>
