@@ -101,21 +101,39 @@ namespace SemestralniPraceDB2.ViewModels
 
         public MakingOrderForCustomerViewModel()
         {
+            SetUp();
+        }
+
+        public void SetUp()
+        {
             SeznamSupermarketu = new(SupermarketService.GetAll());
             SeznamPokladen = new();
             SeznamZboziSCenou = new();
             SeznamVerKaret = new(VernostniKartaService.GetAll());
             SeznamVerKaret.Insert(0, new Vernostni_karta() { Jmeno = string.Empty, Cislo_Karty = string.Empty });
-            VybranaVerKarta = SeznamVerKaret.First();
             SeznamVydavatelu = new(VydavatelService.GetAll());
-            VybranyVydavatel = SeznamVydavatelu.First();
-            VybranySupermarket = SeznamSupermarketu.First();
-            VybranyTypPlatby = TypPlatby.First();
+            VybranaVerKarta = SeznamVerKaret.First();
+            if (SeznamVydavatelu.Count > 0)
+            {
+                VybranyVydavatel = SeznamVydavatelu.First();
+            }
+            if (SeznamSupermarketu.Count > 0)
+            {
+                VybranySupermarket = SeznamSupermarketu.First();
+            }
+            if (TypPlatby.Count > 0)
+            {
+                VybranyTypPlatby = TypPlatby.First();
+            }
+            Refresh();
         }
 
         partial void OnVybranySupermarketChanged(Supermarket? value)
         {
-            RefreshSupermarketChange();
+            if ( value is not null)
+            {
+                RefreshSupermarketChange();
+            }
         }
 
         void RefreshTotalPrice()
@@ -125,20 +143,21 @@ namespace SemestralniPraceDB2.ViewModels
 
         private void RefreshSupermarketChange()
         {
-            SeznamPokladen.Clear();
+            if (VybranySupermarket is null)
+            {
+                return;
+            }
             var pokladny = (PokladnaService.GetFromSupermarket(VybranySupermarket));
             foreach (var i in pokladny) SeznamPokladen.Add(i);
             if (SeznamPokladen.Count > 0)
             {
                 VybranaPokladna = SeznamPokladen.First();
             }
-            SeznamZboziSCenou.Clear();
             var seznam = InventarniPolozkaService.GetAllZboziWithCurentPriceFromInventory(VybranySupermarket);
             foreach (var v in seznam)
             {
                 SeznamZboziSCenou.Add(v);
             }
-            SeznamVybranehoZbozi.Clear();
             RefreshTotalPrice();
         }
 
@@ -276,7 +295,8 @@ namespace SemestralniPraceDB2.ViewModels
                 MessageBox.Show("Zboží vyprodáno.");
                 return;
             }
-            Refresh();
+            SetUp();
+            
         }
 
         private void Refresh()
@@ -287,6 +307,10 @@ namespace SemestralniPraceDB2.ViewModels
             Debit = false;
             VybranyVydavatel = SeznamVydavatelu.First();
             VybranaVerKarta = SeznamVerKaret.First();
+            SeznamPokladen.Clear();
+            SeznamZboziSCenou.Clear();
+            SeznamVybranehoZbozi.Clear();
+            CenaCelkem = 0;
             RefreshSupermarketChange();
         }
     }
