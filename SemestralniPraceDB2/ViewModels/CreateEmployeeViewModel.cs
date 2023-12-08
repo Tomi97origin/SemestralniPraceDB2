@@ -66,14 +66,10 @@ namespace SemestralniPraceDB2.ViewModels
             {
                 case "Plný úvazek":
                     VlozPlnyUvazekdoDB();
-                    MessageBox.Show("Zaměstnanec na plný úvazek uložen.");
-                    Refresh();
                     break;
 
                 case "Brigádník":
                     VlozBrigadnikDoDB();
-                    MessageBox.Show("Zaměstnanec brigádník uložen.");
-                    Refresh();
                     break;
                 default:
                     MessageBox.Show("Vyberte typ úvazku.");
@@ -83,6 +79,14 @@ namespace SemestralniPraceDB2.ViewModels
 
         public void Refresh()
         {
+            /*
+              Zamestnanec = new();
+            Zamestnanec.Adresa = new();
+            Supermarkety = new(SupermarketService.GetAll());
+            Vedouci = new(PlnyUvazekService.GetAll());
+            Role = new(RoleService.GetAll());
+            Zamestnanec.Nastup = DateTime.Now;
+             */
             Zamestnanec = new();
             Zamestnanec.Adresa = new();
             Supermarkety = new(SupermarketService.GetAll());
@@ -93,7 +97,7 @@ namespace SemestralniPraceDB2.ViewModels
             HodinovaSazba = null;
             Hodiny = null;
             Plat = null;
-            PlatnostDo = DateTime.Today;
+            PlatnostDo = DateTime.Today.AddDays(365);
             ImagePath = string.Empty;
             ImageToShow = new();
             ZamestnanecImage = null;
@@ -102,7 +106,6 @@ namespace SemestralniPraceDB2.ViewModels
         private void VlozBrigadnikDoDB()
         {
             string chybnePole;
-            Zamestnanec.TypUvazku = 0;
 
             chybnePole = ZamestnanecIsValid();
             if (chybnePole != string.Empty)
@@ -143,8 +146,13 @@ namespace SemestralniPraceDB2.ViewModels
                     return;
                 }
 
+                Zamestnanec.TypUvazku = 0;
                 Brigadnik novyZamestnanec = new(Zamestnanec, hodinovaSazbaNumber, hodinyNumber);
                 ZamestnanecService.Create(novyZamestnanec);
+
+                MessageBox.Show("Zaměstnanec brigádník uložen.");
+
+                Refresh();
                 //MessageBox.Show($"Vytvářím nového Brigádníka {Zamestnanec.DataToText()}, s adresou {Zamestnanec.Adresa?.DataToText()}, obr: {Zamestnanec.ObrazekZamestnance.Soubor}={Zamestnanec.ObrazekZamestnance.Image}");
             }
         }
@@ -152,7 +160,6 @@ namespace SemestralniPraceDB2.ViewModels
         private void VlozPlnyUvazekdoDB()
         {
             string chybnePole;
-            Zamestnanec.TypUvazku = 1;
 
             chybnePole = ZamestnanecIsValid();
             if (chybnePole != string.Empty)
@@ -183,9 +190,14 @@ namespace SemestralniPraceDB2.ViewModels
                     return;
                 }
 
+                Zamestnanec.TypUvazku = 1;
                 PlnyUvazek novyZamestnanec = new(Zamestnanec, platNumber, PlatnostDo);
-                ZamestnanecService.Create(novyZamestnanec); //todo: toto nějak nefachá
-                                                            //MessageBox.Show($"Vytvářím nového zaměstnance {Zamestnanec.DataToText()}, s adresou {Zamestnanec.Adresa?.DataToText()}, obr: {Zamestnanec.ObrazekZamestnance.Soubor}={Zamestnanec.ObrazekZamestnance.Image}");
+                ZamestnanecService.Create(novyZamestnanec);
+                //MessageBox.Show($"Vytvářím nového zaměstnance {Zamestnanec.DataToText()}, s adresou {Zamestnanec.Adresa?.DataToText()}, obr: {Zamestnanec.ObrazekZamestnance.Soubor}={Zamestnanec.ObrazekZamestnance.Image}");
+
+                MessageBox.Show("Zaměstnanec na plný úvazek uložen.");
+
+                Refresh();
             }
         }
 
@@ -216,10 +228,10 @@ namespace SemestralniPraceDB2.ViewModels
                 return "Nástup";
             }
 
-            if (Zamestnanec.TypUvazku == 0 && Vedouci == null)
-            {
-                return "Vedoucí";
-            }
+            //if (Zamestnanec.TypUvazku == 0 && Vedouci == null)
+            //{
+            //    return "Vedoucí";
+            //}
 
             if (Zamestnanec.Supermarket == null)
             {
