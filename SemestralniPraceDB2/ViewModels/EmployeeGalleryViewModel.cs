@@ -71,7 +71,7 @@ namespace SemestralniPraceDB2.ViewModels
             }
         }
 
-        private void Refresh()
+        public void Refresh()
         {
             ZamestnanciList = new(ZamestnanecService.GetAll());
         }

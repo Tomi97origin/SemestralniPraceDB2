@@ -78,7 +78,7 @@ partial class TopMenuViewModel : BaseViewModel, IRecipient<UserLogin>, IRecipien
             SaveFileDialog saveFileDialog = new SaveFileDialog();
 
             // Nastavení výchozího názvu souboru (nepovinné)
-            saveFileDialog.FileName = "DB_logs.txt";
+            saveFileDialog.FileName = "DB_logs";
 
             // Nastavení filtru souborů (nepovinné)
             saveFileDialog.Filter = "JSON strukturovaný soubor (*.json)|*.json";

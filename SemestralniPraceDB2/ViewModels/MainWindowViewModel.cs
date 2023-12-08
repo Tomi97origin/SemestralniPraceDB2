@@ -115,6 +115,8 @@ namespace SemestralniPraceDB2.ViewModels
                     break;
                 case "AddProductPrice": addProductPriceVM.Refresh();
                     break;
+                case "EmployeeGallery": employeeGalleryVM.Refresh();
+                    break;
                 case "MakingOrderForCustomer":
                     makingOrderForCustomerVM.SetUp();
                     break;
