@@ -96,7 +96,7 @@ namespace SemestralniPraceDB2.Models
                 Id = reader.GetInt32("id_inventarni_polozky"),
                 Sklad = reader.GetInt16("sklad"),
                 Mnozstvi = reader.GetInt32("mnozstvi"),
-                OznaceniPozice = reader.GetString("oznaceni_pozice"),
+                OznaceniPozice = reader.IsDBNull("oznaceni_pozice")? string.Empty : reader.GetString("oznaceni_pozice"),
                 Naskladneno = reader.GetDateTime("naskladneno"),
                 Supermarket = new Supermarket() { Id = reader.GetInt32("id_supermarketu") },
                 Zbozi = new Zbozi() { Id = reader.GetInt32("id_zbozi") }
