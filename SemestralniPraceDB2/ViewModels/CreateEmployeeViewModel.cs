@@ -79,20 +79,13 @@ namespace SemestralniPraceDB2.ViewModels
 
         public void Refresh()
         {
-            /*
-              Zamestnanec = new();
-            Zamestnanec.Adresa = new();
+            Zamestnanec zamestnanec = new();
+            zamestnanec.Adresa = new();
+            zamestnanec.Nastup = DateTime.Now;
+            Zamestnanec = zamestnanec;
             Supermarkety = new(SupermarketService.GetAll());
             Vedouci = new(PlnyUvazekService.GetAll());
             Role = new(RoleService.GetAll());
-            Zamestnanec.Nastup = DateTime.Now;
-             */
-            Zamestnanec = new();
-            Zamestnanec.Adresa = new();
-            Supermarkety = new(SupermarketService.GetAll());
-            Vedouci = new(PlnyUvazekService.GetAll());
-            Role = new(RoleService.GetAll());
-            Zamestnanec.Nastup = DateTime.Now;
             VybranyTypUvazku = null;
             HodinovaSazba = null;
             Hodiny = null;
@@ -153,7 +146,6 @@ namespace SemestralniPraceDB2.ViewModels
                 MessageBox.Show("Zaměstnanec brigádník uložen.");
 
                 Refresh();
-                //MessageBox.Show($"Vytvářím nového Brigádníka {Zamestnanec.DataToText()}, s adresou {Zamestnanec.Adresa?.DataToText()}, obr: {Zamestnanec.ObrazekZamestnance.Soubor}={Zamestnanec.ObrazekZamestnance.Image}");
             }
         }
 
@@ -193,7 +185,6 @@ namespace SemestralniPraceDB2.ViewModels
                 Zamestnanec.TypUvazku = 1;
                 PlnyUvazek novyZamestnanec = new(Zamestnanec, platNumber, PlatnostDo);
                 ZamestnanecService.Create(novyZamestnanec);
-                //MessageBox.Show($"Vytvářím nového zaměstnance {Zamestnanec.DataToText()}, s adresou {Zamestnanec.Adresa?.DataToText()}, obr: {Zamestnanec.ObrazekZamestnance.Soubor}={Zamestnanec.ObrazekZamestnance.Image}");
 
                 MessageBox.Show("Zaměstnanec na plný úvazek uložen.");
 
