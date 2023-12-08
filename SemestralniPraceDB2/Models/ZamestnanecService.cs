@@ -165,7 +165,7 @@ namespace SemestralniPraceDB2.Models
             string query = "SELECT z.*,  m.jmeno AS manager_jmeno, m.prijmeni AS manager_prijmeni, LEVEL, (SELECT COUNT(*) FROM zamestnanci WHERE id_vedouci = z.id_zamestnance) AS num_subordinates " +
                 "FROM  zamestnanci z " +
                 "JOIN zamestnanci m ON z.id_vedouci = m.id_zamestnance " +
-                "WHERE  LEVEL != 1 OR (SELECT COUNT(*) FROM zamestnanci WHERE id_vedouci = z.id_zamestnance) != 0 " +
+                "WHERE  LEVEL != 0 OR (SELECT COUNT(*) FROM zamestnanci WHERE id_vedouci = z.id_zamestnance) != 0 " +
                 "START WITH  z.id_vedouci = :id_vedouci " +
                 "CONNECT BY  PRIOR z.id_zamestnance = z.id_vedouci "
                  + "ORDER BY LEVEL, num_subordinates DESC";

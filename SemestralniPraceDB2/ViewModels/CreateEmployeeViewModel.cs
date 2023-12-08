@@ -141,11 +141,16 @@ namespace SemestralniPraceDB2.ViewModels
 
                 Zamestnanec.TypUvazku = 0;
                 Brigadnik novyZamestnanec = new(Zamestnanec, hodinovaSazbaNumber, hodinyNumber);
-                ZamestnanecService.Create(novyZamestnanec);
-
-                MessageBox.Show("Zaměstnanec brigádník uložen.");
-
-                Refresh();
+                var uspech = ZamestnanecService.Create(novyZamestnanec);
+                if (uspech)
+                {
+                    MessageBox.Show("Zaměstnanec brigádník uložen.");
+                    Refresh();
+                }
+                else
+                {
+                    MessageBox.Show("Nepodarilo se uložit.");
+                }
             }
         }
 
@@ -184,11 +189,17 @@ namespace SemestralniPraceDB2.ViewModels
 
                 Zamestnanec.TypUvazku = 1;
                 PlnyUvazek novyZamestnanec = new(Zamestnanec, platNumber, PlatnostDo);
-                ZamestnanecService.Create(novyZamestnanec);
-
-                MessageBox.Show("Zaměstnanec na plný úvazek uložen.");
-
-                Refresh();
+                var uspech = ZamestnanecService.Create(novyZamestnanec);
+                if (uspech)
+                {
+                    MessageBox.Show("Zaměstnanec na plný úvazek uložen.");
+                    Refresh();
+                }
+                else
+                {
+                    MessageBox.Show("Nepodarilo se uložit.");
+                }
+                
             }
         }
 

@@ -12,10 +12,6 @@ namespace SemestralniPraceDB2.ViewModels
 
     partial class PasswordChangeViewModel : BaseViewModel
     {
-        //private IMessenger messenger = WeakReferenceMessenger.Default;
-
-
-        //public SecureString SecurePassword { private get; set; } //pro bezpečné heslo (see: UserLoginView)
         public string Password1 { private get; set; } = string.Empty; //pro heslo napsané ve stringu
         public string Password2 { private get; set; } = string.Empty;
 
@@ -27,7 +23,14 @@ namespace SemestralniPraceDB2.ViewModels
             {
                 if (Password1 == Password2)
                 {
-                    UzivateleService.UpdateWithNewPassword(UzivateleService.Aktualni, Password1);
+                    var uspech = UzivateleService.UpdateWithNewPassword(UzivateleService.Aktualni, Password1);
+                    if (uspech)
+                    {
+                        MessageBox.Show("Změna hesla byla úspěšná.");
+                    } else
+                    {
+                        MessageBox.Show("Změna hesla se nezdařila.");
+                    }
                 }
                 else
                 {
@@ -38,6 +41,7 @@ namespace SemestralniPraceDB2.ViewModels
             {
                 MessageBox.Show("Nejprve se musíte přihlásit.", "Nejste přihlášeni", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
         }
 
     }
