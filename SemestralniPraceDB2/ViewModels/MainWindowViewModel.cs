@@ -120,6 +120,12 @@ namespace SemestralniPraceDB2.ViewModels
                 case "MakingOrderForCustomer":
                     makingOrderForCustomerVM.SetUp();
                     break;
+                case "UserEmulation":
+                    userEmulationVM.Refresh();
+                    break;
+                case "StatisticsSales":
+                    statisticsSalesVM.Refresh();
+                    break;
             }
 
             if (newVM != SelectedViewModel)

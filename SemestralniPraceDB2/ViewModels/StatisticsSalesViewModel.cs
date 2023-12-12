@@ -37,7 +37,7 @@ namespace SemestralniPraceDB2.ViewModels
             }
         }
 
-        private void Refresh()
+        internal void Refresh()
         {
             SupermarketList = new(SupermarketService.GetAllInOrderOfSales());
             SalesList = new();
