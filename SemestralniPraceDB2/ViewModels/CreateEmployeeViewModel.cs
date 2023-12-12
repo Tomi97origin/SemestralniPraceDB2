@@ -16,6 +16,7 @@ using System.Drawing;
 using System.Windows.Shapes;
 using System.Windows.Media.Imaging;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 
 namespace SemestralniPraceDB2.ViewModels
 {
@@ -215,7 +216,7 @@ namespace SemestralniPraceDB2.ViewModels
                 return "Příjmení";
             }
 
-            if (string.IsNullOrEmpty(Zamestnanec.OsobniCislo))
+            if (string.IsNullOrEmpty(Zamestnanec.OsobniCislo) && IsNumeric(Zamestnanec.OsobniCislo))
             {
                 return "Osobní číslo";
             }
@@ -283,6 +284,11 @@ namespace SemestralniPraceDB2.ViewModels
             return string.Empty; // Třída je v pořádku
         }
 
+        private bool IsNumeric(string? input)
+        {
+            Regex regex = new Regex(@"^\d+$");
+            return regex.IsMatch(input);
+        }
 
         [RelayCommand]
         private void ChooseImage()
